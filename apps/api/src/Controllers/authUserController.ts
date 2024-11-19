@@ -32,8 +32,7 @@ export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: R
     if (existingUser) {
         return res.status(400).json({ message: 'User already exists' });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new userModel({ username, email, password: hashedPassword });
+    const user = new userModel({ username, email, password });
     await user.save();
 
     // Create token
@@ -55,21 +54,16 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
 
     try {
         // Fetch the user and explicitly cast it to IUser | null
-        const user = (await userModel.findOne({ email })) as IUser | null;
-
+        const user = await userModel.findOne({ email }) as IUser | null;
         // Check if user exists
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        console.log(password)
-        console.log(user.password);
+        };
         // Compare the passwords
         const isValidPassword = await bcrypt.compare(password, user.password);
-
         if (!isValidPassword) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-
         // Create a token
         const token = createToken(user.user_id.toString(), user.isAdmin);
 
