@@ -2,6 +2,7 @@ import { json, urlencoded } from "body-parser";
 import express, { type Express } from "express";
 import morgan from "morgan";
 import cors from "cors";
+import authRouter from "./Routers/authRouter";
 
 export const createServer = (): Express => {
   const app = express();
@@ -9,7 +10,7 @@ export const createServer = (): Express => {
     .disable("x-powered-by")
     .use(morgan("dev"))
     .use(urlencoded({ extended: true }))
-    .use(json())
+    .use(express.json())
     .use(cors())
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
@@ -17,6 +18,8 @@ export const createServer = (): Express => {
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     });
+  
+  app.use("/api/auth", authRouter);
 
   return app;
 };
