@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState, FormEvent } from "react";
-import { type LoginUser } from "../../../utils/user-service";
-import { NavDesktop } from "../../../components/components";
-import "./login.scss";
+import React, { useState, FormEvent } from "react";
+import { type LoginUser } from "@/utils/user-service";
+import { NavDesktop } from "@/components/components";
+import "@/login.scss";
 import { Button } from "@repo/ui/button";
 import Head from "next/head";
 import { NextPage } from "next";
@@ -99,7 +99,7 @@ const Login: NextPage = () => {
           </div>
 
           <div className="formFooter">
-            <a href="/forgot-password">Forgot Password?</a>
+            <a href="/forgot-password">Forgot Password?</a> {/* no page on /forgot-password or /signup yet. */}
             <a href="/signup">Create Account</a>
           </div>
         </form>
