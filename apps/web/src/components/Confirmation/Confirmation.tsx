@@ -1,4 +1,5 @@
 import { FC } from "react";
+import React from 'react';
 
 interface ConfirmationProps {
   type: "warning" | "info";
