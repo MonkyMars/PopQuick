@@ -19,6 +19,7 @@ const Login: NextPage = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // checking window width for nav responsiveness
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -45,19 +46,20 @@ const Login: NextPage = () => {
           <h2>Login</h2>
 
           <div className="inputGroup">
-            <label>Username</label>
+            <label aria-label='Username/email' htmlFor="username">Username</label>
             <input
-              type="email"
+              type="text"
               placeholder="Username or email..."
               value={credentials.username}
               onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
               required
               className="loginInput"
+              id="username"
             />
           </div>
 
           <div className="inputGroup passwordGroup">
-            <label>Password</label>
+            <label aria-label='Password' htmlFor="password">Password</label>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
@@ -65,6 +67,7 @@ const Login: NextPage = () => {
               onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
               required
               className="loginInput"
+              id="password"
             />
             <button
               type="button"
@@ -81,15 +84,15 @@ const Login: NextPage = () => {
 
           <div className="socialLogin">
             <button type="button" className="googleButton" onClick={handleGoogleLogin}>
-              <FontAwesomeIcon icon={faGoogle} /> Google
+              <FontAwesomeIcon icon={faGoogle} /> <label>Google</label>
             </button>
             <Button type="button" className="discordButton" onClick={handleDiscordLogin}>
-              <FontAwesomeIcon icon={faDiscord} /> Discord
+              <FontAwesomeIcon icon={faDiscord} /> <label>Discord</label>
             </Button>
           </div>
 
           <div className="formFooter">
-            <a href="/forgot-password">Forgot Password?</a>
+            <a href="/forgot-password">Forgot Password?</a> {/* Href's not active pages currently */}
             <a href="/signup">Create Account</a>
           </div>
         </form>
