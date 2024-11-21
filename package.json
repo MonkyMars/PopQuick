@@ -11,8 +11,7 @@
     "test": "turbo run test"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "sass": "^1.81.0"
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
