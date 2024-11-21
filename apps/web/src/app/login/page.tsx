@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, FormEvent } from "react";
 import { type LoginUser } from "@/utils/user-service";
-import { NavDesktop } from "@/components/components";
-import "@/login.scss";
+import NavDesktop from "@/components/Navigation/NavDesktop";
+import '@/app/login/login.scss'
 import { Button } from "@repo/ui/button";
 import Head from "next/head";
 import { NextPage } from "next";

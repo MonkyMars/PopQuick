@@ -1,4 +1,5 @@
 import { FC } from "react";
+import './/NavDesktop.scss';
 
 const NavDesktop: FC = () => {
   const user: string | null = null;
