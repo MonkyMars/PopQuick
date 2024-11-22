@@ -12,7 +12,7 @@ const NavMobile: FC = () => {
   }
 
   const user: User = {
-    name: "Levi",
+    name: "User",
     image: "/test.jpeg",
   };
 
