@@ -66,7 +66,7 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
         }
         // Create a token
         const token = createToken(user.user_id.toString(), user.isAdmin);
-
+        
         // Send response
         res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
