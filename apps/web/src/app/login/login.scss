@@ -1,0 +1,223 @@
+$background: #f9f9f9;
+$pink: #ff77b4;
+$purple: #9b4d97;
+$dark-gray: #383838;
+$error-red: #e02b2b;
+$border-radius: 8px;
+$green: #38eb38;
+.loginContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginForm {
+  background: darken(rgba(255, 119, 180, 0.2), 90%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: min(420px, 95vw);
+  padding: 1.3em;
+  border-radius: $border-radius;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  color: $background;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5em;
+    position: relative;
+    font-size: 2em;
+    color: $background;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  .loginContent {
+    background-color: $dark-gray;
+    padding: 2em;
+    border-radius: $border-radius;
+    color: $background;
+    box-sizing: border-box;
+  }
+
+  .inputGroup {
+    position: relative;
+    margin-bottom: 1em;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    & label {
+      display: inline;
+      left: -45%;
+      transform: translateX(50%);
+      position: relative;
+			margin: .3em;
+    }
+    .loginInput {
+      box-sizing: border-box;
+      width: 90%;
+      padding: 0.8em 1em;
+      border: none;
+      border-radius: $border-radius;
+      background-color: lighten($pink, 20%);
+      color: $background;
+      transition:
+        outline 0.3s,
+        transform 0.3s;
+      outline: 1px solid transparent;
+
+      &:focus {
+        outline: 1px solid $pink;
+        transform: translateY(-2px);
+      }
+
+      &::placeholder {
+        color: lighten($dark-gray, 40%);
+      }
+			&:user-invalid{
+				outline: 1px solid $error-red;
+			}
+			&:user-valid, :valid{
+				outline: 1px solid $green;
+			}
+    }
+
+    &.passwordGroup {
+      .passwordToggle {
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: lighten($dark-gray, 40%);
+        cursor: pointer;
+        transition: color 0.3s;
+        &:hover {
+          color: $pink;
+        }
+      }
+    }
+  }
+
+  .loginButton {
+    width: 90%;
+    padding: 0.8em;
+    background-color: darken($pink, 10%);
+    color: $background;
+    border: none;
+    border-radius: $border-radius;
+    font-weight: bold;
+    cursor: pointer;
+		margin-top: .3em;
+    transition:
+      background-color 0.3s,
+      transform 0.2s;
+    &:hover {
+      background-color: darken($pink, 20%);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5em 0;
+    color: $background;
+    width: 90%;
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid rgba($background, 0.3);
+    }
+
+    span {
+      padding: 0 10px;
+      font-size: 0.9em;
+    }
+  }
+
+  .socialLogin {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    width: 90%;
+    button {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5em;
+      padding: 0.8em;
+      border: none;
+      border-radius: $border-radius;
+      color: $dark-gray;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: "poppins";
+      transition:
+        background-color 0.3s,
+        transform 0.2s;
+
+      svg {
+        margin-right: 0.5em;
+      }
+
+      &.googleButton {
+        background-color: $background;
+        &:hover {
+          background-color: darken($background, 10%);
+        }
+      }
+
+      &.discordButton {
+        background-color: #7289da;
+        color: $background;
+        &:hover {
+          background-color: darken(#7289da, 10%);
+        }
+      }
+    }
+  }
+
+  .formFooter {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    width: 80%;
+    bottom: 5px;
+    position: relative;
+    a {
+      color: $background;
+      text-decoration: none;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $pink;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .loginForm {
+    width: 95vw;
+
+    .socialLogin {
+      flex-direction: column;
+      gap: 0.5em;
+    }
+  }
+}
