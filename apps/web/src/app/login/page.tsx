@@ -42,7 +42,7 @@ const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: credentials.username,
+        email: credentials.username,
         password: credentials.password
       })
     });
