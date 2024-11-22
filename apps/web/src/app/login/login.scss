@@ -65,7 +65,7 @@ $green: #38eb38;
       border: none;
       border-radius: $border-radius;
       background-color: lighten($pink, 20%);
-      color: $background;
+      color: #222;
       transition:
         outline 0.3s,
         transform 0.3s;
@@ -91,11 +91,11 @@ $green: #38eb38;
       .passwordToggle {
         position: absolute;
         right: 25px;
-        top: 50%;
+        top: 75%;
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: lighten($dark-gray, 40%);
+        color: lighten($dark-gray, 20%);
         cursor: pointer;
         transition: color 0.3s;
         &:hover {
