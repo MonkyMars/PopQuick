@@ -15,6 +15,7 @@ const Login: NextPage = () => {
     username: "",
     password: "",
   });
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -26,9 +27,36 @@ const Login: NextPage = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  useEffect(() => {
+    alert(error)
+  }, [error])
+
+const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError(null);
+  alert('submitted')
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: credentials.username,
+        password: credentials.password
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Login failed');
+    }
+    
+    // const data = await response.json();
+    // Handle successful login (e.g., store token, redirect)
+  } catch (error) {
+    setError(error instanceof Error ? error.message : 'An unexpected error occurred');
+  }
+};
 
   const handleGoogleLogin = () => {};
   const handleDiscordLogin = () => {};
