@@ -20,7 +20,6 @@ const Login: NextPage = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // checking window width for nav responsiveness
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -48,7 +47,6 @@ const Login: NextPage = () => {
         throw new Error(errorData.message || "Login failed");
       }
 
-      // Handle successful login (e.g., store token, redirect)
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "An unexpected error occurred"
@@ -86,6 +84,8 @@ const Login: NextPage = () => {
               onChange={(e) =>
                 setCredentials({ ...credentials, username: e.target.value })
               }
+              onFocus={(e) => e.target.classList.add("focused")}
+              onBlur={(e) => e.target.classList.remove("focused")}
               required
               className="loginInput"
               id="username"
@@ -103,6 +103,8 @@ const Login: NextPage = () => {
               onChange={(e) =>
                 setCredentials({ ...credentials, password: e.target.value })
               }
+              onFocus={(e) => e.target.classList.add("focused")}
+              onBlur={(e) => e.target.classList.remove("focused")}
               required
               className="loginInput"
               id="password"
@@ -114,6 +116,7 @@ const Login: NextPage = () => {
             >
               {showPassword ? <Eye /> : <EyeClosed />}
             </button>
+            <a href="/forgot-password">Forgot Password?</a>
           </div>
 
           <button type="submit" className="loginButton">
@@ -142,9 +145,8 @@ const Login: NextPage = () => {
           </div>
 
           <div className="formFooter">
-            <a href="/forgot-password">Forgot Password?</a>{" "}
             {/* Href's not active pages currently */}
-            <a href="/signup">Create Account</a>
+            <a href="/signup">Don't have an account? Create account</a>
           </div>
         </form>
       </div>
