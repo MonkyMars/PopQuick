@@ -1,8 +1,7 @@
 import { createServer } from "./server";
 import { log } from "@repo/logger";
-import dotenv from "dotenv";
+import 'dotenv/config';
 import connectDB from "@/src/database";
-dotenv.config();
 
 const port = process.env.API_PORT;
 const server = createServer();
