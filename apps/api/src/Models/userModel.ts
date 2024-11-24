@@ -9,6 +9,7 @@ export interface IUser extends Document {
     email: string;
     password: string;
     isAdmin: boolean;
+    profile_picture?: string;
 }
 
 // Define the User schema
@@ -21,11 +22,9 @@ const userSchema: Schema<IUser> = new Schema({
     },
     username: {
         type: String,
-        required: true
     },
     email: {
         type: String,
-        required: true,
         unique: true
     },
     password: {
@@ -35,6 +34,10 @@ const userSchema: Schema<IUser> = new Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    profile_picture: {
+        type: String,
+        default: "https://i.pinimg.com/736x/99/d0/7f/99d07f72ea74f29fe21833964704cdc9.jpg"
     }
 })
 

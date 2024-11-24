@@ -1,10 +1,17 @@
 import express, { type Express } from "express";
-import { getUserInfo } from "../Controllers/userController";
-import { authMiddleware } from "../Middlewares/authMiddleware";
+import { deleteUserAccount, getUserInfo, updateUser } from "@/src/Controllers/userController";
+import { authMiddleware } from "@/src/Middlewares/authMiddleware";
+import { isAdminMiddleware } from "@/src/Middlewares/isAdminMiddleware";
 
 const router = express.Router();
 
 //User Profile routes
-router.get('/profile/:_id',authMiddleware , getUserInfo)
+router.get('/profile',authMiddleware , getUserInfo);
+
+// Update user profile routes
+router.put('/profile', authMiddleware, updateUser);
+
+// Delete user profile routes
+router.delete('/profile', authMiddleware, isAdminMiddleware, deleteUserAccount);
 
 export default router;
