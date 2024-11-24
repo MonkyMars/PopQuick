@@ -18,6 +18,8 @@ const Login: NextPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  //Get the api url
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
   useEffect(() => {
     // checking window width for nav responsiveness
@@ -36,7 +38,7 @@ const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
   setError(null);
   alert('submitted')
   try {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch(`${apiUrl}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
