@@ -19,6 +19,13 @@ const loginSchema = z.object({
     password: z.string().min(8, "Password must be at least 8 characters"),
 })
 
+// Define the schema for register request validation
+const registerSchema = z.object({
+    username: z.string().min(3, "Username must be at least 3 characters"),
+    email: z.string().email("Invalid email"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+})
+
 //Crate a token
 const createToken = (user_id: string, isAdmin: boolean) => {
     // Define the payload
@@ -32,7 +39,9 @@ const createToken = (user_id: string, isAdmin: boolean) => {
 }
 //Resister user functionality
 export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: Response, next: NextFunction) => {
-    const { username, email, password } = req.body;
+    const validatedData = registerSchema.parse(req.body);
+    // Destructure validated fields
+    const { username, email, password } = validatedData;
     try {
         const existingUser = await userModel.findOne({ email }) as IUser | null;
     if (existingUser) {
