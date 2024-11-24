@@ -12,7 +12,7 @@ import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
 
 const Login: NextPage = () => {
   const [credentials, setCredentials] = useState<LoginUser>({
-    username: "",
+    identifier: "",
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +44,7 @@ const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: credentials.username,
+        identifier: credentials.identifier,
         password: credentials.password
       })
     });
@@ -80,8 +80,8 @@ const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
             <input
               type="text"
               placeholder="Username or email..."
-              value={credentials.username}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+              value={credentials.identifier}
+              onChange={(e) => setCredentials({ ...credentials, identifier: e.target.value })}
               required
               className="loginInput"
               id="username"
