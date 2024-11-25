@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
 import { type LoginUser } from "@/utils/user-service";
-import NavDesktop from "@/components/Navigation/NavDesktop";
-import NavMobile from "@/components/Navigation/NavMobile";
 import '@/app/login/login.scss';
 import { Button } from "@repo/ui/button";
 import Head from "next/head";
 import { NextPage } from "next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import Link from "next/link";
 
 const Login: NextPage = () => {
   const [credentials, setCredentials] = useState<LoginUser>({
@@ -17,26 +16,12 @@ const Login: NextPage = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   //Get the api url
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
-  useEffect(() => {
-    // checking window width for nav responsiveness
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  useEffect(() => {
-    alert(error)
-  }, [error])
 
 const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setError(null);
-  alert('submitted')
   try {
     const response = await fetch(`${apiUrl}/api/auth/login`, {
       method: 'POST',
@@ -68,8 +53,6 @@ const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
       <Head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </Head>
-
-      {isMobile ? <NavMobile /> : <NavDesktop />}
 
       <div className="loginContainer">
         <form className="loginForm" onSubmit={handleLogin}>
@@ -122,8 +105,8 @@ const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
           </div>
 
           <div className="formFooter">
-            <a href="/forgot-password">Forgot Password?</a> {/* Href's not active pages currently */}
-            <a href="/signup">Create Account</a>
+            <Link href="/forgot-password">Forgot Password?</Link> {/* Href's not active pages currently */}
+            <Link href="/signup">Create Account</Link>
           </div>
         </form>
       </div>
