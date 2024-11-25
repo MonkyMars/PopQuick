@@ -1,10 +1,8 @@
-import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
-dotenv.config();
 
-export interface CustomRequest extends Request {
-    token: string | JwtPayload;
+interface JwtPayload {
+    user_id: string;
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,8 +13,8 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
             return res.status(403).json({ message: 'Invalid token' });
         }
 
-        const decoded = jwt.verify(token, <string>process.env.JWT_SECRET);
-        (req as CustomRequest).token = decoded;
+        const decoded = jwt.verify(token, <string>process.env.JWT_SECRET) as JwtPayload;
+        req.body.user_id = decoded.user_id;
         next();
     } catch (error) {
         return res.status(401).json({ message: 'Please authenticate.' });

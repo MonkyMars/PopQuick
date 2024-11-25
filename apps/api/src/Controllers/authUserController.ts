@@ -2,8 +2,8 @@ import userModel, { IUser } from '@/src/Models/userModel';
 import { Request, Response, NextFunction } from 'express';
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import dotenv from 'dotenv';
-dotenv.config();
+import { z } from 'zod';
+import 'dotenv/config';
 
 const JWT_SECRET = <string>process.env.JWT_SECRET;
 
@@ -12,6 +12,19 @@ interface AuthRequestBody {
     email: string;
     password: string;
 }
+
+// Define the schema for login request validation
+const loginSchema = z.object({
+    identifier: z.string().min(3, "Email or username is request"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+})
+
+// Define the schema for register request validation
+const registerSchema = z.object({
+    username: z.string().min(3, "Username must be at least 3 characters"),
+    email: z.string().email("Invalid email"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+})
 
 //Crate a token
 const createToken = (user_id: string, isAdmin: boolean) => {
@@ -26,7 +39,9 @@ const createToken = (user_id: string, isAdmin: boolean) => {
 }
 //Resister user functionality
 export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: Response, next: NextFunction) => {
-    const { username, email, password } = req.body;
+    const validatedData = registerSchema.parse(req.body);
+    // Destructure validated fields
+    const { username, email, password } = validatedData;
     try {
         const existingUser = await userModel.findOne({ email }) as IUser | null;
     if (existingUser) {
@@ -50,11 +65,14 @@ export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: R
 
 // Login user functionality
 export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
-
     try {
-        // Fetch the user and explicitly cast it to IUser | null
-        const user = await userModel.findOne({ email }) as IUser | null;
+        const validatedData = loginSchema.parse(req.body);
+        // Destructure validated fields
+        const { identifier, password } = validatedData;
+        // Check if identifier is an email or username
+        const isEmail = /\S+@\S+\.\S+/.test(identifier);
+        // Fetch user
+        const user = isEmail ? await userModel.findOne({ email: identifier}) as IUser | null : await userModel.findOne({ username: identifier }) as IUser | null
         // Check if user exists
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
