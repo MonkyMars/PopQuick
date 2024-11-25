@@ -11,6 +11,6 @@ router.get('/profile',authMiddleware , getUserInfo);
 router.patch('/profile', authMiddleware, updateUser);
 
 // Delete user profile routes
-router.delete('/profile', authMiddleware, isAdminMiddleware, deleteUserAccount);
+router.delete('/profile/:_id', authMiddleware, deleteUserAccount);
 
 export default router;

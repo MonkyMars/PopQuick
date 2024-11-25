@@ -3,9 +3,9 @@ import { Request, Response } from "express";
 
 //Get user information
 export const getUserInfo = async (req: Request, res: Response) => {
-    const userId = req.body.user_id;
+    const user_id = res.locals.user.user_id;
     try {
-        const user = await userModel.findOne({ user_id: userId }).select("-password") as IUser | null;
+        const user = await userModel.findOne({ user_id: user_id }).select("-password") as IUser | null;
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -17,7 +17,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
 
 // Update user information
 export const updateUser = async (req: Request, res: Response) => {
-    const userId = req.body.user_id;
+    const userId = res.locals.user.user_id;
     const { username, email } = req.body;
     try {
         await userModel.findOneAndUpdate({user_id: userId }, { username, email }) as IUser | null;
@@ -29,9 +29,13 @@ export const updateUser = async (req: Request, res: Response) => {
 
 //Delete user account information
 export const deleteUserAccount = async (req: Request, res: Response) => {
-    const userId = req.body.user_id;
+    const { _id } = req.params;
+    const admin = res.locals.user.isAdmin;
     try {
-        await userModel.findOneAndDelete({ user_id: userId });
+        if (admin) {
+            return res.status(500).json({ message: 'You cannot delete this user'});
+        };
+        await userModel.findByIdAndDelete(_id);
         res.json({ message: "User account deleted successfully" });
     } catch (error) {
         return res.status(500).json({ message: "Error deleting user account" });
