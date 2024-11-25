@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint . --max-warnings 0",
-    "start": "next start"
+    "start": "next start",
+    "scss:watch": "sass --watch ./src/app/login/login.scss:./src/app/login/login.css "
   },
   "dependencies": {
     "@repo/ui": "*",

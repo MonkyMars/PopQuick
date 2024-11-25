@@ -1,5 +1,6 @@
 import { FC } from "react";
-
+import './/Banner.scss';
+import { TriangleAlert } from "lucide-react";
 interface BannerProps {
   type: "info" | "error";
   message: string;
@@ -9,9 +10,7 @@ const Banner: FC<BannerProps> = ({ type, message }) => (
   <div
     className={`Banner ${type.toLowerCase() === "error" ? "error" : "info"}`}
   >
-    <i className="material-icons">
-      {type.toLowerCase() === "error" ? "warning" : "info"}
-    </i>
+  <TriangleAlert/>
     <span>{message}</span>
   </div>
 );

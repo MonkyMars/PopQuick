@@ -27,6 +27,7 @@ $green: #38eb38;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
   h2 {
     text-align: center;
     margin-bottom: 1.5em;
@@ -51,40 +52,56 @@ $green: #38eb38;
     flex-direction: column;
     width: 100%;
     align-items: center;
+
     & label {
       display: inline;
-      left: -45%;
-      transform: translateX(50%);
       position: relative;
-			margin: .3em;
+      margin: 0.3em;
+      align-self: flex-start;
+    }
+
+    a {
+      color: $background;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+      font-size: 0.8em;
+      margin: 0.5em;
+      align-self: flex-start;
+
+      &:hover {
+        color: $pink;
+      }
     }
     .loginInput {
-      box-sizing: border-box;
       width: 90%;
       padding: 0.8em 1em;
       border: none;
-      border-radius: $border-radius;
-      background-color: lighten($pink, 20%);
-      color: $background;
+      border-radius: 0.5em;
+      background-color: #ffffff;
+      color: #222;
       transition:
         outline 0.3s,
         transform 0.3s;
+        background: 0.3s;
       outline: 1px solid transparent;
 
       &:focus {
-        outline: 1px solid $pink;
         transform: translateY(-2px);
       }
 
       &::placeholder {
-        color: lighten($dark-gray, 40%);
+        color: #b3b3b3;
       }
-			&:user-invalid{
-				outline: 1px solid $error-red;
-			}
-			&:user-valid, :valid{
-				outline: 1px solid $green;
-			}
+
+      &:invalid {
+        outline: 1px solid $error-red;
+        background-color: #f7d1dc;
+      }
+
+      &:valid {
+        outline: 1px solid $green;
+        background-color: #f0ffee;
+      }
     }
 
     &.passwordGroup {
@@ -95,11 +112,12 @@ $green: #38eb38;
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: lighten($dark-gray, 40%);
+        color: #888;
         cursor: pointer;
         transition: color 0.3s;
+
         &:hover {
-          color: $pink;
+          color: #ff69b4;
         }
       }
     }
@@ -114,7 +132,7 @@ $green: #38eb38;
     border-radius: $border-radius;
     font-weight: bold;
     cursor: pointer;
-		margin-top: .3em;
+    margin-top: 0.3em;
     transition:
       background-color 0.3s,
       transform 0.2s;
@@ -202,7 +220,7 @@ $green: #38eb38;
     a {
       color: $background;
       text-decoration: none;
-      transition: color 0.3s;
+      transition: color 0.3s ease-in-out;
 
       &:hover {
         color: $pink;
