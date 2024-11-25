@@ -18,17 +18,9 @@ const Login: NextPage = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   // Get the API URL
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,8 +69,6 @@ const Login: NextPage = () => {
 
   return (
     <>
-      {isMobile ? <NavMobile /> : <NavDesktop />}
-
       <div className="loginContainer">
         <form className="loginForm" onSubmit={handleLogin}>
           <h2>Login</h2>
