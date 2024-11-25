@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
 import { type LoginUser } from "@/utils/user-service";
-import NavDesktop from "@/components/Navigation/NavDesktop";
-import Banner from "@/components/Banner/Banner";
-import NavMobile from "@/components/Navigation/NavMobile";
 import "@/app/login/login.scss";
 import { Button } from "@repo/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Eye, EyeClosed } from "lucide-react";
+import Link from "next/link"; // Added import for Link
 import { NextPage } from "next";
+import Banner from "@/components/Banner/Banner"; 
 
 const Login: NextPage = () => {
   const [credentials, setCredentials] = useState<LoginUser>({
@@ -44,9 +43,9 @@ const Login: NextPage = () => {
         throw new Error(errorData.message || "Login failed");
       }
 
-      // Handle success (e.g., redirect, update state)
-    } catch (error) {
-      console.error("An error occurred:", error);
+      // Success handling (e.g., redirect or update state)
+    } catch (err) {
+      console.error("An error occurred:", err);
     }
   };
 
@@ -114,7 +113,7 @@ const Login: NextPage = () => {
             >
               {showPassword ? <Eye /> : <EyeClosed />}
             </button>
-            <a href="/forgot-password">Forgot Password?</a>
+            <Link href="/forgot-password">Forgot Password?</Link>
           </div>
 
           <button type="submit" className="loginButton">
@@ -143,7 +142,7 @@ const Login: NextPage = () => {
           </div>
 
           <div className="formFooter">
-            <a href="/signup">Don't have an account? Create account</a>
+            <Link href="/signup">Don't have an account? Create account</Link>
           </div>
         </form>
       </div>

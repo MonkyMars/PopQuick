@@ -1,52 +1,18 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
-import NavDesktop from "@/components/Navigation/NavDesktop";
-import NavMobile from "@/components/Navigation/NavMobile";
 import "@/app/signup/signup.scss";
 import { Button } from "@repo/ui/button";
 import { NextPage } from "next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Check, X } from "lucide-react";
-
+import { passwordRequirements } from "@/utils/password-validation";
+import validator from 'validator';
+import Link from "next/link";
 interface ValidationErrors {
   email?: string;
   password?: string;
 }
-
-interface PasswordRequirement {
-  id: string;
-  text: string;
-  validator: (password: string) => boolean;
-}
-
-const passwordRequirements: PasswordRequirement[] = [
-  {
-    id: "length",
-    text: "At least 8 characters",
-    validator: (password) => password.length >= 8,
-  },
-  {
-    id: "uppercase",
-    text: "One uppercase letter",
-    validator: (password) => /[A-Z]/.test(password),
-  },
-  {
-    id: "lowercase",
-    text: "One lowercase letter",
-    validator: (password) => /[a-z]/.test(password),
-  },
-  {
-    id: "number",
-    text: "One number",
-    validator: (password) => /\d/.test(password),
-  },
-  {
-    id: "special",
-    text: "One special character",
-    validator: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
-  },
-];
 
 const Signup: NextPage = () => {
   const [user, setUser] = useState({
@@ -56,34 +22,9 @@ const Signup: NextPage = () => {
     date: String(new Date(0)),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [signupPage, setSignupPage] = useState(0);
+  const [formPageIndex, setformPageIndex] = useState(0);
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [validRequirements, setValidRequirements] = useState<string[]>([]);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    
-    if (!email) {
-      setErrors(prev => ({ ...prev, email: "Email is required" }));
-      return false;
-    }
-    if (!emailRegex.test(email)) {
-      setErrors(prev => ({ ...prev, email: "Please enter a valid email address" }));
-      return false;
-    }
-    
-    setErrors(prev => ({ ...prev, email: undefined }));
-    return true;
-  };
 
   const validatePassword = (password: string): boolean => {
     const validRequirements = passwordRequirements
@@ -112,11 +53,11 @@ const Signup: NextPage = () => {
 
   const handleContinue = (e: FormEvent) => {
     e.preventDefault();
-    const isEmailValid = validateEmail(user.email);
+    const isEmailValid = validator.isEmail(user.email);
     const isPasswordValid = validatePassword(user.password);
 
     if (isEmailValid && isPasswordValid) {
-      setSignupPage(1);
+      setformPageIndex(1);
     }
   };
 
@@ -125,12 +66,10 @@ const Signup: NextPage = () => {
 
   return (
     <>
-      {isMobile ? <NavMobile /> : <NavDesktop />}
-
       <div className="signupContainer">
         <form className="signupForm" onSubmit={handleSignup}>
           <h2>{"Sign up"}</h2>
-          {signupPage === 0 && (
+          {formPageIndex === 0 && (
             <>
               <div className="inputGroup">
                 <label htmlFor="email">Email</label>
@@ -141,7 +80,7 @@ const Signup: NextPage = () => {
                   value={user.email}
                   onChange={(e) => {
                     setUser({ ...user, email: e.target.value });
-                    validateEmail(e.target.value);
+                    validator.isEmail(e.target.value);
                   }}
                   required
                   id="email"
@@ -158,8 +97,6 @@ const Signup: NextPage = () => {
                     setUser({ ...user, password: e.target.value });
                     validatePassword(e.target.value);
                   }}
-                  onFocus={() => setFocusedInput("password")}
-                  onBlur={() => setFocusedInput(null)}
                   required
                   className={`signupInput ${errors.password ? 'error' : ''}`}
                   id="password"
@@ -172,7 +109,7 @@ const Signup: NextPage = () => {
                   <i className="material-icons">{showPassword ? "visibility_off" : "visibility"}</i>
                 </button>
                 
-                <div className={`password-requirements ${focusedInput === "password" ? "show" : ""}`} style={{padding: focusedInput === 'password' ? '1em': '', margin: focusedInput === 'password' ? '1em' : ''}}>
+                <div className="password-requirements">
                   <ul>
                     {passwordRequirements.map((req) => (
                       <li 
@@ -205,11 +142,11 @@ const Signup: NextPage = () => {
               </div>
 
               <div className="formFooter">
-                <a href="/login">Already have an account? Login!</a>
+                <Link href="/login">Already have an account? Login!</Link>
               </div>
             </>
           )}
-          {signupPage === 1 && (
+          {formPageIndex === 1 && (
             <>
               <div className="inputGroup">
                 <label htmlFor="date" aria-label="Date of birth">{'Date of birth'}</label>
