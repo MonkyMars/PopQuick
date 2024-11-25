@@ -9,6 +9,8 @@ import { Check, X } from "lucide-react";
 import { passwordRequirements } from "@/utils/password-validation";
 import validator from 'validator';
 import Link from "next/link";
+import { Eye, EyeClosed } from "lucide-react";
+
 interface ValidationErrors {
   email?: string;
   password?: string;
@@ -106,7 +108,7 @@ const Signup: NextPage = () => {
                   className="passwordToggle"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <i className="material-icons">{showPassword ? "visibility_off" : "visibility"}</i>
+                  {showPassword ? <Eye /> : <EyeClosed />}
                 </button>
                 
                 <div className="password-requirements">
