@@ -65,5 +65,7 @@ userSchema.statics.login = async function(email, password) {
     return user
 }
 
+userSchema.index({ username: 1 });
+
 const userModel = model<IUser>('User', userSchema);
 export default userModel;
