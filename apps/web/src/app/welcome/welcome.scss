@@ -1,0 +1,54 @@
+$background: #f9f9f9;
+$pink: #ff77b4;
+$purple: #9b4d97;
+$dark-gray: #383838;
+$error-red: #e02b2b;
+$border-radius: 8px;
+$green: #38eb38;
+
+.MainContent {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 2em;
+  .Header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+		padding: 0;
+		margin: 0;
+		& h1 {
+			margin: 0em;
+		}
+		a{
+			width: 100%;
+		}
+    button {
+      width: 40%;
+      padding: 0.8em;
+      background-color: darken($pink, 10%);
+      color: $background;
+      border: none;
+      border-radius: $border-radius;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 0.5em;
+			margin: 1em;
+      transition:
+        background-color 0.3s,
+        transform 0.2s;
+      &:hover {
+        background-color: darken($pink, 20%);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
