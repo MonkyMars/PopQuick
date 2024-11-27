@@ -15,6 +15,27 @@ export const getUserInfo = async (req: Request, res: Response) => {
     }
 }
 
+// Search for user by username
+export const searchUserByUsername = async (req: Request, res: Response) => {
+    const limit = parseInt(req.query.limit as string) || 10; //default to 10
+    const skip = parseInt(req.query.skip as string) * limit || 0;
+    try {
+        const { username } = req.query;
+        if (!username) {
+            return res.status(400).json({ message: 'Username query parameter is required'})
+        }
+        const user = await userModel.find({
+            username: { $regex: username, $options: 'i' } // `i` makes the search case-insensitive
+        }).select("-password").limit(limit).skip(skip);
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'No users found'});
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while searching for users', error });
+    }
+}
+
 // Update user information
 export const updateUser = async (req: Request, res: Response) => {
     const userId = res.locals.user.user_id;
