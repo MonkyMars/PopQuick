@@ -106,7 +106,7 @@ $green: #38eb38;
       box-sizing: border-box;
       align-items: center;
       position: relative;
-			box-shadow: 4px 8px 40px rgb(0, 0, 0, 0.1);
+      box-shadow: 4px 8px 40px rgb(0, 0, 0, 0.1);
       img {
         width: 100%;
         height: 60%;
@@ -119,9 +119,9 @@ $green: #38eb38;
         margin: 0;
         color: $pink;
       }
-			p{
-				width: 90%;
-			}
+      p {
+        width: 90%;
+      }
       label {
         font-weight: bold;
         color: $purple;
@@ -147,15 +147,15 @@ $green: #38eb38;
         font-weight: bold;
         cursor: pointer;
         margin-top: 0.5em;
-				box-shadow: 4px 8px 40px rgb(0, 0, 0, 0.3);
+        box-shadow: 4px 6px 10px rgb(0, 0, 0, 0.3);
         transition:
           background-color 0.3s,
           transform 0.2s,
-					box-shadow 0.2s;
+          box-shadow 0.2s;
         &:hover {
           background-color: darken($pink, 20%);
           transform: translateY(-2px);
-					box-shadow: 4px 8px 40px rgb(0, 0, 0, 0.6);
+          box-shadow: 4px 6px 20px rgb(0, 0, 0, 0.6);
         }
 
         &:active {
@@ -164,4 +164,41 @@ $green: #38eb38;
       }
     }
   }
+}
+
+.buttonContainer {
+  display: flex;
+  align-content: center;
+  width: 100%;
+  justify-content: center;
+  gap: 3em;
+  & button {
+    padding: 0.8em 2em;
+    background-color: darken($pink, 10%);
+    color: $background;
+    border: none;
+    border-radius: $border-radius;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5em;
+    box-shadow: 4px 8px 10px rgb(0, 0, 0, 0.3);
+    transition:
+      background-color 0.3s,
+      transform 0.2s,
+      box-shadow 0.2s;
+    &:hover {
+      background-color: darken($pink, 20%);
+      transform: translateY(-2px);
+      box-shadow: 4px 8px 20px rgb(0, 0, 0, 0.6);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.selected{
+  background-color: var(--theme-pink) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 4px 8px 20px rgb(0, 0, 0, 0.6) !important;
 }

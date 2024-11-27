@@ -22,7 +22,9 @@ interface Groups {
 
 const Home: NextPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-
+  const [selectedGroups, setSelectedGroups] = useState<
+    "recommended" | "location" | "interests"
+  >("recommended");
   const pages: Pages[] = [
     { label: "Home", href: "/", id: 1 },
     { label: "Placeholder", href: "/", id: 2 },
@@ -137,28 +139,95 @@ const Home: NextPage = () => {
         <User className="icon" />
       </nav>
       <div className="mainContent">
-        <h2>Recommended Groups for You</h2>
-        <div className="groupGrid">
-          {filteredGroups.length > 0 ? (
-            filteredGroups.map((group, index) => (
-              <div className="groupCard" key={index}>
-                <Image
-                  src={group.image}
-                  alt={group.name}
-                  width={300}
-                  height={300}
-                />
-                <span>Participants: 1/4</span>
-                <h3>{group.name}</h3>
-                <p>{group.description}</p>
-                <label>{group.category}</label>
-                <button>Join</button>
-              </div>
-            ))
-          ) : (
-            <h2>No groups found</h2>
-          )}
+        <div className="buttonContainer">
+        <button onClick={() => setSelectedGroups("recommended")} className={selectedGroups === 'recommended' ? 'selected' : ''}>
+            Recommended groups
+          </button>
+          <button onClick={() => setSelectedGroups("location")} className={selectedGroups === 'location' ? 'selected' : ''}>
+            Location based groups
+          </button>
+          <button onClick={() => setSelectedGroups("interests")} className={selectedGroups === 'interests' ? 'selected' : ''}>
+            Interest based groups
+          </button>
         </div>
+        {selectedGroups === "recommended" && (
+          <>
+            <h2>Recommended Groups for You</h2>
+            <div className="groupGrid">
+              {filteredGroups.length > 0 ? (
+                filteredGroups.map((group, index) => (
+                  <div className="groupCard" key={index}>
+                    <Image
+                      src={group.image}
+                      alt={group.name}
+                      width={300}
+                      height={300}
+                    />
+                    <span>Participants: 1/4</span>
+                    <h3>{group.name}</h3>
+                    <p>{group.description}</p>
+                    <label>{group.category}</label>
+                    <button>Join</button>
+                  </div>
+                ))
+              ) : (
+                <h2>No groups found</h2>
+              )}
+            </div>{" "}
+          </>
+        )}
+        {selectedGroups === "interests" && (
+          <>
+            <h2>Interesting Groups for You</h2>
+            <div className="groupGrid">
+              {filteredGroups.length > 0 ? (
+                filteredGroups.map((group, index) => (
+                  <div className="groupCard" key={index}>
+                    <Image
+                      src={group.image}
+                      alt={group.name}
+                      width={300}
+                      height={300}
+                    />
+                    <span>Participants: 1/4</span>
+                    <h3>{group.name}</h3>
+                    <p>{group.description}</p>
+                    <label>{group.category}</label>
+                    <button>Join</button>
+                  </div>
+                ))
+              ) : (
+                <h2>No groups found</h2>
+              )}
+            </div>
+          </>
+        )}
+        {selectedGroups === "location" && (
+          <>
+            <h2>Nearby Groups for You</h2>
+            <div className="groupGrid">
+              {filteredGroups.length > 0 ? (
+                filteredGroups.map((group, index) => (
+                  <div className="groupCard" key={index}>
+                    <Image
+                      src={group.image}
+                      alt={group.name}
+                      width={300}
+                      height={300}
+                    />
+                    <span>Participants: 1/4</span>
+                    <h3>{group.name}</h3>
+                    <p>{group.description}</p>
+                    <label>{group.category}</label>
+                    <button>Join</button>
+                  </div>
+                ))
+              ) : (
+                <h2>No groups found</h2>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   );
