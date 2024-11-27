@@ -11,6 +11,7 @@ const Welcome: NextPage = () => {
         <BlobBorder>
           <header className="Header">
             <h1>Welcome To <strong>P</strong>op<strong>Q</strong>uick</h1>
+            <p>Your journey to new <strong>friendships</strong> starts now.</p>
             <p><strong>Sign up</strong> to get started, and find new friends</p>
             <Link href={'/signup'}><button>Sign up</button></Link>
           </header>

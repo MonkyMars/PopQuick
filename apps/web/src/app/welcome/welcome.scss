@@ -14,7 +14,6 @@ $green: #38eb38;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  font-size: 2em;
   .Header {
     display: flex;
     align-items: center;
@@ -22,9 +21,10 @@ $green: #38eb38;
     justify-content: center;
 		padding: 0;
 		margin: 0;
+    font-size: 2em;
     & strong{
       font-weight: 600;
-      color: darken($pink, 10%);
+      color: darken($pink,10%);
     }
 		a{
 			width: 100%;
