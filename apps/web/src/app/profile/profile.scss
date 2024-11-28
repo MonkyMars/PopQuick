@@ -1,0 +1,94 @@
+.profileContainer {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .userInformation {
+    background: darken(rgba(255, 119, 180, 0.2), 90%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: min(420px, 95vw);
+    padding: 1.3em;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: min(420px, 95vw);
+    .icon {
+      display: flex;
+      position: relative;
+      align-items: center;
+      width: 100px;
+      height: 100px;
+      justify-content: center;
+      & img {
+        border-radius: 50%;
+        z-index: 3;
+        position: absolute;
+        color: #383838;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    & label {
+      display: inline;
+      left: -45%;
+      transform: translateX(50%);
+      position: relative;
+      margin: 0.3em;
+    }
+    & input,
+    textarea {
+      box-sizing: border-box;
+      width: 90%;
+      padding: 0.8em 1em;
+      border: none;
+      transition: transform 0.3s;
+      font-family: var(--headers-font);
+      box-sizing: border-box;
+      width: 90%;
+      padding: 0.8em 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--theme-pink);
+      color: #fff;
+      transition:
+        outline 0.3s,
+        transform 0.3s;
+      outline: 1px solid transparent;
+
+      &:focus {
+        outline: 1px solid var(--theme-pink);
+        transform: translateY(-2px);
+        & ~ .password-requirements {
+          max-height: 300px;
+          opacity: 1;
+          padding: 1rem;
+        }
+      }
+
+      &::placeholder {
+        color: #e3e3e3;
+      }
+      &:user-invalid {
+        outline: 1px solid var(--error-red);
+      }
+      &:user-valid,
+      :valid {
+        outline: 1px solid var(--confirm-green);
+      }
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        outline: none;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
