@@ -34,7 +34,7 @@ const createToken = (user_id: string, isAdmin: boolean) => {
         isAdmin,
     }
     // Generate the token
-    const token = jwt.sign(payloads, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(payloads, JWT_SECRET, { expiresIn: '24h' });
     return token;
 }
 //Resister user functionality
@@ -95,3 +95,21 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
         next(error);
     }
 };
+
+export const googleCallBack = async (req: Request, res: Response, next: NextFunction) => {
+    const { user_id, isAdmin } = req.user as Express.User;
+    console.log()
+    // Create token
+    const token = createToken(user_id.toString(), isAdmin);
+    // Successfully authenticated
+    res.status(200).json({ message: 'Login successfully', user: req.user, token: token });
+};
+
+export const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+        if (err)  {
+            next(err);
+            res.redirect('/');
+        }
+    })
+}
