@@ -24,10 +24,6 @@ export const createServer = (): Express => {
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })
-    .get("/cookie", (req, res) => {
-      const cookie = req.cookies.x_auth_cookie;
-      res.status(200).json({ cookie: cookie });
-    })
     .use("/api/auth", authRouter)
     .use("/api/users", userRouter);
 
