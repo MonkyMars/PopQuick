@@ -53,7 +53,13 @@ export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: R
     // Create token
     const token = createToken(user.user_id.toString(), user.isAdmin);
 
-    res.status(201).json({ message: 'User created successfully', token });
+    res.cookie('x_auth_cookie', token, {
+        httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict", // Protect against CSRF attacks
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         res.status(500).json({ 
             message: 'Server Error',
@@ -86,7 +92,13 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
         const token = createToken(user.user_id.toString(), user.isAdmin);
         
         // Send response
-        res.status(200).json({ message: 'Login successful', token });
+        res.cookie('x_auth_cookie', token, {
+            httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: "strict", // Protect against CSRF attacks
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+        });
+        res.status(200).json({ message: 'Login successful'});
     } catch (error) {
         res.status(500).json({
             message: 'Server Error',
@@ -102,7 +114,13 @@ export const googleCallBack = async (req: Request, res: Response, next: NextFunc
     // Create token
     const token = createToken(user_id.toString(), isAdmin);
     // Successfully authenticated
-    res.status(200).json({ message: 'Login successfully', user: req.user, token: token });
+    res.cookie('x_auth_cookie', token, {
+        httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict", // Protect against CSRF attacks
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    res.status(200).json({ message: 'Login successfully', user: req.user});
 };
 
 export const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
