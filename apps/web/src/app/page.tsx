@@ -6,6 +6,7 @@ import { LogOut, Search, Settings, User, ChevronDown } from 'lucide-react';
 import Link from "next/link";
 import "./Home.scss";
 import { useState, useRef, useEffect } from "react";
+import PopQuickGroupCard from "@/components/GroupCard/GroupCard";
 
 interface Pages {
   id: number;
@@ -95,7 +96,7 @@ const Home: NextPage = () => {
       image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
       description:
         "A group dedicated to promoting sustainable living and environmental awareness.",
-      category: "Environment",
+      category: "environmentalism",
     },
     {
       name: "Foodies Haven",
@@ -206,19 +207,15 @@ const Home: NextPage = () => {
             <div className="groupGrid">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
-                  <div className="groupCard" key={index}>
-                    <Image
-                      src={group.image}
-                      alt={group.name}
-                      width={300}
-                      height={300}
-                    />
-                    <span>Participants: 1/4</span>
-                    <h3>{group.name}</h3>
-                    <p>{group.description}</p>
-                    <label>{group.category}</label>
-                    <button>Join</button>
-                  </div>
+                  <PopQuickGroupCard
+                    key={index}
+                    name={group.name}
+                    imageUrl={group.image}
+                    description={group.description}
+                    category={group.category}
+                    memberCount={4}
+                    maxMemberSize={4}
+                  />
                 ))
               ) : (
                 <h2>No groups found</h2>
