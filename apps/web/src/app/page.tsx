@@ -2,10 +2,10 @@
 
 import { NextPage } from "next";
 import Image from "next/image";
-import { Search, User } from "lucide-react";
+import { LogOut, Search, Settings, User, ChevronDown } from 'lucide-react';
 import Link from "next/link";
 import "./Home.scss";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface Pages {
   id: number;
@@ -22,9 +22,25 @@ interface Groups {
 
 const Home: NextPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedGroups, setSelectedGroups] = useState<
-    "recommended" | "location" | "interests"
-  >("recommended");
+  const [selectedCategory, setSelectedCategory] = useState<string>("recommended");
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const pages: Pages[] = [
     { label: "Home", href: "/", id: 1 },
     { label: "Placeholder", href: "/", id: 2 },
@@ -108,27 +124,15 @@ const Home: NextPage = () => {
     group.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
+  const categoryOptions = [
+    { value: "recommended", label: "Recommended" },
+    { value: "location", label: "Location Based" },
+    { value: "interests", label: "Interest Based" },
+  ];
+
   return (
     <>
       <nav className="Nav">
-        <Image
-          src={"/PopQuick.png"}
-          alt="PopQuick"
-          className="logo"
-          width={60}
-          height={60}
-          priority
-          draggable={false}
-        />
-        <div className="search">
-          <Search className="icon" />
-          <input
-            type="text"
-            placeholder="Search groups..."
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-          />
-        </div>
         <div className="pages">
           {pages.map((page) => (
             <Link href={page.href} key={page.id}>
@@ -136,49 +140,69 @@ const Home: NextPage = () => {
             </Link>
           ))}
         </div>
-        <User className="icon" />
+        <div className={`search ${isSearchFocused ? "focused" : ""}`}>
+          <Search className={`icon ${isSearchFocused ? "active" : ""}`} />
+          <input
+            type="text"
+            placeholder="Search groups..."
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+          />
+        </div>
+        <div className="userMenuContainer">
+          <button
+            className="userButton"
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            aria-label="User menu"
+          >
+            <User className="icon" />
+          </button>
+          {isUserMenuOpen && (
+            <div className="userMenu">
+              <button className="menuItem">
+                <Settings className="menuIcon" />
+                Settings
+              </button>
+              <button className="menuItem">
+                <LogOut className="menuIcon" />
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </nav>
       <div className="mainContent">
-        <div className="buttonContainer">
-        <button onClick={() => setSelectedGroups("recommended")} className={selectedGroups === 'recommended' ? 'selected' : ''}>
-            Recommended groups
+        <div className="categorySelect" ref={dropdownRef}>
+          <button 
+            className={`dropdownTrigger ${isDropdownOpen ? 'active' : ''}`}
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            aria-expanded={isDropdownOpen}
+          >
+            <span>{categoryOptions.find(option => option.value === selectedCategory)?.label}</span>
+            <ChevronDown className="icon" />
           </button>
-          <button onClick={() => setSelectedGroups("location")} className={selectedGroups === 'location' ? 'selected' : ''}>
-            Location based groups
-          </button>
-          <button onClick={() => setSelectedGroups("interests")} className={selectedGroups === 'interests' ? 'selected' : ''}>
-            Interest based groups
-          </button>
+          {isDropdownOpen && (
+            <div className="dropdownMenu">
+              {categoryOptions.map((option) => (
+                <button
+                  key={option.value}
+                  className={`dropdownItem ${selectedCategory === option.value ? 'selected' : ''}`}
+                  onClick={() => {
+                    setSelectedCategory(option.value);
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-        {selectedGroups === "recommended" && (
+        {selectedCategory === "recommended" && (
           <>
             <h2>Recommended Groups for You</h2>
-            <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
-                filteredGroups.map((group, index) => (
-                  <div className="groupCard" key={index}>
-                    <Image
-                      src={group.image}
-                      alt={group.name}
-                      width={300}
-                      height={300}
-                    />
-                    <span>Participants: 1/4</span>
-                    <h3>{group.name}</h3>
-                    <p>{group.description}</p>
-                    <label>{group.category}</label>
-                    <button>Join</button>
-                  </div>
-                ))
-              ) : (
-                <h2>No groups found</h2>
-              )}
-            </div>{" "}
-          </>
-        )}
-        {selectedGroups === "interests" && (
-          <>
-            <h2>Interesting Groups for You</h2>
             <div className="groupGrid">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
@@ -202,9 +226,35 @@ const Home: NextPage = () => {
             </div>
           </>
         )}
-        {selectedGroups === "location" && (
+        {selectedCategory === "location" && (
           <>
             <h2>Nearby Groups for You</h2>
+            <div className="groupGrid">
+              {filteredGroups.length > 0 ? (
+                filteredGroups.map((group, index) => (
+                  <div className="groupCard" key={index}>
+                    <Image
+                      src={group.image}
+                      alt={group.name}
+                      width={300}
+                      height={300}
+                    />
+                    <span>Participants: 1/4</span>
+                    <h3>{group.name}</h3>
+                    <p>{group.description}</p>
+                    <label>{group.category}</label>
+                    <button>Join</button>
+                  </div>
+                ))
+              ) : (
+                <h2>No groups found</h2>
+              )}
+            </div>
+          </>
+        )}
+        {selectedCategory === "interests" && (
+          <>
+            <h2>Interesting Groups for You</h2>
             <div className="groupGrid">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
