@@ -10,23 +10,25 @@ import { passwordRequirements } from "@/utils/password-validation";
 import validator from 'validator';
 import Link from "next/link";
 import { Eye, EyeClosed } from "lucide-react";
-
+import Banner from "@/components/Banner/Banner";
+import { useRouter } from "next/navigation";
 interface ValidationErrors {
   email?: string;
   password?: string;
 }
 
 const Signup: NextPage = () => {
+  const router = useRouter();
   const [user, setUser] = useState({
     email: "",
     password: "",
     username: "",
-    date: String(new Date(0)),
   });
   const [showPassword, setShowPassword] = useState(false);
   const [formPageIndex, setformPageIndex] = useState(0);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [validRequirements, setValidRequirements] = useState<string[]>([]);
+  const [signupError, setSignupError] = useState<string | null>(null);
 
   const validatePassword = (password: string): boolean => {
     const validRequirements = passwordRequirements
@@ -49,9 +51,34 @@ const Signup: NextPage = () => {
     return isValid;
   };
 
-  const handleSignup = (e: FormEvent<HTMLFormElement>) => {
+
+  const handleSignup = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  };
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          password: user.password,
+          username: user.username,
+        }),
+      });
+      // Handle successful signup
+      if (response.ok) {
+        router.push("/");
+      } else {
+        const data = await response.json();
+        setSignupError(data.message);
+      }
+    } catch (error) {
+      // Handle any errors during signup
+      console.error("Signup error:", error);
+      setSignupError(error instanceof Error ? "An unknown error occurred" : null);
+    }
+  }
 
   const handleContinue = (e: FormEvent) => {
     e.preventDefault();
@@ -60,6 +87,11 @@ const Signup: NextPage = () => {
 
     if (isEmailValid && isPasswordValid) {
       setformPageIndex(1);
+    } else {
+      setErrors({
+        email: isEmailValid ? undefined : "Please enter a valid email",
+        password: isPasswordValid ? undefined : "Please meet all password requirements"
+      });
     }
   };
 
@@ -151,17 +183,6 @@ const Signup: NextPage = () => {
           {formPageIndex === 1 && (
             <>
               <div className="inputGroup">
-                <label htmlFor="date" aria-label="Date of birth">{'Date of birth'}</label>
-                <input
-                  type="date"
-                  className="signupInput"
-                  id="date"
-                  required
-                  value={user.date}
-                  onChange={(e) => setUser({ ...user, date: e.target.value })}
-                />
-              </div>
-              <div className="inputGroup">
                 <label htmlFor="username" aria-label="username">{'Username'}</label>
                 <input
                   type="text"
@@ -177,6 +198,7 @@ const Signup: NextPage = () => {
           )}
         </form>
       </div>
+      {signupError && <Banner type="error" message={signupError} />}
     </>
   );
 };
