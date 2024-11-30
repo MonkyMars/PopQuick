@@ -168,10 +168,10 @@ const Signup: NextPage = () => {
 
               <div className="socialSignup">
                 <button type="button" className="googleButton" onClick={handleGoogleSignup}>
-                  <FontAwesomeIcon icon={faGoogle} /> <label>Google</label>
+                  <FontAwesomeIcon icon={faGoogle} />Google
                 </button>
                 <Button type="button" className="discordButton" onClick={handleDiscordSignup}>
-                  <FontAwesomeIcon icon={faDiscord} /> <label>Discord</label>
+                  <FontAwesomeIcon icon={faDiscord} />Discord
                 </Button>
               </div>
 
