@@ -34,7 +34,7 @@ const createToken = (user_id: string, isAdmin: boolean) => {
         isAdmin,
     }
     // Generate the token
-    const token = jwt.sign(payloads, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(payloads, JWT_SECRET, { expiresIn: '24h' });
     return token;
 }
 //Resister user functionality
@@ -53,7 +53,13 @@ export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: R
     // Create token
     const token = createToken(user.user_id.toString(), user.isAdmin);
 
-    res.status(201).json({ message: 'User created successfully', token });
+    res.cookie('x_auth_cookie', token, {
+        httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict", // Protect against CSRF attacks
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         res.status(500).json({ 
             message: 'Server Error',
@@ -86,7 +92,13 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
         const token = createToken(user.user_id.toString(), user.isAdmin);
         
         // Send response
-        res.status(200).json({ message: 'Login successful', token });
+        res.cookie('x_auth_cookie', token, {
+            httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: "strict", // Protect against CSRF attacks
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+        });
+        res.status(200).json({ message: 'Login successful'});
     } catch (error) {
         res.status(500).json({
             message: 'Server Error',
@@ -95,3 +107,27 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
         next(error);
     }
 };
+
+export const googleCallBack = async (req: Request, res: Response, next: NextFunction) => {
+    const { user_id, isAdmin } = req.user as Express.User;
+    console.log()
+    // Create token
+    const token = createToken(user_id.toString(), isAdmin);
+    // Successfully authenticated
+    res.cookie('x_auth_cookie', token, {
+        httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict", // Protect against CSRF attacks
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    res.status(200).json({ message: 'Login successfully', user: req.user});
+};
+
+export const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+        if (err)  {
+            next(err);
+            res.redirect('/');
+        }
+    })
+}
