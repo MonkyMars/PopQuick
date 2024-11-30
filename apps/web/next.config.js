@@ -17,4 +17,7 @@ module.exports = {
       },
     ],
   },
+  dependencies: {
+    "sass": "^1.81.0"
+  }
 };
