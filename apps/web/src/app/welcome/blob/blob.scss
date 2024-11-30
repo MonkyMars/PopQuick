@@ -1,0 +1,74 @@
+// Keyframes for the moving blob outline
+@keyframes blob-outline {
+  0% {
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    transform: rotate(0deg) scale(1);
+    opacity: 0.4; // Starting with lower opacity
+  }
+  50% {
+    border-radius: 40% 60% 50% 40% / 60% 50% 40% 60%;
+    transform: rotate(180deg) scale(1.2); // Increased scale for more volume
+    opacity: 0.6; // Slightly increased opacity
+  }
+  100% {
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    transform: rotate(360deg) scale(1);
+    opacity: 0.8; // Maximum opacity at the end
+  }
+}
+
+// Container styles
+.blob-container {
+  position: relative;
+  display: inline-block;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: white;
+
+  .content {
+    position: relative;
+    z-index: 1;
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #a100ff;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #b33cff;
+      }
+    }
+  }
+  .blob-outline {
+    position: absolute;
+		inset: 0;
+    margin: -100px;
+    border: 3px solid #ffffff; 
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    animation: blob-outline 6s infinite linear;
+    z-index: -1;
+    opacity: 0.4;
+
+    &.second {
+      border-color: #ff77b4; 
+      animation-delay: 3s;
+      
+    }
+  }
+}
