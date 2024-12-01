@@ -1,0 +1,400 @@
+$background: #f9f9f9;
+$pink: #ff77b4;
+$purple: #9b4d97;
+$dark-gray: #383838;
+$error-red: #e02b2b;
+$border-radius: 8px;
+$green: #38eb38;
+
+.Nav {
+  display: flex;
+  background-color: darken($dark-gray, 10%);
+  justify-content: space-around;
+  align-items: center;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100px;
+  padding: 1em;
+  box-sizing: border-box;
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    position: relative;
+    border-radius: $border-radius;
+    padding: 0.5em;
+    background: linear-gradient(
+      to right,
+      lighten($pink, 20%),
+      lighten($pink, 30%)
+    );
+    transition: all 0.3s ease;
+
+    &.focused {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba($pink, 0.3);
+    }
+
+    .icon {
+      position: absolute;
+      left: 12px;
+      width: 24px;
+      height: 24px;
+      color: rgba($dark-gray, 0.6);
+      transition: all 0.3s ease;
+
+      &.active {
+        color: $pink;
+        transform: scale(1.15);
+      }
+    }
+
+    input {
+      width: 300px;
+      padding: 0.6em 1em 0.6em 3em;
+      border: none;
+      border-radius: $border-radius;
+      background-color: lighten($pink, 25%);
+      font-size: 1rem;
+      color: $dark-gray;
+      outline: none;
+      transition: all 0.3s ease;
+
+      &::placeholder {
+        color: rgba($dark-gray, 0.6);
+      }
+
+      &:focus {
+        outline: 2px solid $pink;
+        box-shadow: 0 0 12px rgba($pink, 0.4);
+
+        &::placeholder {
+          transform: translateX(15px);
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  .groupCard {
+    background: lighten($pink, 35%);
+    border-radius: $border-radius;
+    box-shadow: 0 4px 8px rgba($dark-gray, 0.1);
+    padding: 1em;
+    text-align: center;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba($pink, 0.3);
+    }
+
+    img {
+      border-radius: $border-radius;
+      margin-bottom: 0.5em;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin: 0.5em 0;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: rgba($dark-gray, 0.8);
+      margin-bottom: 1em;
+    }
+
+    label {
+      display: inline-block;
+      background: $pink;
+      color: #fff;
+      padding: 0.3em 0.6em;
+      font-size: 0.8rem;
+      border-radius: $border-radius;
+      margin-bottom: 1em;
+    }
+
+    button {
+      background: $pink;
+      color: #fff;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: darken($pink, 10%);
+      }
+    }
+  }
+
+  .pages a {
+    color: $dark-gray;
+    text-decoration: none;
+    margin: 0 1em;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $pink;
+    }
+  }
+
+  .pages {
+    display: flex;
+    gap: 1em;
+
+    a {
+      color: $background;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.3s ease;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: $pink;
+        transition: width 0.3s ease;
+      }
+
+      &:hover {
+        color: $pink;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .userMenuContainer {
+    position: relative;
+
+    .userButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background-color: $pink;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        background-color: darken($pink, 10%);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        color: white;
+      }
+    }
+
+    .userMenu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      width: 200px;
+      background-color: $dark-gray;
+      border-radius: $border-radius;
+      padding: 0.5em 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease;
+
+      .menuItem {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        width: 100%;
+        padding: 0.75em 1em;
+        border: none;
+        background: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: $pink;
+        }
+
+        .menuIcon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
+.mainContent{
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	overflow: hidden;
+	transition: grid-template-columns 0.3s ease;
+	min-height: calc(100vh - 100px);
+.aside{
+	background-color: #383838;
+	width: 300px;
+	overflow: hidden;
+	transition: width 0.3s ease;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	padding: .6em 1em;
+	border-radius: 0 8px 8px 0;
+	.member{
+		display: flex;
+		align-items: center;
+		gap: .5em;
+		padding: .5em .2em;
+		border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background-color 0.3s ease, transform .3s ease, margin .3s ease;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 1.2em;
+		&:hover{
+			background-color: rgba(255,255,255,0.1);
+			.avatar{
+				transform: scale(1.1);
+				margin: 0 .3em;
+			}
+		}
+		.avatar{
+			width: 40px;
+			transition: background-color 0.3s ease, transform .3s ease, margin .3s ease;
+			height: 40px;
+			border-radius: 50%;
+		}
+		.username{
+			color: #f9f9f9;
+			text-overflow: ellipsis;
+		}
+	}
+	.details{
+		display: flex;
+		flex-direction: column;
+		gap: .5em;
+		padding: .3em 0;
+		&.hidden{
+			display: none;
+		}
+		.detail{
+			display: flex;
+			align-items: center;
+			gap: .1em;
+			.icon{
+				width: 20px;
+				height: 20px;
+				color: #f9f9f9;
+			}
+			.text{
+				color: #f9f9f9;
+			}
+		}
+	}
+}
+.messagesTab{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+	background-color: #292929;
+	padding: .5em 1em;
+	border-radius: 8px 8px 0 0;
+	width: auto;
+	top: 0;
+	overflow: hidden;
+	.messagesContainer{
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+		.message{
+			color: #f9f9f9;
+			font-size: 1.2rem;
+			width: max-content;
+			max-width: min(90%, 400px);
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			position: relative;
+			overflow: hidden;
+			margin: 10px 20px;
+			padding: .3em .7em;
+			border-radius: 12px;
+			box-sizing: border-box;
+			& header{
+				display: flex;
+				align-items: center;
+				gap: .5em;
+				.username{
+					color: #f9f9f9;
+				}
+				.avatar{
+					color: #f9f9f9;
+					border-radius: 50%;
+				}
+			}
+			& footer{
+				position: absolute;
+				font-size: .8em;
+				bottom: -10px;
+				right: 10px;
+				color: #ccc;
+			}
+			.content{
+				color: #f9f9f9;
+				font-size: 1rem;
+				width: 100%;
+				margin-bottom: 25px;
+			}
+		}
+	}
+	.icon{
+		width: 20px;
+		height: 20px;
+		color: #f9f9f9;
+	}
+}
+}
+
+.received {
+	margin-right: auto !important;
+	margin-left: 30px !important;
+	background-color: rgba($pink, 0.8) !important;
+	& footer{
+		color: lighten($pink, 10%) !important;
+	}
+}
+
+.sent {
+	background-color: #444 !important;
+	margin-left: auto !important;
+	margin-right: 0px !important;
+}
+
+.you{
+	background-color: #444 !important;
+}
