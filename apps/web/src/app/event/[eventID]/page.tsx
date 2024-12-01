@@ -107,7 +107,7 @@ const EventPage = () => {
 			try {
 				const response = await fetch(`/api/events/${eventID}`);
 				if (!response.ok) {
-					router.push("/");
+					// router.push("/"); // Redirect to home page if event not found
 					throw new Error("Failed to fetch event data");
 				}
 				const eventData: Event = await response.json();
