@@ -23,122 +23,7 @@ body {
   height: 100px;
   padding: 1em;
   box-sizing: border-box;
-
-  .search {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    position: relative;
-    border-radius: $border-radius;
-    padding: 0.5em;
-    background: linear-gradient(
-      to right,
-      lighten($pink, 20%),
-      lighten($pink, 30%)
-    );
-    transition: all 0.3s ease;
-
-    &.focused {
-      transform: scale(1.03);
-      box-shadow: 0 4px 10px rgba($pink, 0.3);
-    }
-
-    .icon {
-      position: absolute;
-      left: 12px;
-      width: 24px;
-      height: 24px;
-      color: rgba($dark-gray, 0.6);
-      transition: all 0.3s ease;
-
-      &.active {
-        color: $pink;
-        transform: scale(1.15);
-      }
-    }
-
-    input {
-      width: 300px;
-      padding: 0.6em 1em 0.6em 3em;
-      border: none;
-      border-radius: $border-radius;
-      background-color: lighten($pink, 25%);
-      font-size: 1rem;
-      color: $dark-gray;
-      outline: none;
-      transition: all 0.3s ease;
-
-      &::placeholder {
-        color: rgba($dark-gray, 0.6);
-      }
-
-      &:focus {
-        outline: 2px solid $pink;
-        box-shadow: 0 0 12px rgba($pink, 0.4);
-
-        &::placeholder {
-          transform: translateX(15px);
-          opacity: 0;
-        }
-      }
-    }
-  }
-
-  .groupCard {
-    background: lighten($pink, 35%);
-    border-radius: $border-radius;
-    box-shadow: 0 4px 8px rgba($dark-gray, 0.1);
-    padding: 1em;
-    text-align: center;
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
-
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba($pink, 0.3);
-    }
-
-    img {
-      border-radius: $border-radius;
-      margin-bottom: 0.5em;
-    }
-
-    h3 {
-      font-size: 1.2rem;
-      margin: 0.5em 0;
-    }
-
-    p {
-      font-size: 0.9rem;
-      color: rgba($dark-gray, 0.8);
-      margin-bottom: 1em;
-    }
-
-    label {
-      display: inline-block;
-      background: $pink;
-      color: #fff;
-      padding: 0.3em 0.6em;
-      font-size: 0.8rem;
-      border-radius: $border-radius;
-      margin-bottom: 1em;
-    }
-
-    button {
-      background: $pink;
-      color: #fff;
-      padding: 0.5em 1em;
-      border: none;
-      border-radius: $border-radius;
-      cursor: pointer;
-      transition: background 0.3s ease;
-
-      &:hover {
-        background: darken($pink, 10%);
-      }
-    }
-  }
+  z-index: 2;
 
   .pages a {
     color: $dark-gray;
@@ -226,7 +111,7 @@ body {
       padding: 0.5em 0;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       animation: slideIn 0.3s ease;
-
+      z-index: 2;
       .menuItem {
         display: flex;
         align-items: center;
