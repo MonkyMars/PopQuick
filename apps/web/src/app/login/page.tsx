@@ -9,6 +9,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import Link from "next/link"; // Added import for Link
 import { NextPage } from "next";
 import Banner from "@/components/Banner/Banner"; 
+import Footer from "./footer/footer";
 
 const Login: NextPage = () => {
   const [credentials, setCredentials] = useState<LoginUser>({
@@ -72,22 +73,22 @@ const Login: NextPage = () => {
         <form className="loginForm" onSubmit={handleLogin}>
           <h2>Login</h2>
 
-          <div className="inputGroup">
+            <div className="inputGroup">
             <label aria-label="Username/email" htmlFor="username">
               Username or email
             </label>
             <input
               type="text"
-              placeholder="Username or email..."
+              placeholder="Enter your username or email"
               value={credentials.identifier}
               onChange={(e) =>
-                setCredentials({ ...credentials, identifier: e.target.value })
+              setCredentials({ ...credentials, identifier: e.target.value })
               }
               required
               className="loginInput"
               id="username"
             />
-          </div>
+            </div>
 
           <div className="inputGroup passwordGroup">
             <label aria-label="Password" htmlFor="password">
@@ -95,10 +96,10 @@ const Login: NextPage = () => {
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="Enter your password"
               value={credentials.password}
               onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value })
+              setCredentials({ ...credentials, password: e.target.value })
               }
               onFocus={(e) => e.target.classList.add("focused")}
               onBlur={(e) => e.target.classList.remove("focused")}
@@ -120,30 +121,10 @@ const Login: NextPage = () => {
             Login
           </button>
 
-          <div className="divider">
-            <span>Or continue with</span>
-          </div>
-
-          <div className="socialLogin">
-            <button
-              type="button"
-              className="googleButton"
-              onClick={handleGoogleLogin}
-            >
-              <FontAwesomeIcon icon={faGoogle} /> <label>Google</label>
-            </button>
-            <Button
-              type="button"
-              className="discordButton"
-              onClick={handleDiscordLogin}
-            >
-              <FontAwesomeIcon icon={faDiscord} /> <label>Discord</label>
-            </Button>
-          </div>
-
-          <div className="formFooter">
-            <Link href="/signup">Don't have an account? Create account</Link>
-          </div>
+          <Footer
+            handleGoogleLogin={handleGoogleLogin}
+            handleDiscordLogin={handleDiscordLogin}
+          />
         </form>
       </div>
       {error && <Banner type="error" message={error} />}
