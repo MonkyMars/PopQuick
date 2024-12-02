@@ -72,22 +72,22 @@ const Login: NextPage = () => {
         <form className="loginForm" onSubmit={handleLogin}>
           <h2>Login</h2>
 
-          <div className="inputGroup">
+            <div className="inputGroup">
             <label aria-label="Username/email" htmlFor="username">
               Username or email
             </label>
             <input
               type="text"
-              placeholder="Username or email..."
+              placeholder="Enter your username or email"
               value={credentials.identifier}
               onChange={(e) =>
-                setCredentials({ ...credentials, identifier: e.target.value })
+              setCredentials({ ...credentials, identifier: e.target.value })
               }
               required
               className="loginInput"
               id="username"
             />
-          </div>
+            </div>
 
           <div className="inputGroup passwordGroup">
             <label aria-label="Password" htmlFor="password">
@@ -95,10 +95,10 @@ const Login: NextPage = () => {
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="Enter your password"
               value={credentials.password}
               onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value })
+              setCredentials({ ...credentials, password: e.target.value })
               }
               onFocus={(e) => e.target.classList.add("focused")}
               onBlur={(e) => e.target.classList.remove("focused")}
