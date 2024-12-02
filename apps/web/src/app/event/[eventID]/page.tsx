@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Search, User, Settings, LogOut, Plus, Send, Menu } from "lucide-react";
+import { User, Settings, LogOut, Plus, Send, Menu, CalendarDays, Info, Clock  } from "lucide-react";
 import Link from "next/link";
 import "../event.scss";
 
@@ -10,8 +10,8 @@ interface Event {
   id: string;
   name: string;
   date: string;
-  location: string;
   description: string;
+  timeRemaining: string;
   members: Member[];
   messages: Message[];
 }
@@ -20,6 +20,7 @@ interface Member {
   id: number;
   username: string;
   profilePicture: string;
+  status?: 'online' | 'offline';
 }
 
 interface Message {
@@ -31,11 +32,16 @@ interface Message {
 const EventPage = () => {
   const params = useParams() as { eventID: string };
   const router = useRouter();
+  const [timeRemaining, setTimeRemaining] = useState<{raw: number, formatted: string}>({
+    raw: 600,
+    formatted: '10:00'
+  });
   const eventID = params.eventID as string;
   const [event, setEvent] = useState<Event | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const [isMemberMenuOpen, setIsMemberMenuOpen] = useState<boolean>(false);
   const [messageInput, setMessageInput] = useState<string>("");
+  
   const staticMembers: Member[] = [
     {
       id: 1,
@@ -113,12 +119,33 @@ const EventPage = () => {
     },
   ];
 
+  const calculateTimeRemaining = (timeRemaining: number): string => {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timeRemaining.raw > 0) {
+        setTimeRemaining((prevTime) => ({
+          raw: prevTime.raw - 1,
+          formatted: calculateTimeRemaining(prevTime.raw - 1)
+        }));
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval)
+  }, [timeRemaining])
+
   const staticEvent: Event = {
     id: eventID,
     name: `Event ${eventID}`,
     date: new Date().toDateString(),
-    location: "Location 1",
     description: "Description 1",
+    timeRemaining: calculateTimeRemaining(600),
     members: staticMembers,
     messages: staticMessages,
   } as Event;
@@ -136,7 +163,7 @@ const EventPage = () => {
           throw new Error("Failed to fetch event data");
         }
         const eventData: Event = await response.json();
-        setEvent(eventData);
+        setEvent(eventData); // need to set event data based on response one by one
       } catch (error) {
         console.error("Error fetching event data:", error);
         setEvent(staticEvent);
@@ -150,7 +177,8 @@ const EventPage = () => {
     { label: "Placeholder", href: "/", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
-  const [activeUser, setActiveUser] = useState<Member | null>(staticMembers[0]);
+  const [activeUser] = useState<Member | null>(staticMembers[0]);
+  const members = event?.members.map(member => member.username).join(', ');
   return (
     <>
       <nav className="Nav">
@@ -210,16 +238,28 @@ const EventPage = () => {
                   </span>
                 </div>
               ))}
-              <section className="details">
+                <section className="details">
                 <h2>Event Details</h2>
-                <p>{event.date}</p>
-                <p>{event.location}</p>
-                <p>{event.description}</p>
-              </section>
+                <div className="detail">
+                  <CalendarDays className="icon" />
+                  <span className="text">{event.date}</span>
+                </div>
+                <div className="detail">
+                  <User className="icon" />
+                  <span className="text">{
+                    members
+                    }</span>
+                </div>
+                <div className="detail">
+                  <Info className="icon" />
+                  <span className="text">{event.description}</span>
+                </div>
+                </section>
             </aside>
             <section className="messagesTab">
-              <h2>Messages</h2>
+                <h2>Messages</h2>
               <div className="messagesContainer">
+                <span className="timer"><Clock className="icon"/>{timeRemaining.formatted}</span>
                 {staticMessages.map((message) => (
                   <div
                     key={message.id}

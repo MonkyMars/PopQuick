@@ -159,35 +159,44 @@ body {
     .member {
       display: flex;
       align-items: center;
-      gap: 0.5em;
-      padding: 0.5em 0.2em;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition:
-        background-color 0.3s ease,
-        transform 0.3s ease,
-        margin 0.3s ease;
-      border-radius: 4px;
+      gap: 0.8em;
+      padding: 0.8em 1em;
+      border: 1px solid rgba($pink, 0.1);
+      margin: 0.3em 0;
+      transition: all 0.3s ease !important;
+      border-radius: $border-radius;
       cursor: pointer;
-      font-size: 1.2em;
+      font-size: 1.1em;
+      background: rgba($dark-gray, 0.3);
       &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background: rgba($purple, 0.15);
+        transform: translateX(4px);
+        border-color: rgba($pink, 0.3);
+        width: 90%;
         .avatar {
           transform: scale(1.1);
-          margin: 0 0.3em;
+          box-shadow: 0 0 15px rgba($pink, 0.3);
+        }
+
+        .username {
+          color: $pink;
         }
       }
+
       .avatar {
-        width: 40px;
-        transition:
-          background-color 0.3s ease,
-          transform 0.3s ease,
-          margin 0.3s ease;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
+        object-fit: cover;
+        transition: all 0.3s ease;
+        border: 2px solid rgba($pink, 0.2);
       }
+
       .username {
-        color: #f9f9f9;
+        color: $background;
         text-overflow: ellipsis;
+        font-weight: 500;
+        transition: color 0.3s ease;
       }
     }
     .details {
@@ -226,7 +235,7 @@ body {
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
-    .inputContainer{
+    .inputContainer {
       background-color: #383838;
       position: fixed;
       width: calc(100% - 300px);
@@ -260,6 +269,7 @@ body {
         width: 25px;
         height: 25px;
         transition: all 0.3s ease;
+        margin: 0 5px;
         &:hover {
           transform: scale(1.1);
         }
@@ -270,26 +280,27 @@ body {
         border: none;
         background: transparent;
         color: #f9f9f9;
+        background-color: #222;
         padding: 0 0.5em;
-        font-size: 1rem;
+        font-size: 1.05rem;
         border-radius: 8px;
         &::placeholder {
           color: #ccc;
         }
-        &:focus{
+        &:focus {
           outline: none;
         }
       }
-			.valid{
-				color: $pink;
-			}
-			.invalid{
-				cursor: not-allowed;
-				color: lighten($dark-gray, 20%);
-				&:hover{
-					transform: none;
-				}
-			}
+      .valid {
+        color: $pink;
+      }
+      .invalid {
+        cursor: not-allowed;
+        color: lighten($dark-gray, 20%);
+        &:hover {
+          transform: none;
+        }
+      }
     }
     .messagesContainer {
       box-sizing: border-box;
@@ -333,7 +344,10 @@ body {
         border-radius: 12px;
         box-sizing: border-box;
         &:nth-last-child(2) {
-          margin-bottom: 80px;
+          margin-bottom: 1em;
+        }
+        &:nth-child(1) {
+          margin-top: 2em;
         }
         & header {
           display: flex;
@@ -370,6 +384,77 @@ body {
     }
   }
 }
+.details {
+  background-color: darken($dark-gray, 10%);
+  padding: 1.5em;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1em 0;
+  width: 100%;
+  height: 100%;
+  h2 {
+    color: $dark-gray;
+    font-size: 1.5rem;
+    margin-bottom: 1em;
+    border-bottom: 2px solid $pink;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+  }
+
+  .detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    border-radius: $border-radius;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: lighten($dark-gray, 10%);
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      color: $pink;
+      margin-right: 0.5em;
+    }
+
+    .text {
+      color: $dark-gray;
+      font-size: 1.1rem;
+    }
+  }
+  @media screen and (min-width: 1080px) {
+    & h2{
+      text-align: center;
+    }
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.timer{
+  background-color: rgba(#000, 0.4);
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 1em;
+  gap: 1em;
+  border-radius: 12px;
+  position: fixed;
+  top: calc(100px + 5em);
+  left: 50%;
+  translate: -50%, 0;
+  z-index: 3;
+  .icon{
+    color: $pink !important;
+  }
+  @media screen and (max-width: 1080px) {
+    top: 120px;
+  }
+}
 
 .received {
   margin-right: auto !important;
@@ -388,6 +473,7 @@ body {
 
 .you {
   background-color: #444 !important;
+  color: $pink !important;
 }
 
 @media screen and (max-width: 1080px) {
@@ -398,7 +484,13 @@ body {
     .aside {
       width: 0;
       padding: 0;
+      & h1 {
+        display: none;
+      }
       .details {
+        display: none;
+      }
+      .member .avatar {
         display: none;
       }
     }
@@ -413,32 +505,38 @@ body {
       width: 100vw !important;
     }
   }
-	.AsideOpen{
-		& h1{
-			text-align: center;
-		}
-		width: 90% !important;
-		position: fixed !important;
-		top: 100px;
-		z-index: 99;
-		height: calc(100% - 100px) !important;
-		.details{
-			display: flex !important;
-			margin: auto !important;
-		}
-	}
-	.menu{
-		position: absolute;
-		top: .3em;
-		left: .3em;
-		width: 50px;
-		height: 50px;
-		cursor: pointer;
-		transition: transform .5s ease, left .3s ease;
-		z-index: 99;
-	}
-	.open{
-		transform: rotate(360deg);
-		left: 90%;
-	}
+  .AsideOpen {
+    & h1 {
+      text-align: center;
+      display: block !important;
+    }
+    width: 90% !important;
+    position: fixed !important;
+    top: 100px;
+    z-index: 1;
+    height: calc(100% - 100px) !important;
+    .details {
+      display: flex !important;
+      margin: auto !important;
+    }
+    .avatar {
+      display: flex !important;
+    }
+  }
+  .menu {
+    position: absolute;
+    top: 0.3em;
+    left: 0.3em;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition:
+      transform 0.5s ease,
+      left 0.3s ease;
+    z-index: 99;
+  }
+  .open {
+    transform: rotate(360deg);
+    left: 90%;
+  }
 }
