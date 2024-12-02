@@ -393,7 +393,7 @@ body {
   width: 100%;
   height: 100%;
   h2 {
-    color: $dark-gray;
+    color: $background;
     font-size: 1.5rem;
     margin-bottom: 1em;
     border-bottom: 2px solid $pink;
@@ -434,25 +434,43 @@ body {
   }
 }
 
-.timer{
-  background-color: rgba(#000, 0.4);
+.timer {
+  background-color: rgba(#000, 0.6);
   width: max-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5em 1em;
-  gap: 1em;
-  border-radius: 12px;
+  padding: 0.8em 1.2em;
+  gap: 1.2em;
+  border-radius: 16px;
   position: fixed;
   top: calc(100px + 5em);
   left: 50%;
-  translate: -50%, 0;
+  transform: translateX(-50%);
   z-index: 3;
-  .icon{
-    color: $pink !important;
+  box-shadow: 0 4px 15px rgba($pink, 0.2);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  font-size: 1em !important;
+  &:hover {
+    background-color: rgba(#000, 0.75);
+    box-shadow: 0 6px 20px rgba($pink, 0.3);
+    transform: translateX(-50%) translateY(-2px);
   }
+
+  .icon {
+    color: $pink !important;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
   @media screen and (max-width: 1080px) {
     top: 120px;
+    padding: 0.6em 1em;
+    font-size: 0.9em;
   }
 }
 
