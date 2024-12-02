@@ -36,7 +36,7 @@ const Footer: React.FC<FooterProps> = ({
       </div>
 
       <div className="formFooter">
-        <Link href="/signup">Don't have an account? Create account</Link>
+        <Link href="/login">Already have an account? Log in!</Link>
       </div>
     </>
   );
