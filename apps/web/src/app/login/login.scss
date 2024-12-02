@@ -30,7 +30,7 @@ $green: #38eb38;
 
   h2 {
     text-align: center;
-    margin-bottom: 1.5em;
+    margin-bottom: .4em;
     position: relative;
     font-size: 2em;
     color: $background;
@@ -52,55 +52,61 @@ $green: #38eb38;
     flex-direction: column;
     width: 100%;
     align-items: center;
-
     & label {
       display: inline;
+      left: -45%;
+      transform: translateX(50%);
       position: relative;
       margin: 0.3em;
-      align-self: flex-start;
     }
-
     a {
       color: $background;
       text-decoration: none;
       transition: color 0.3s ease-in-out;
       font-size: 0.8em;
-      margin: 0.5em;
+      margin-top: 0.8em;
       align-self: flex-start;
-
+      left: 2em;
+      position: relative;
+      font-family: 'Poppins', sans-serif;
       &:hover {
         color: $pink;
       }
     }
     .loginInput {
+      box-sizing: border-box;
       width: 90%;
-      padding: 0.8em 1em;
-      border: none;
-      border-radius: 0.5em;
-      background-color: #ffffff;
-      color: #222;
-      transition:
-        outline 0.3s,
-        transform 0.3s;
-        background: 0.3s;
-      outline: 1px solid transparent;
-
+      padding: .8em;
+      border: 2px solid transparent;
+      border-radius: $border-radius;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: $background;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      margin-top: 0.2em;
+      outline: .1px solid $pink;
       &:focus {
-        transform: translateY(-2px);
+      outline: none;
+      border-color: rgba($pink, 0.6);
+      background-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 15px rgba($pink, 0.2);
+      & ~ .password-requirements {
+        max-height: 300px;
+        opacity: 1;
+        padding: 1rem;
+        margin-top: 1em;
+      }
+      }
+
+      &:-webkit-autofill {
+      -webkit-text-fill-color: $background;
+      -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.2) inset;
+      transition: background-color 5000s ease-in-out 0s;
       }
 
       &::placeholder {
-        color: #b3b3b3;
-      }
-
-      &:invalid {
-        outline: 1px solid $error-red;
-        background-color: #f7d1dc;
-      }
-
-      &:valid {
-        outline: 1px solid $green;
-        background-color: #f0ffee;
+      color: rgba($background, 0.5);
       }
     }
 
@@ -108,16 +114,14 @@ $green: #38eb38;
       .passwordToggle {
         position: absolute;
         right: 25px;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 45px;
         background: none;
         border: none;
-        color: #888;
+        color: lighten($dark-gray, 40%);
         cursor: pointer;
         transition: color 0.3s;
-
         &:hover {
-          color: #ff69b4;
+          color: $pink;
         }
       }
     }
@@ -125,24 +129,50 @@ $green: #38eb38;
 
   .loginButton {
     width: 90%;
-    padding: 0.8em;
-    background-color: darken($pink, 10%);
+    padding: .8em;
+    background: linear-gradient(135deg, $pink 0%, darken($purple, 10%) 100%);
     color: $background;
     border: none;
     border-radius: $border-radius;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 0.3em;
-    transition:
-      background-color 0.3s,
-      transform 0.2s;
+    margin-top: 0.5em;
+    position: relative;
+    overflow: hidden;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba($pink, 0.3);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
     &:hover {
-      background-color: darken($pink, 20%);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba($pink, 0.4);
+      background: linear-gradient(135deg, lighten($pink, 5%) 0%, $purple 100%);
+
+      &::before {
+        left: 100%;
+      }
     }
 
     &:active {
-      transform: translateY(0);
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba($pink, 0.2);
     }
   }
 
@@ -181,49 +211,114 @@ $green: #38eb38;
       border: none;
       border-radius: $border-radius;
       color: $dark-gray;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
       font-family: "poppins";
-      transition:
-        background-color 0.3s,
-        transform 0.2s;
-
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
       svg {
         margin-right: 0.5em;
+        transition: transform 0.3s ease;
       }
-
+  
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: 0.5s;
+      }
+  
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba($pink, 0.4);
+        background: linear-gradient(135deg, lighten($pink, 5%) 0%, $purple 100%);
+  
+        &::before {
+          left: 100%;
+        }
+      }
+  
+      &:active {
+        transform: translateY(1px);
+        box-shadow: 0 4px 10px rgba($pink, 0.2);
+      }
+  
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba($background, 0.4);
+        background: linear-gradient(135deg, lighten($pink, 5%) 0%, $purple 100%);
+  
+        &::before {
+          left: 100%;
+        }
+      }
+  
       &.googleButton {
-        background-color: $background;
+        background: linear-gradient(135deg, $background 0%, darken($background, 5%) 100%);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        
         &:hover {
-          background-color: darken($background, 10%);
+          background: linear-gradient(135deg, darken($background, 3%) 0%, darken($background, 8%) 100%);
         }
       }
-
+  
       &.discordButton {
-        background-color: #7289da;
+        background: linear-gradient(135deg, #7289da 0%, darken(#7289da, 10%) 100%);
         color: $background;
+        
         &:hover {
-          background-color: darken(#7289da, 10%);
+          background: linear-gradient(135deg, lighten(#7289da, 3%) 0%, #7289da 100%);
+        }
+          }
         }
       }
-    }
-  }
 
   .formFooter {
     margin-top: 1.5em;
     display: flex;
-    justify-content: space-between;
-    font-size: 0.9em;
-    width: 80%;
-    bottom: 5px;
-    position: relative;
+    justify-content: center;
+    font-size: 0.95em;
+    width: 90%;
+    border-radius: $border-radius;
+    backdrop-filter: blur(5px);
     a {
       color: $background;
       text-decoration: none;
-      transition: color 0.3s ease-in-out;
-
+      position: relative;
+      transition: all 0.3s ease;
+      padding: 0.2em 0.5em;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       &:hover {
-        color: $pink;
+    color: $pink;
+    text-shadow: 0 0 8px rgba($pink, 0.5);
+      }
+      
+      &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 50%;
+    background: $pink;
+    transition: all 0.3s ease;
+      }
+      
+      &:hover::after {
+    width: 100%;
+    left: 0;
       }
     }
   }
