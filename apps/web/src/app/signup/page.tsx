@@ -10,6 +10,7 @@ import { passwordRequirements } from "@/utils/password-validation";
 import validator from "validator";
 import Link from "next/link";
 import { Eye, EyeClosed } from "lucide-react";
+import Footer from "./footer/footer";
 
 interface ValidationErrors {
   email?: string;
@@ -141,30 +142,10 @@ const Signup: NextPage = () => {
               <button className="signupButton" onClick={handleContinue}>
                 Continue
               </button>
-              <div className="divider">
-                <span>Or continue with</span>
-              </div>
-
-              <div className="socialSignup">
-                <button
-                  type="button"
-                  className="googleButton"
-                  onClick={handleGoogleSignup}
-                >
-                  <FontAwesomeIcon icon={faGoogle} /> Google
-                </button>
-                <Button
-                  type="button"
-                  className="discordButton"
-                  onClick={handleDiscordSignup}
-                >
-                  <FontAwesomeIcon icon={faDiscord} /> Discord
-                </Button>
-              </div>
-
-              <div className="formFooter">
-                <Link href="/login">Already have an account? Login!</Link>
-              </div>
+              <Footer
+                handleGoogleSignup={handleGoogleSignup}
+                handleDiscordSignup={handleDiscordSignup}
+              />
             </>
           )}
           {formPageIndex === 1 && (

@@ -9,6 +9,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import Link from "next/link"; // Added import for Link
 import { NextPage } from "next";
 import Banner from "@/components/Banner/Banner"; 
+import Footer from "./footer/footer";
 
 const Login: NextPage = () => {
   const [credentials, setCredentials] = useState<LoginUser>({
@@ -120,30 +121,10 @@ const Login: NextPage = () => {
             Login
           </button>
 
-          <div className="divider">
-            <span>Or continue with</span>
-          </div>
-
-          <div className="socialLogin">
-            <button
-              type="button"
-              className="googleButton"
-              onClick={handleGoogleLogin}
-            >
-              <FontAwesomeIcon icon={faGoogle} /> <label>Google</label>
-            </button>
-            <Button
-              type="button"
-              className="discordButton"
-              onClick={handleDiscordLogin}
-            >
-              <FontAwesomeIcon icon={faDiscord} /> <label>Discord</label>
-            </Button>
-          </div>
-
-          <div className="formFooter">
-            <Link href="/signup">Don't have an account? Create account</Link>
-          </div>
+          <Footer
+            handleGoogleLogin={handleGoogleLogin}
+            handleDiscordLogin={handleDiscordLogin}
+          />
         </form>
       </div>
       {error && <Banner type="error" message={error} />}
