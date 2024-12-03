@@ -24,7 +24,7 @@ const Message: React.FC<MessageProps> = ({ message, activeUser }) => {
   return (
     <div
       key={message.id}
-      className={`message ${message.sender?.id == activeUser?.id ? "sent" : "received"}`}
+      className={`message ${message.sender?.id === activeUser?.id ? "sent" : "received"}`}
     >
       <header>
         {message.sender?.profilePicture && (
