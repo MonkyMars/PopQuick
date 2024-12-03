@@ -156,6 +156,7 @@ body {
     padding: 0.6em 1em;
     border-radius: 0 8px 8px 0;
     box-sizing: border-box;
+    z-index: 3;
     .member {
       display: flex;
       align-items: center;
@@ -447,7 +448,7 @@ body {
   top: calc(100px + 5em);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 2;
   box-shadow: 0 4px 15px rgba($pink, 0.2);
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;

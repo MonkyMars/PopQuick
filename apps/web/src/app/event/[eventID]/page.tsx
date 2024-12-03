@@ -5,6 +5,8 @@ import Image from "next/image";
 import { User, Settings, LogOut, Plus, Send, Menu, CalendarDays, Info, Clock  } from "lucide-react";
 import Link from "next/link";
 import "../event.scss";
+import { NextPage } from "next";
+import Message from "./message/message";
 
 interface Event {
   id: string;
@@ -13,7 +15,7 @@ interface Event {
   description: string;
   timeRemaining: string;
   members: Member[];
-  messages: Message[];
+  messages: MessageType[];
 }
 
 interface Member {
@@ -23,13 +25,15 @@ interface Member {
   status?: 'online' | 'offline';
 }
 
-interface Message {
+interface MessageType {
   id: number;
   content: string;
   date: string;
+  timeSent: string;
   sender?: Member;
 }
-const EventPage = () => {
+
+const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
   const router = useRouter();
   const [timeRemaining, setTimeRemaining] = useState<{raw: number, formatted: string}>({
@@ -68,54 +72,62 @@ const EventPage = () => {
         "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
     },
   ];
-  const staticMessages: Message[] = [
+  const staticMessages: MessageType[] = [
     {
       id: 1,
       content: "Hey everyone, excited for the event!",
       date: "2022-01-01",
       sender: staticMembers[0],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 2,
       content: "Looking forward to meeting you all.",
       date: "2022-01-02",
       sender: staticMembers[1],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 3,
       content: "Don't forget to bring your tickets.",
       date: "2022-01-03",
       sender: staticMembers[2],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 4,
       content: "See you all there!",
       date: "2022-01-04",
       sender: staticMembers[3],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 5,
       content: "Hey everyone, excited for the event!",
       date: "2022-01-01",
       sender: staticMembers[0],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 6,
       content: "Looking forward to meeting you all.",
       date: "2022-01-02",
       sender: staticMembers[1],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 7,
       content: "Don't forget to bring your tickets.",
       date: "2022-01-03",
       sender: staticMembers[2],
+      timeSent: new Date().toTimeString(),
     },
     {
       id: 8,
       content: "See you all there!",
       date: "2022-01-04",
       sender: staticMembers[3],
+      timeSent: new Date().toTimeString(),
     },
   ];
 
@@ -261,28 +273,7 @@ const EventPage = () => {
               <div className="messagesContainer">
                 <span className="timer"><Clock className="icon"/>{timeRemaining.formatted}</span>
                 {staticMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`message ${message.sender?.id == activeUser?.id ? "sent" : "received"}`}
-                  >
-                    <header>
-                      {message.sender?.profilePicture && (
-                        <Image
-                          src={message.sender?.profilePicture}
-                          alt="User"
-                          width={50}
-                          height={50}
-                          className="avatar"
-                          draggable={false}
-                        />
-                      )}
-                      <span>{message.sender?.username}</span>
-                    </header>
-                    <p className="content">{message.content}</p>
-                    <footer>
-                      <p>{message.date}</p>
-                    </footer>
-                  </div>
+                  <Message message={message} activeUser={activeUser}/>
                 ))}
                 <div className="inputContainer">
                   <button>
