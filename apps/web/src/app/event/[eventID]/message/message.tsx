@@ -1,24 +1,10 @@
 import Image from "next/image";
-
-interface Member {
-  id: number;
-  username: string;
-  profilePicture: string;
-  status?: 'online' | 'offline';
-}
+import { Member, MessageType } from "../event-util";
 
 interface MessageProps {
-  message: {
-		id: number;
-		content: string;
-		date: string;
-		timeSent: string;
-		sender?: Member;
-  };
+  message: MessageType;
   activeUser: Member | null;
 }
-
-
 
 const Message: React.FC<MessageProps> = ({ message, activeUser }) => {
   return (

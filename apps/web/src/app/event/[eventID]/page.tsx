@@ -7,31 +7,8 @@ import Link from "next/link";
 import "../event.scss";
 import { NextPage } from "next";
 import Message from "./message/message";
-
-interface Event {
-  id: string;
-  name: string;
-  date: string;
-  description: string;
-  timeRemaining: string;
-  members: Member[];
-  messages: MessageType[];
-}
-
-interface Member {
-  id: number;
-  username: string;
-  profilePicture: string;
-  status?: 'online' | 'offline';
-}
-
-interface MessageType {
-  id: number;
-  content: string;
-  date: string;
-  timeSent: string;
-  sender?: Member;
-}
+import { Member, MessageType, Event } from "./event-util";
+import { fetchEvent } from "./fetching/event-fetching";
 
 const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
@@ -163,25 +140,15 @@ const EventPage: NextPage = () => {
   } as Event;
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      if (!eventID) {
-        router.push("/");
-        return;
-      }
-      try {
-        const response = await fetch(`/api/events/${eventID}`);
-        if (!response.ok) {
-          // router.push("/"); // Redirect to home page if event not found
-          throw new Error("Failed to fetch event data");
-        }
-        const eventData: Event = await response.json();
-        setEvent(eventData); // need to set event data based on response one by one
-      } catch (error) {
-        console.error("Error fetching event data:", error);
+    const fetchEventData = async () => {
+      const fetchedEvent = await fetchEvent({ eventID });
+      if (fetchedEvent.status === 200) {
+        setEvent(fetchedEvent.data);
+      } else {
         setEvent(staticEvent);
       }
     };
-    fetchEvent();
+    fetchEventData();
   }, [eventID]);
 
   const pages = [
