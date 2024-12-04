@@ -6,17 +6,15 @@ import {
   User,
   Settings,
   LogOut,
-  Plus,
-  Send,
   Menu,
   CalendarDays,
-  Info,
   Clock,
 } from "lucide-react";
 import Link from "next/link";
 import "../event.scss";
 import { NextPage } from "next";
 import Message from "./message/message";
+import InputField from "./inputField/inputField";
 import { Member, MessageType, Event } from "./event-util";
 import { fetchEvent } from "./fetching/event-fetching";
 
@@ -265,23 +263,7 @@ const EventPage: NextPage = () => {
                 {staticMessages.map((message) => (
                   <Message message={message} activeUser={activeUser} />
                 ))}
-                <div className="inputContainer">
-                  <button>
-                    <Plus className="icon add" />
-                  </button>
-                  <input
-                    type="text"
-                    placeholder="Type a message..."
-                    className="input"
-                    value={messageInput}
-                    onChange={(e) => setMessageInput(e.target.value)}
-                  />
-                  <button type="submit" disabled={!messageInput}>
-                    <Send
-                      className={`icon send ${messageInput ? "valid" : "invalid"}`}
-                    ></Send>
-                  </button>
-                </div>
+                <InputField messageInput={messageInput} setMessageInput={setMessageInput}/>
               </div>
             </section>
             <Menu
