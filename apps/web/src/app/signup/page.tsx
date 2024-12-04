@@ -172,20 +172,10 @@ const Signup: NextPage = () => {
                 </div>
               </div>
               <button className="signupButton" onClick={handleContinue}>Continue</button>
-              <div className="divider"><span>Or continue with</span></div>
-
-              <div className="socialSignup">
-                <button type="button" className="googleButton" onClick={handleGoogleSignup}>
-                  <FontAwesomeIcon icon={faGoogle} />Google
-                </button>
-                <Button type="button" className="discordButton" onClick={handleDiscordSignup}>
-                  <FontAwesomeIcon icon={faDiscord} />Discord
-                </Button>
-              </div>
-
-              <div className="formFooter">
-                <Link href="/login">Already have an account? Login!</Link>
-              </div>
+              <Footer 
+                handleDiscordSignup={handleDiscordSignup}
+                handleGoogleSignup={handleGoogleSignup}
+              />
             </>
           )}
           {formPageIndex === 1 && (
