@@ -62,49 +62,49 @@ const EventPage: NextPage = () => {
       content: "Looking forward to meeting you all.",
       date: "2022-01-02",
       sender: staticMembers[1],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
     {
       id: 3,
       content: "Don't forget to bring your tickets.",
       date: "2022-01-03",
       sender: staticMembers[2],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
     {
       id: 4,
       content: "See you all there!",
       date: "2022-01-04",
       sender: staticMembers[3],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
     {
       id: 5,
       content: "Hey everyone, excited for the event!",
       date: "2022-01-01",
       sender: staticMembers[0],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
     {
       id: 6,
       content: "Looking forward to meeting you all.",
       date: "2022-01-02",
       sender: staticMembers[1],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
     {
       id: 7,
       content: "Don't forget to bring your tickets.",
       date: "2022-01-03",
       sender: staticMembers[2],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
     {
       id: 8,
       content: "See you all there!",
       date: "2022-01-04",
       sender: staticMembers[3],
-      timeSent: new Date().toTimeString(),
+      timeSent: new Date().toTimeString().toString(),
     },
   ];
 
@@ -132,8 +132,7 @@ const EventPage: NextPage = () => {
   const staticEvent: Event = {
     id: eventID,
     name: `Event ${eventID}`,
-    date: new Date().toDateString(),
-    description: "Description 1",
+    date: new Date().toString(),
     timeRemaining: calculateTimeRemaining(600),
     members: staticMembers,
     messages: staticMessages,
@@ -158,6 +157,13 @@ const EventPage: NextPage = () => {
   ];
   const [activeUser] = useState<Member | null>(staticMembers[0]);
   const members = event?.members.map(member => member.username).join(', ');
+  const formattedDate = new Date(String(event?.date)).toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+  
   return (
     <>
       <nav className="Nav">
@@ -196,6 +202,7 @@ const EventPage: NextPage = () => {
             <aside className={`aside ${isMemberMenuOpen ? "AsideOpen" : null}`}>
               <header>
                 <h1>{event.name}</h1>
+                <span className="timer"><Clock className="icon"/>{timeRemaining.formatted}</span>
               </header>
               {staticMembers.map((member) => (
                 <div
@@ -221,7 +228,7 @@ const EventPage: NextPage = () => {
                 <h2>Event Details</h2>
                 <div className="detail">
                   <CalendarDays className="icon" />
-                  <span className="text">{event.date}</span>
+                  <span className="text">{formattedDate}</span>
                 </div>
                 <div className="detail">
                   <User className="icon" />
@@ -229,16 +236,11 @@ const EventPage: NextPage = () => {
                     members
                     }</span>
                 </div>
-                <div className="detail">
-                  <Info className="icon" />
-                  <span className="text">{event.description}</span>
-                </div>
                 </section>
             </aside>
             <section className="messagesTab">
-                <h2>Messages</h2>
+                
               <div className="messagesContainer">
-                <span className="timer"><Clock className="icon"/>{timeRemaining.formatted}</span>
                 {staticMessages.map((message) => (
                   <Message message={message} activeUser={activeUser}/>
                 ))}

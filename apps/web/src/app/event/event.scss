@@ -140,7 +140,6 @@ body {
 .mainContent {
   display: grid;
   grid-template-columns: 300px 1fr;
-  overflow: hidden;
   transition: grid-template-columns 0.3s ease;
   min-height: calc(100vh - 100px);
   box-sizing: border-box;
@@ -148,15 +147,37 @@ body {
   .aside {
     background-color: #383838;
     width: 300px;
-    overflow: hidden;
     transition: width 0.3s ease;
     position: relative;
     display: flex;
     flex-direction: column;
     padding: 0.6em 1em;
-    border-radius: 0 8px 8px 0;
     box-sizing: border-box;
     z-index: 3;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba($pink, 0.5) #383838;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #383838;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($pink, 0.5);
+      border-radius: 20px;
+    }
+
+    & header{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
     .member {
       display: flex;
       align-items: center;
@@ -205,6 +226,7 @@ body {
       flex-direction: column;
       gap: 0.5em;
       padding: 0.3em 0;
+      box-sizing: border-box;
       &.hidden {
         display: none;
       }
@@ -212,6 +234,8 @@ body {
         display: flex;
         align-items: center;
         gap: 0.1em;
+        min-height: calc(100% / 6);
+        box-sizing: border-box;
         .icon {
           width: 20px;
           height: 20px;
@@ -231,7 +255,6 @@ body {
     flex-direction: column;
     background-color: #292929;
     padding: 0.5em 1em;
-    border-radius: 8px 8px 0 0;
     width: auto;
     box-sizing: border-box;
     overflow: hidden;
@@ -344,6 +367,7 @@ body {
         padding: 0.3em 0.7em;
         border-radius: 12px;
         box-sizing: border-box;
+        transition: transform 0.3s ease;
         &:nth-last-child(2) {
           margin-bottom: 1em;
         }
@@ -374,6 +398,9 @@ body {
           font-size: 1rem;
           width: 100%;
           margin-bottom: 25px;
+        }
+        &:hover{
+          transform: translateX(-2px);
         }
       }
     }
@@ -436,7 +463,6 @@ body {
 }
 
 .timer {
-  background-color: rgba(#000, 0.6);
   width: max-content;
   display: flex;
   align-items: center;
@@ -444,21 +470,10 @@ body {
   padding: 0.8em 1.2em;
   gap: 1.2em;
   border-radius: 16px;
-  position: fixed;
-  top: calc(100px + 5em);
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 2;
-  box-shadow: 0 4px 15px rgba($pink, 0.2);
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
   font-size: 1em !important;
-  &:hover {
-    background-color: rgba(#000, 0.75);
-    box-shadow: 0 6px 20px rgba($pink, 0.3);
-    transform: translateX(-50%) translateY(-2px);
-  }
-
   .icon {
     color: $pink !important;
     transition: transform 0.3s ease;

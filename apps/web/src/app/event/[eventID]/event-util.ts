@@ -2,7 +2,6 @@ export interface Event {
   id: string;
   name: string;
   date: string;
-  description: string;
   timeRemaining: string;
   members: Member[];
   messages: MessageType[];
