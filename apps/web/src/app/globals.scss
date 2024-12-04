@@ -6,7 +6,22 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: "Raleway", "Poppins", "Rubik";
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: scroll;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background: lightgray;
+}
+
 :root {
   --background-color: #f9f9f9;
   --text-color: #222;
@@ -17,7 +32,6 @@ body {
   --theme-purple: #9b4d97;
   --confirm-green: #38eb38;
   --error-red: #e02b2b;
-
 }
 
 @media (prefers-color-scheme: dark) {
