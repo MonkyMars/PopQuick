@@ -2,7 +2,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { User, Settings, LogOut, Plus, Send, Menu, CalendarDays, Info, Clock  } from "lucide-react";
+import {
+  User,
+  Settings,
+  LogOut,
+  Plus,
+  Send,
+  Menu,
+  CalendarDays,
+  Info,
+  Clock,
+} from "lucide-react";
 import Link from "next/link";
 import "../event.scss";
 import { NextPage } from "next";
@@ -13,16 +23,19 @@ import { fetchEvent } from "./fetching/event-fetching";
 const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
   const router = useRouter();
-  const [timeRemaining, setTimeRemaining] = useState<{raw: number, formatted: string}>({
+  const [timeRemaining, setTimeRemaining] = useState<{
+    raw: number;
+    formatted: string;
+  }>({
     raw: 600,
-    formatted: '10:00'
+    formatted: "10:00",
   });
   const eventID = params.eventID as string;
   const [event, setEvent] = useState<Event | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const [isMemberMenuOpen, setIsMemberMenuOpen] = useState<boolean>(false);
   const [messageInput, setMessageInput] = useState<string>("");
-  
+
   const staticMembers: Member[] = [
     {
       id: 1,
@@ -111,23 +124,23 @@ const EventPage: NextPage = () => {
   const calculateTimeRemaining = (timeRemaining: number): string => {
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (timeRemaining.raw > 0) {
         setTimeRemaining((prevTime) => ({
           raw: prevTime.raw - 1,
-          formatted: calculateTimeRemaining(prevTime.raw - 1)
+          formatted: calculateTimeRemaining(prevTime.raw - 1),
         }));
       } else {
         clearInterval(interval);
       }
     }, 1000);
 
-    return () => clearInterval(interval)
-  }, [timeRemaining])
+    return () => clearInterval(interval);
+  }, [timeRemaining]);
 
   const staticEvent: Event = {
     id: eventID,
@@ -142,7 +155,12 @@ const EventPage: NextPage = () => {
     const fetchEventData = async () => {
       const fetchedEvent = await fetchEvent({ eventID });
       if (fetchedEvent.status === 200) {
-        setEvent(fetchedEvent.data);
+        try {
+          setEvent(fetchedEvent.data);
+        } catch (error) {
+          console.error("Error setting event data:", error);
+          setEvent(staticEvent);
+        }
       } else {
         setEvent(staticEvent);
       }
@@ -156,14 +174,17 @@ const EventPage: NextPage = () => {
     { label: "Placeholder", href: "/", id: 3 },
   ];
   const [activeUser] = useState<Member | null>(staticMembers[0]);
-  const members = event?.members.map(member => member.username).join(', ');
-  const formattedDate = new Date(String(event?.date)).toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    month: 'long', 
-    day: 'numeric', 
-    year: 'numeric' 
-  });
-  
+  const members = event?.members.map((member) => member.username).join(", ");
+  const formattedDate = new Date(String(event?.date)).toLocaleDateString(
+    "en-US",
+    {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }
+  );
+
   return (
     <>
       <nav className="Nav">
@@ -202,7 +223,10 @@ const EventPage: NextPage = () => {
             <aside className={`aside ${isMemberMenuOpen ? "AsideOpen" : null}`}>
               <header>
                 <h1>{event.name}</h1>
-                <span className="timer"><Clock className="icon"/>{timeRemaining.formatted}</span>
+                <span className="timer">
+                  <Clock className="icon" />
+                  {timeRemaining.formatted}
+                </span>
               </header>
               {staticMembers.map((member) => (
                 <div
@@ -224,7 +248,7 @@ const EventPage: NextPage = () => {
                   </span>
                 </div>
               ))}
-                <section className="details">
+              <section className="details">
                 <h2>Event Details</h2>
                 <div className="detail">
                   <CalendarDays className="icon" />
@@ -232,17 +256,14 @@ const EventPage: NextPage = () => {
                 </div>
                 <div className="detail">
                   <User className="icon" />
-                  <span className="text">{
-                    members
-                    }</span>
+                  <span className="text">{members}</span>
                 </div>
-                </section>
+              </section>
             </aside>
             <section className="messagesTab">
-                
               <div className="messagesContainer">
                 {staticMessages.map((message) => (
-                  <Message message={message} activeUser={activeUser}/>
+                  <Message message={message} activeUser={activeUser} />
                 ))}
                 <div className="inputContainer">
                   <button>
