@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useRef, FormEvent } from "react";
 import "@/app/signup/signup.scss";
 import { Button } from "@repo/ui/button";
 import { NextPage } from "next";
@@ -7,9 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Check, X } from "lucide-react";
 import { passwordRequirements } from "@/utils/password-validation";
-import validator from 'validator';
+import validator from "validator";
 import Link from "next/link";
 import { Eye, EyeClosed } from "lucide-react";
+import Footer from "./footer/footer";
 
 interface ValidationErrors {
   email?: string;
@@ -17,6 +18,7 @@ interface ValidationErrors {
 }
 
 const Signup: NextPage = () => {
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -24,28 +26,29 @@ const Signup: NextPage = () => {
     date: String(new Date(0)),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [formPageIndex, setformPageIndex] = useState(0);
+  const [formPageIndex, setFormPageIndex] = useState(0);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [validRequirements, setValidRequirements] = useState<string[]>([]);
 
   const validatePassword = (password: string): boolean => {
     const validRequirements = passwordRequirements
-      .filter(req => req.validator(password))
-      .map(req => req.id);
-    
+      .filter((req) => req.validator(password))
+      .map((req) => req.id);
+
     setValidRequirements(validRequirements);
-    
+
     const isValid = validRequirements.length === passwordRequirements.length;
-    
+
     if (!isValid) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        password: "Please meet all password requirements"
+        password: "Please meet all password requirements",
       }));
+      passwordInputRef.current?.focus();;
     } else {
-      setErrors(prev => ({ ...prev, password: undefined }));
+      setErrors((prev) => ({ ...prev, password: undefined }));
     }
-    
+
     return isValid;
   };
 
@@ -59,7 +62,7 @@ const Signup: NextPage = () => {
     const isPasswordValid = validatePassword(user.password);
 
     if (isEmailValid && isPasswordValid) {
-      setformPageIndex(1);
+      setFormPageIndex(1);
     }
   };
 
@@ -77,7 +80,7 @@ const Signup: NextPage = () => {
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
-                  className={`signupInput ${errors.email ? 'error' : ''}`}
+                  className={`signupInput ${errors.email ? "error" : ""}`}
                   placeholder="e.g, johndoe@example.com"
                   value={user.email}
                   onChange={(e) => {
@@ -87,11 +90,16 @@ const Signup: NextPage = () => {
                   required
                   id="email"
                 />
-                {errors.email && <span className="errorMessage">{errors.email}</span>}
+                {errors.email && (
+                  <span className="errorMessage">{errors.email}</span>
+                )}
               </div>
               <div className="inputGroup passwordGroup">
-                <label aria-label='Password' htmlFor="password">Password</label>
+                <label aria-label="Password" htmlFor="password">
+                  Password
+                </label>
                 <input
+                  ref={passwordInputRef}
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={user.password}
@@ -100,7 +108,7 @@ const Signup: NextPage = () => {
                     validatePassword(e.target.value);
                   }}
                   required
-                  className={`signupInput ${errors.password ? 'error' : ''}`}
+                  className={`signupInput ${errors.password ? "error" : ""}`}
                   id="password"
                 />
                 <button
@@ -110,13 +118,13 @@ const Signup: NextPage = () => {
                 >
                   {showPassword ? <Eye /> : <EyeClosed />}
                 </button>
-                
+
                 <div className="password-requirements">
                   <ul>
                     {passwordRequirements.map((req) => (
-                      <li 
+                      <li
                         key={req.id}
-                        className={`requirement ${validRequirements.includes(req.id) ? 'valid' : ''}`}
+                        className={`requirement ${validRequirements.includes(req.id) ? "valid" : ""}`}
                       >
                         <span className="icon">
                           {validRequirements.includes(req.id) ? (
@@ -131,27 +139,21 @@ const Signup: NextPage = () => {
                   </ul>
                 </div>
               </div>
-              <button className="signupButton" onClick={handleContinue}>Continue</button>
-              <div className="divider"><span>Or continue with</span></div>
-
-              <div className="socialSignup">
-                <button type="button" className="googleButton" onClick={handleGoogleSignup}>
-                  <FontAwesomeIcon icon={faGoogle} /> <label>Google</label>
-                </button>
-                <Button type="button" className="discordButton" onClick={handleDiscordSignup}>
-                  <FontAwesomeIcon icon={faDiscord} /> <label>Discord</label>
-                </Button>
-              </div>
-
-              <div className="formFooter">
-                <Link href="/login">Already have an account? Login!</Link>
-              </div>
+              <button className="signupButton" onClick={handleContinue}>
+                Continue
+              </button>
+              <Footer
+                handleGoogleSignup={handleGoogleSignup}
+                handleDiscordSignup={handleDiscordSignup}
+              />
             </>
           )}
           {formPageIndex === 1 && (
             <>
               <div className="inputGroup">
-                <label htmlFor="date" aria-label="Date of birth">{'Date of birth'}</label>
+                <label htmlFor="date" aria-label="Date of birth">
+                  {"Date of birth"}
+                </label>
                 <input
                   type="date"
                   className="signupInput"
@@ -162,17 +164,23 @@ const Signup: NextPage = () => {
                 />
               </div>
               <div className="inputGroup">
-                <label htmlFor="username" aria-label="username">{'Username'}</label>
+                <label htmlFor="username" aria-label="username">
+                  {"Username"}
+                </label>
                 <input
                   type="text"
                   className="signupInput"
                   id="username"
                   required
                   value={user.username}
-                  onChange={(e) => setUser({ ...user, username: e.target.value })}
+                  onChange={(e) =>
+                    setUser({ ...user, username: e.target.value })
+                  }
                 />
               </div>
-              <Button className="signupButton" type="submit">{'Sign up'}</Button>
+              <Button className="signupButton" type="submit">
+                {"Sign up"}
+              </Button>
             </>
           )}
         </form>
