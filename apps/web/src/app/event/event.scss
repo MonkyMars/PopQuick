@@ -353,7 +353,6 @@ body {
       }
 
       .message {
-        color: #f9f9f9;
         font-size: 1.2rem;
         width: max-content;
         max-width: min(90%, 400px);
@@ -378,9 +377,16 @@ body {
           display: flex;
           align-items: center;
           gap: 0.5em;
-          .username {
-            color: #f9f9f9;
-          }
+            .username {
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba($pink, 0.3);
+            cursor: pointer;
+            
+            &:hover {
+              color: $background;
+              text-shadow: 0 0 12px rgba($background, .4);
+            }
+            }
           .avatar {
             color: #f9f9f9;
             border-radius: 50%;

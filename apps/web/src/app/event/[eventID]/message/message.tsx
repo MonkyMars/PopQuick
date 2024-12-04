@@ -23,7 +23,7 @@ const Message: React.FC<MessageProps> = ({ message, activeUser }) => {
             draggable={false}
           />
         )}
-        <span>{message.sender?.username}</span>
+        <span className="username">{message.sender?.username}</span>
       </header>
       <p className="content">{message.content}</p>
       <footer>
