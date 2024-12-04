@@ -8,20 +8,20 @@ interface JwtPayload {
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
+        const token = req.cookies.x_auth_cookie;
 
         if (!token) {
             return res.status(403).json({ message: 'Invalid token' });
         }
 
         const decoded = jwt.verify(token, <string>process.env.JWT_SECRET) as JwtPayload;
-        res.locals.user = {
+        req.user = {
             user_id: decoded.user_id,
             isAdmin: decoded.isAdmin,
         }
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Please authenticate.' });
+        return res.status(401).json({ message: 'Please authenticate.', error: ( error as Error ).message });
     }
 };
 

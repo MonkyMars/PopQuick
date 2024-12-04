@@ -4,15 +4,20 @@ import morgan from "morgan";
 import cors from "cors";
 import authRouter from "./Routers/authRouter";
 import userRouter from "@/src/Routers/userRouter";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import '@/src/configs/passportConfig';
 
 export const createServer = (): Express => {
   const app = express();
   app
     .disable("x-powered-by")
     .use(morgan("dev"))
+    .use(passport.initialize())
     .use(urlencoded({ extended: true }))
     .use(express.json())
-    .use(cors())
+    .use(cookieParser())
+    .use(cors({ credentials: true }))
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
     })
