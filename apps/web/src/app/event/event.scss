@@ -399,9 +399,6 @@ body {
           width: 100%;
           margin-bottom: 25px;
         }
-        &:hover{
-          transform: translateX(-2px);
-        }
       }
     }
 
@@ -497,12 +494,20 @@ body {
   & footer {
     color: lighten($pink, 10%) !important;
   }
+  &:hover{
+    transform: translateX(2px);
+    box-shadow: 0 4px 10px rgba($pink, 0.3);
+  }
 }
 
 .sent {
   background-color: #444 !important;
   margin-left: auto !important;
   margin-right: 10px !important;
+  &:hover{
+    transform: translateX(-2px);
+    box-shadow: 0 4px 10px rgba(#444, 0.3);
+  }
 }
 
 .you {
