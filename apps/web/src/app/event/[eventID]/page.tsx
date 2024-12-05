@@ -171,6 +171,7 @@ const EventPage: NextPage = () => {
     { label: "Placeholder", href: "/", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
+  
   const [activeUser] = useState<Member | null>(staticMembers[0]);
   const members = event?.members.map((member) => member.username).join(", ");
   const formattedDate = new Date(String(event?.date)).toLocaleDateString(
