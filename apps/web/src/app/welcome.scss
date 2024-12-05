@@ -1,10 +1,11 @@
-$background: #f9f9f9;
-$pink: #ff77b4;
-$purple: #9b4d97;
-$dark-gray: #383838;
-$error-red: #e02b2b;
+$background: var(--background-color);
+$pink: var(--theme-pink);
+$purple: var(--theme-pink);
+$dark-gray: var(--secondary-background);
+$error-red: var(--error-red);
 $border-radius: 8px;
-$green: #38eb38;
+$green: var(--confirm-green);
+$text-color: var(--text-color);
 
 .MainContent {
   height: 100vh;
@@ -22,9 +23,10 @@ $green: #38eb38;
 		padding: 0;
 		margin: 0;
     font-size: 2em;
+    color: $text-color !important;
     & strong{
       font-weight: 600;
-      color: darken($pink,10%);
+      color: $pink;
     }
 		a{
 			width: 100%;
@@ -32,7 +34,7 @@ $green: #38eb38;
     button {
       width: 40%;
       padding: 0.8em;
-      background-color: darken($pink, 10%);
+      background-color: $pink;
       color: $background;
       border: none;
       border-radius: $border-radius;
@@ -44,7 +46,7 @@ $green: #38eb38;
         background-color 0.3s,
         transform 0.2s;
       &:hover {
-        background-color: darken($pink, 20%);
+        background-color: $pink;
         transform: translateY(-2px);
       }
 
