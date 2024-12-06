@@ -6,6 +6,43 @@ $error-red: #e02b2b;
 $border-radius: 8px;
 $green: #38eb38;
 
+@keyframes typing {
+  0% { 
+    width: 0;
+    border-right-color: $pink;
+  }
+  99% { 
+    border-right-color: $pink;
+  }
+  100% { 
+    width: 100%;
+    border-right-color: transparent;
+  }
+}
+
+@keyframes deleting {
+  0% { 
+    width: 100%;
+    border-right-color: $pink;
+  }
+  99% { 
+    border-right-color: $pink;
+  }
+  100% { 
+    width: 0;
+    border-right-color: transparent;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { border-right-color: $pink; }
+  50% { border-right-color: transparent; }
+}
+
+ body { 
+  overflow: hidden;
+ }
+
 .MainContent {
   height: 100vh;
   width: 100vw;
@@ -19,18 +56,41 @@ $green: #38eb38;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-		padding: 0;
-		margin: 0;
+    padding: 0;
+    margin: 0;
     font-size: 2em;
-    & strong{
-      font-weight: 600;
-      color: darken($pink,10%);
+    h1 {
+      display: inline-block;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid $pink;
+      width: 400px; // Add fixed width
+      height: 1.2em; // Add fixed height
+      
+      &.typing {
+        animation: 
+          typing 2s steps(30, end),
+          blink 1s step-end infinite;
+        animation-fill-mode: forwards;
+      }
+      
+      &.deleting {
+        animation: 
+          deleting 1.5s steps(30, end),
+          blink 1s step-end infinite;
+        animation-fill-mode: forwards;
+      }
+      strong {
+        font-weight: 600;
+        color: darken($pink,10%);
+      }
     }
-		a{
-			width: 100%;
-		}
+    a {
+      width: 100%;
+    }
     button {
-      width: 40%;
+      width: 45%;
       padding: 0.8em;
       background-color: darken($pink, 10%);
       color: $background;
@@ -39,7 +99,7 @@ $green: #38eb38;
       font-weight: bold;
       cursor: pointer;
       margin-top: 0.5em;
-			margin: 1em;
+      margin: 1em;
       transition:
         background-color 0.3s,
         transform 0.2s;
@@ -54,3 +114,4 @@ $green: #38eb38;
     }
   }
 }
+
