@@ -1,10 +1,33 @@
-$background: #f9f9f9;
-$pink: #ff77b4;
-$purple: #9b4d97;
-$dark-gray: #383838;
-$error-red: #e02b2b;
+$background: var(--background-color);
+$pink: var(--theme-pink);
+$purple: var(--theme-purple);
+$dark-gray: var(--secondary-background);
+$error-red: var(--error-red);
 $border-radius: 8px;
-$green: #38eb38;
+$green: var(--confirm-green);
+$text-color: var(--text-color);
+$form-background: var(--form-background);
+:root {
+  --google-signin: #898989;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --google-signin: #e3e3e3;
+  }
+}
+
+$google-signin: var(--google-signin);
+
+*{
+  box-sizing: border-box;
+  &::placeholder{
+    color: #a1a1a1 !important;
+  }
+  .password-requirements{
+    color: indianred !important;
+  }
+}
 
 .signupContainer {
   min-height: 100vh;
@@ -14,7 +37,7 @@ $green: #38eb38;
 }
 
 .signupForm {
-  background: darken(rgba(255, 119, 180, 0.2), 90%);
+  background: $form-background;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.125);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -28,12 +51,13 @@ $green: #38eb38;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  color: $text-color !important;
   h2 {
     text-align: center;
     margin-bottom: .4em;
     position: relative;
     font-size: 2em;
-    color: $background;
+    color: $text-color;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
   }
   .signupContent {
@@ -103,7 +127,7 @@ $green: #38eb38;
         top: 45px;
         background: none;
         border: none;
-        color: lighten($dark-gray, 40%);
+        color: inherit !important;
         cursor: pointer;
         transition: color 0.3s;
         &:hover {
@@ -116,8 +140,7 @@ $green: #38eb38;
   .signupButton {
     width: 90%;
     padding: .8em;
-    background: linear-gradient(135deg, $pink 0%, darken($purple, 10%) 100%);
-    color: $background;
+    background: linear-gradient(135deg, $pink 0%, $purple 100%);
     border: none;
     border-radius: $border-radius;
     font-weight: 600;
@@ -127,6 +150,7 @@ $green: #38eb38;
     overflow: hidden;
     font-size: 1em;
     letter-spacing: 0.5px;
+    color: $text-color;
     transition: all 0.3s ease;
     box-shadow: 0 6px 15px rgba($pink, 0.3);
 
@@ -149,7 +173,7 @@ $green: #38eb38;
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba($pink, 0.4);
-      background: linear-gradient(135deg, lighten($pink, 5%) 0%, $purple 100%);
+      background: linear-gradient(135deg, $pink 0%, $purple 100%);
 
       &::before {
         left: 100%;
@@ -168,13 +192,13 @@ $green: #38eb38;
   align-items: center;
   text-align: center;
   margin: 1.5em 0;
-  color: $background;
+  color: $text-color;
   width: 90%;
   &::before,
   &::after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid rgba($background, 0.3);
+    border-bottom: 1px solid $text-color;
   }
 
   span {
@@ -188,6 +212,7 @@ $green: #38eb38;
   justify-content: space-between;
   gap: 1em;
   width: 90%;
+  color: $text-color !important;
   button {
     flex-grow: 1;
     display: flex;
@@ -197,7 +222,7 @@ $green: #38eb38;
     padding: 0.8em;
     border: none;
     border-radius: $border-radius;
-    color: $dark-gray;
+    color: $text-color;
     font-weight: 600;
     cursor: pointer;
     font-family: "poppins";
@@ -230,7 +255,7 @@ $green: #38eb38;
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba($pink, 0.4);
-      background: linear-gradient(135deg, lighten($pink, 5%) 0%, $purple 100%);
+      background: linear-gradient(135deg, $pink 0%, $purple 100%);
 
       &::before {
         left: 100%;
@@ -245,7 +270,7 @@ $green: #38eb38;
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba($background, 0.4);
-      background: linear-gradient(135deg, lighten($pink, 5%) 0%, $purple 100%);
+      background: linear-gradient(135deg, $pink 0%, $purple 100%);
 
       &::before {
         left: 100%;
@@ -253,20 +278,16 @@ $green: #38eb38;
     }
 
     &.googleButton {
-      background: linear-gradient(135deg, $background 0%, darken($background, 5%) 100%);
+      background: $google-signin;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      
-      &:hover {
-        background: linear-gradient(135deg, darken($background, 3%) 0%, darken($background, 8%) 100%);
-      }
     }
 
     &.discordButton {
-      background: linear-gradient(135deg, #7289da 0%, darken(#7289da, 10%) 100%);
+      background: #7289da;
       color: $background;
       
       &:hover {
-        background: linear-gradient(135deg, lighten(#7289da, 3%) 0%, #7289da 100%);
+        background: #8699dd;
       }
         }
       }
@@ -280,13 +301,13 @@ $green: #38eb38;
       width: 90%;
       border-radius: $border-radius;
       backdrop-filter: blur(5px);
+      color: $text-color !important;
       a {
-        color: $background;
+        color: inherit;
         text-decoration: none;
         position: relative;
         transition: all 0.3s ease;
         padding: 0.2em 0.5em;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         &:hover {
       color: $pink;
       text-shadow: 0 0 8px rgba($pink, 0.5);

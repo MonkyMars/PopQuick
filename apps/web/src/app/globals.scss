@@ -32,6 +32,7 @@ body {
   --theme-purple: #9b4d97;
   --confirm-green: #38eb38;
   --error-red: #e02b2b;
+  --form-background: rgba(255, 199, 226, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,5 +40,6 @@ body {
     --background-color: #222;
     --text-color: #f9f9f9;
     --secondary-background: #383838;
+    --form-background: rgba(0, 0, 0, 0.2);
   }
 }
