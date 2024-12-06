@@ -140,7 +140,6 @@ body {
 .mainContent {
   display: grid;
   grid-template-columns: 300px 1fr;
-  overflow: hidden;
   transition: grid-template-columns 0.3s ease;
   min-height: calc(100vh - 100px);
   box-sizing: border-box;
@@ -148,14 +147,37 @@ body {
   .aside {
     background-color: #383838;
     width: 300px;
-    overflow: hidden;
     transition: width 0.3s ease;
     position: relative;
     display: flex;
     flex-direction: column;
     padding: 0.6em 1em;
-    border-radius: 0 8px 8px 0;
     box-sizing: border-box;
+    z-index: 3;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba($pink, 0.5) #383838;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #383838;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($pink, 0.5);
+      border-radius: 20px;
+    }
+
+    & header{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
     .member {
       display: flex;
       align-items: center;
@@ -204,6 +226,7 @@ body {
       flex-direction: column;
       gap: 0.5em;
       padding: 0.3em 0;
+      box-sizing: border-box;
       &.hidden {
         display: none;
       }
@@ -211,6 +234,8 @@ body {
         display: flex;
         align-items: center;
         gap: 0.1em;
+        min-height: calc(100% / 6);
+        box-sizing: border-box;
         .icon {
           width: 20px;
           height: 20px;
@@ -230,7 +255,6 @@ body {
     flex-direction: column;
     background-color: #292929;
     padding: 0.5em 1em;
-    border-radius: 8px 8px 0 0;
     width: auto;
     box-sizing: border-box;
     overflow: hidden;
@@ -329,7 +353,6 @@ body {
       }
 
       .message {
-        color: #f9f9f9;
         font-size: 1.2rem;
         width: max-content;
         max-width: min(90%, 400px);
@@ -343,6 +366,7 @@ body {
         padding: 0.3em 0.7em;
         border-radius: 12px;
         box-sizing: border-box;
+        transition: transform 0.3s ease;
         &:nth-last-child(2) {
           margin-bottom: 1em;
         }
@@ -353,12 +377,24 @@ body {
           display: flex;
           align-items: center;
           gap: 0.5em;
-          .username {
-            color: #f9f9f9;
-          }
+            .username {
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba($pink, 0.3);
+            cursor: pointer;
+            
+            &:hover {
+              color: $background;
+              text-shadow: 0 0 12px rgba($background, .4);
+            }
+            }
           .avatar {
             color: #f9f9f9;
             border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            &:hover{
+              box-shadow: 1px 4px 12px rgba(10,22, 15, 0.3);
+            }
           }
         }
         & footer {
@@ -393,7 +429,7 @@ body {
   width: 100%;
   height: 100%;
   h2 {
-    color: $dark-gray;
+    color: $background;
     font-size: 1.5rem;
     margin-bottom: 1em;
     border-bottom: 2px solid $pink;
@@ -434,25 +470,31 @@ body {
   }
 }
 
-.timer{
-  background-color: rgba(#000, 0.4);
+.timer {
   width: max-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5em 1em;
-  gap: 1em;
-  border-radius: 12px;
-  position: fixed;
-  top: calc(100px + 5em);
-  left: 50%;
-  translate: -50%, 0;
-  z-index: 3;
-  .icon{
+  padding: 0.8em 1.2em;
+  gap: 1.2em;
+  border-radius: 16px;
+  z-index: 2;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  font-size: 1em !important;
+  .icon {
     color: $pink !important;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
   }
+
   @media screen and (max-width: 1080px) {
     top: 120px;
+    padding: 0.6em 1em;
+    font-size: 0.9em;
   }
 }
 
@@ -463,12 +505,20 @@ body {
   & footer {
     color: lighten($pink, 10%) !important;
   }
+  &:hover{
+    transform: translateX(2px);
+    box-shadow: 0 4px 10px rgba($pink, 0.3);
+  }
 }
 
 .sent {
   background-color: #444 !important;
   margin-left: auto !important;
   margin-right: 10px !important;
+  &:hover{
+    transform: translateX(-2px);
+    box-shadow: 0 4px 10px rgba(#444, 0.3);
+  }
 }
 
 .you {

@@ -1,275 +1,44 @@
-"use client";
+'use client'
+import React, { useState, useEffect } from 'react';
+import type { NextPage } from "next";
+import BlobBorder from './welcome/blob/blob';
+import "./welcome.scss";
+import Link from 'next/link';
 
-import { NextPage } from "next";
-import Image from "next/image";
-import { LogOut, Search, Settings, User, ChevronDown } from 'lucide-react';
-import Link from "next/link";
-import "./Home.scss";
-import { useState, useRef, useEffect } from "react";
-import PopQuickGroupCard from "@/components/GroupCard/GroupCard";
-
-interface Pages {
-  id: number;
-  label: string;
-  href: string;
-}
-
-interface Groups {
-  name: string;
-  image: string;
-  description: string;
-  category: string;
-}
-
-const Home: NextPage = () => {
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("recommended");
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+const Welcome: NextPage = () => {
+  const [text, setText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const fullText = 'Welcome To PopQuick';
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
+    const typeText = () => {
+      if (isDeleting) {
+        setText(prev => prev.slice(0, -1));
+        if (text === '') setIsDeleting(false);
+      } else {
+        setText(prev => fullText.slice(0, prev.length + 1));
+        if (text === fullText) setTimeout(() => setIsDeleting(true), 2000);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
-    { label: "Placeholder", href: "/", id: 2 },
-    { label: "Placeholder", href: "/", id: 3 },
-  ];
-
-  const groups: Groups[] = [
-    {
-      name: "Tech Innovators",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A community for tech enthusiasts to share ideas, projects, and innovations.",
-      category: "Technology",
-    },
-    {
-      name: "Fitness Warriors",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "Join our group to stay motivated on your fitness journey with tips and challenges.",
-      category: "Health & Wellness",
-    },
-    {
-      name: "Art Explorers",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A vibrant community for artists to share their work, gain feedback, and inspire each other.",
-      category: "Art",
-    },
-    {
-      name: "Bookworms United",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A group for book lovers to discuss their favorite reads and discover new ones.",
-      category: "Literature",
-    },
-    {
-      name: "Adventure Seekers",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A community for outdoor enthusiasts and travel lovers to share adventures and plan trips.",
-      category: "Travel & Adventure",
-    },
-    {
-      name: "Music Makers",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "Connect with fellow musicians and music lovers to collaborate and share your passion.",
-      category: "Music",
-    },
-    {
-      name: "Eco Warriors",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A group dedicated to promoting sustainable living and environmental awareness.",
-      category: "environmentalism",
-    },
-    {
-      name: "Foodies Haven",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A place for food enthusiasts to share recipes, reviews, and culinary experiences.",
-      category: "Food & Drink",
-    },
-    {
-      name: "Gamers Hub",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "Join the ultimate gaming community to discuss the latest games, strategies, and news.",
-      category: "Gaming",
-    },
-    {
-      name: "Mindful Living",
-      image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
-      description:
-        "A supportive group focusing on mindfulness, meditation, and mental well-being.",
-      category: "Health & Wellness",
-    },
-  ];
-
-  const filteredGroups = groups.filter((group) =>
-    group.name.toLowerCase().includes(searchValue.toLowerCase())
-  );
-
-  const categoryOptions = [
-    { value: "recommended", label: "Recommended" },
-    { value: "location", label: "Location Based" },
-    { value: "interests", label: "Interest Based" },
-  ];
+    const timer = setInterval(typeText, 100);
+    return () => clearInterval(timer);
+  }, [text, isDeleting]);
 
   return (
     <>
-      <nav className="Nav">
-        <div className="pages">
-          {pages.map((page) => (
-            <Link href={page.href} key={page.id}>
-              {page.label}
-            </Link>
-          ))}
-        </div>
-        <div className={`search ${isSearchFocused ? "focused" : ""}`}>
-          <Search className={`icon ${isSearchFocused ? "active" : ""}`} />
-          <input
-            type="text"
-            placeholder="Search groups..."
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-            onFocus={() => setIsSearchFocused(true)}
-            onBlur={() => setIsSearchFocused(false)}
-          />
-        </div>
-        <div className="userMenuContainer">
-          <button
-            className="userButton"
-            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            aria-label="User menu"
-          >
-            <User className="icon" />
-          </button>
-          {isUserMenuOpen && (
-            <div className="userMenu">
-              <button className="menuItem">
-                <Settings className="menuIcon" />
-                Settings
-              </button>
-              <button className="menuItem">
-                <LogOut className="menuIcon" />
-                Sign out
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
-      <div className="mainContent">
-        <div className="categorySelect" ref={dropdownRef}>
-          <button 
-            className={`dropdownTrigger ${isDropdownOpen ? 'active' : ''}`}
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            aria-expanded={isDropdownOpen}
-          >
-            <span>{categoryOptions.find(option => option.value === selectedCategory)?.label}</span>
-            <ChevronDown className="icon" />
-          </button>
-          {isDropdownOpen && (
-            <div className="dropdownMenu">
-              {categoryOptions.map((option) => (
-                <button
-                  key={option.value}
-                  className={`dropdownItem ${selectedCategory === option.value ? 'selected' : ''}`}
-                  onClick={() => {
-                    setSelectedCategory(option.value);
-                    setIsDropdownOpen(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-        {selectedCategory === "recommended" && (
-          <>
-            <h2>Recommended Groups for You</h2>
-            <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
-                filteredGroups.map((group, index) => (
-                  <PopQuickGroupCard
-                    key={index}
-                    name={group.name}
-                    imageUrl={group.image}
-                    description={group.description}
-                    category={group.category}
-                    memberCount={4}
-                    maxMemberSize={4}
-                  />
-                ))
-              ) : (
-                <h2>No groups found</h2>
-              )}
-            </div>
-          </>
-        )}
-        {selectedCategory === "location" && (
-          <>
-            <h2>Nearby Groups for You</h2>
-            <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
-                filteredGroups.map((group, index) => (
-                  <PopQuickGroupCard
-                    key={index}
-                    name={group.name}
-                    imageUrl={group.image}
-                    description={group.description}
-                    category={group.category}
-                    memberCount={4}
-                    maxMemberSize={4}
-                  />
-                ))
-              ) : (
-                <h2>No groups found</h2>
-              )}
-            </div>
-          </>
-        )}
-        {selectedCategory === "interests" && (
-          <>
-            <h2>Interesting Groups for You</h2>
-            <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
-                filteredGroups.map((group, index) => (
-                  <PopQuickGroupCard
-                    key={index}
-                    name={group.name}
-                    imageUrl={group.image}
-                    description={group.description}
-                    category={group.category}
-                    memberCount={4}
-                    maxMemberSize={4}
-                  />
-                ))
-              ) : (
-                <h2>No groups found</h2>
-              )}
-            </div>
-          </>
-        )}
-      </div>
+      <main className="MainContent">
+        <BlobBorder>
+          <header className="Header">
+            <h1 className={isDeleting ? 'deleting' : 'typing'}>{text}</h1>
+            <p>Your journey to new <strong>friendships</strong> starts now.</p>
+            <Link href={'/signup'}><button>Sign up</button></Link>
+          </header>
+        </BlobBorder>
+      </main>
     </>
   );
 };
 
-export default Home;
+export default Welcome;
+

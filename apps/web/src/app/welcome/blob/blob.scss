@@ -3,28 +3,27 @@
   0% {
     border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
     transform: rotate(0deg) scale(1);
-    opacity: 0.4; // Starting with lower opacity
+    opacity: 0.4;
   }
   50% {
     border-radius: 40% 60% 50% 40% / 60% 50% 40% 60%;
-    transform: rotate(180deg) scale(1.2); // Increased scale for more volume
-    opacity: 0.6; // Slightly increased opacity
+    transform: rotate(180deg) scale(1.2);
+    opacity: 0.6;
   }
   100% {
     border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
     transform: rotate(360deg) scale(1);
-    opacity: 0.8; // Maximum opacity at the end
+    opacity: 0.8;
   }
 }
 
-// Container styles
 .blob-container {
   position: relative;
   display: inline-block;
   padding: 40px 20px;
   text-align: center;
-  font-family: Arial, sans-serif;
-  color: white;
+  font-family: var(--headers-font);
+  color: var(--text-color);
 
   .content {
     position: relative;
@@ -41,34 +40,34 @@
     }
 
     button {
-      background-color: #a100ff;
+      background-color: var(--theme-purple);
       border: none;
-      color: white;
+      color: var(--text-color);
       padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
+      font-family: var(--buttons-font);
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #b33cff;
+        background-color: var(--theme-pink);
       }
     }
   }
   .blob-outline {
     position: absolute;
-		inset: 0;
+    inset: 0;
     margin: -100px;
-    border: 3px solid #ffffff; 
+    border: 3px solid var(--text-color);
     border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
     animation: blob-outline 6s infinite linear;
     z-index: -1;
     opacity: 0.4;
 
     &.second {
-      border-color: #ff77b4; 
+      border-color: var(--theme-pink);
       animation-delay: 3s;
-      
     }
   }
 }
