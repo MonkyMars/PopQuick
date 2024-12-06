@@ -27,11 +27,12 @@ const registerSchema = z.object({
 })
 
 //Crate a token
-const createToken = (user_id: string, isAdmin: boolean) => {
+const createToken = (user_id: string, isAdmin: boolean, subscription: boolean) => {
     // Define the payload
     const payloads = {
         user_id,
         isAdmin,
+        subscription,
     }
     // Generate the token
     const token = jwt.sign(payloads, JWT_SECRET, { expiresIn: '24h' });
@@ -51,7 +52,7 @@ export const registerUser = async (req: Request<{}, {}, AuthRequestBody>, res: R
     await user.save();
 
     // Create token
-    const token = createToken(user.user_id.toString(), user.isAdmin);
+    const token = createToken(user.user_id.toString(), user.isAdmin, user.subscription);
 
     res.cookie('x_auth_cookie', token, {
         httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
@@ -89,7 +90,7 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
             return res.status(401).json({ message: 'Invalid credentials' });
         }
         // Create a token
-        const token = createToken(user.user_id.toString(), user.isAdmin);
+        const token = createToken(user.user_id.toString(), user.isAdmin, user.subscription);
         
         // Send response
         res.cookie('x_auth_cookie', token, {
@@ -109,10 +110,10 @@ export const loginUser = async (req: Request<{}, {}, AuthRequestBody>, res: Resp
 };
 
 export const googleCallBack = async (req: Request, res: Response, next: NextFunction) => {
-    const { user_id, isAdmin } = req.user as Express.User;
+    const { user_id, isAdmin, subscription } = req.user as Express.User;
     console.log()
     // Create token
-    const token = createToken(user_id.toString(), isAdmin);
+    const token = createToken(user_id.toString(), isAdmin, subscription );
     // Successfully authenticated
     res.cookie('x_auth_cookie', token, {
         httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
