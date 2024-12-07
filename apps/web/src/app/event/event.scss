@@ -140,18 +140,24 @@ body {
 .mainContent {
   display: grid;
   grid-template-columns: 300px 1fr;
+  @media screen and (max-width: 1080px) {
+    grid-template-columns:  1fr;
+    padding-top: 22em;
+  }
   transition: grid-template-columns 0.3s ease;
   min-height: calc(100vh - 100px);
   top: 0 !important;
-  padding-top: 22em;
   box-sizing: border-box;
   position: relative;
   .aside {
+    @media screen and (max-width: 1080px) {
+      display: none;
+    }
     background-color: #383838;
-    width: 300px;
+    width: auto;
     transition: width 0.3s ease;
     position: relative;
-    display: none;
+    display: flex;
     flex-direction: column;
     padding: 0.6em 1em;
     box-sizing: border-box;
@@ -564,6 +570,7 @@ body {
     }
     width: 90% !important;
     position: fixed !important;
+    display: flex !important;
     top: 100px;
     z-index: 1;
     height: calc(100% - 100px) !important;
