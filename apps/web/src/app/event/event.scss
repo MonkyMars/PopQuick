@@ -142,6 +142,8 @@ body {
   grid-template-columns: 300px 1fr;
   transition: grid-template-columns 0.3s ease;
   min-height: calc(100vh - 100px);
+  top: 0 !important;
+  padding-top: 22em;
   box-sizing: border-box;
   position: relative;
   .aside {
@@ -149,7 +151,7 @@ body {
     width: 300px;
     transition: width 0.3s ease;
     position: relative;
-    display: flex;
+    display: none;
     flex-direction: column;
     padding: 0.6em 1em;
     box-sizing: border-box;

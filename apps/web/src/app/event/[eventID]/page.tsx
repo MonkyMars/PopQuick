@@ -117,6 +117,27 @@ const EventPage: NextPage = () => {
       sender: staticMembers[3],
       timeSent: new Date().toTimeString().toString(),
     },
+    {
+      id: 9,
+      content: "Looking forward to meeting you all.",
+      date: "2022-01-02",
+      sender: staticMembers[1],
+      timeSent: new Date().toTimeString().toString(),
+    },
+    {
+      id: 10,
+      content: "Don't forget to bring your tickets.",
+      date: "2022-01-03",
+      sender: staticMembers[2],
+      timeSent: new Date().toTimeString().toString(),
+    },
+    {
+      id:11,
+      content: "See you all there!",
+      date: "2022-01-04",
+      sender: staticMembers[3],
+      timeSent: new Date().toTimeString().toString(),
+    },
   ];
 
   const calculateTimeRemaining = (timeRemaining: number): string => {
