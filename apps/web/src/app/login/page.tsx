@@ -45,8 +45,9 @@ const Login: NextPage = () => {
       }
 
       // Success handling (e.g., redirect or update state)
-    } catch (err) {
-      console.error("An error occurred:", err);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      setError(error instanceof Error ? 'An unknown error occurred' : null);
     }
   };
 
