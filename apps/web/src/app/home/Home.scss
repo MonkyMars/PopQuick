@@ -1,14 +1,19 @@
 $background: var(--background-color);
 $pink: var(--theme-pink);
-$purple: var(--theme-purple);
+$purple: var(--theme-pink);
 $dark-gray: var(--secondary-background);
 $error-red: var(--error-red);
 $border-radius: 8px;
 $green: var(--confirm-green);
+$text-color: var(--text-color);
+
+*{
+  box-sizing: border-box;
+}
 
 .Nav {
   display: flex;
-  background-color: color-mix(in srgb, var(--background-color) 90%, var(--secondary-background));
+  background-color: color-mix(in srgb, var(--secondary-background) 90%, black);
   justify-content: space-around;
   align-items: center;
   width: 100vw;
@@ -16,7 +21,10 @@ $green: var(--confirm-green);
   height: 100px;
   padding: 1em;
   box-sizing: border-box;
-
+  color: $text-color !important;
+  .pages a{
+    color: $text-color !important;
+  }
   .search {
     display: flex;
     align-items: center;
@@ -26,14 +34,14 @@ $green: var(--confirm-green);
     padding: 0.5em;
     background: linear-gradient(
       to right,
-      color-mix(in srgb, $pink 80%, white),
-      color-mix(in srgb, $pink 70%, white)
+      color-mix(in srgb, var(--theme-pink) 80%, white),
+      color-mix(in srgb, var(--theme-pink) 70%, white)
     );
     transition: all 0.3s ease;
 
     &.focused {
       transform: scale(1.03);
-      box-shadow: 0 4px 10px rgba($pink, 0.3);
+      box-shadow: 0 4px 10px color-mix(in srgb, var(--theme-pink) 30%, transparent);
     }
 
     .icon {
@@ -41,11 +49,11 @@ $green: var(--confirm-green);
       left: 12px;
       width: 24px;
       height: 24px;
-      color: rgba($dark-gray, 0.6);
+      color: color-mix(in srgb, var(--secondary-background) 40%, black);
       transition: all 0.3s ease;
 
       &.active {
-        color: $pink;
+        color: var(--theme-pink);
         transform: scale(1.15);
       }
     }
@@ -55,18 +63,18 @@ $green: var(--confirm-green);
       padding: 0.6em 1em 0.6em 3em;
       border: none;
       border-radius: $border-radius;
-      background-color: color-mix(in srgb, var(--background-color) 80%, var(--theme-pink));
-      color: $dark-gray;
+      background-color: color-mix(in srgb, var(--theme-pink) 75%, white);
+      font-size: 1rem;
       outline: none;
       transition: all 0.3s ease;
-
+      color: $text-color !important;
       &::placeholder {
-        color: rgba($dark-gray, 0.6);
+        color: color-mix(in srgb, var(--secondary-background) 5%, white);
       }
 
       &:focus {
-        outline: 2px solid $pink;
-        box-shadow: 0 0 12px rgba($pink, 0.4);
+        outline: 2px solid var(--theme-pink);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--theme-pink) 40%, transparent);
 
         &::placeholder {
           transform: translateX(15px);
@@ -77,9 +85,9 @@ $green: var(--confirm-green);
   }
 
   .groupCard {
-    background: color-mix(in srgb, $pink 65%, white);
+    background: color-mix(in srgb, var(--theme-pink) 65%, white);
     border-radius: $border-radius;
-    box-shadow: 0 4px 8px rgba($dark-gray, 0.1);
+    box-shadow: 0 4px 8px color-mix(in srgb, var(--secondary-background) 10%, transparent);
     padding: 1em;
     text-align: center;
     transition:
@@ -88,7 +96,7 @@ $green: var(--confirm-green);
 
     &:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba($pink, 0.3);
+      box-shadow: 0 6px 12px color-mix(in srgb, var(--theme-pink) 30%, transparent);
     }
 
     img {
@@ -103,13 +111,13 @@ $green: var(--confirm-green);
 
     p {
       font-size: 0.9rem;
-      color: rgba($dark-gray, 0.8);
+      color: color-mix(in srgb, var(--secondary-background) 20%, black);
       margin-bottom: 1em;
     }
 
     label {
       display: inline-block;
-      background: $pink;
+      background: var(--theme-pink);
       color: #fff;
       padding: 0.3em 0.6em;
       font-size: 0.8rem;
@@ -118,7 +126,7 @@ $green: var(--confirm-green);
     }
 
     button {
-      background: $pink;
+      background: var(--theme-pink);
       color: #fff;
       padding: 0.5em 1em;
       border: none;
@@ -133,7 +141,7 @@ $green: var(--confirm-green);
   }
 
   .pages a {
-    color: $dark-gray;
+    color: var(--secondary-background);
     text-decoration: none;
     margin: 0 1em;
     font-size: 1rem;
@@ -141,7 +149,7 @@ $green: var(--confirm-green);
     transition: color 0.3s ease;
 
     &:hover {
-      color: $pink;
+      color: var(--theme-pink);
     }
   }
 
@@ -150,7 +158,7 @@ $green: var(--confirm-green);
     gap: 1em;
 
     a {
-      color: $background;
+      color: var(--background-color);
       text-decoration: none;
       position: relative;
       padding-bottom: 2px;
@@ -163,14 +171,16 @@ $green: var(--confirm-green);
         left: 0;
         width: 0;
         height: 2px;
-        background-color: $pink;
+        background-color: var(--theme-pink);
         transition: width 0.3s ease;
       }
 
       &:hover {
-        transform: translateY(-2px);
-        color: color-mix(in srgb, var(--background-color) 90%, var(--theme-pink));
-        border-bottom: 1px solid color-mix(in srgb, var(--background-color) 90%, var(--theme-pink));
+        color: var(--theme-pink);
+
+        &::after {
+          width: 100%;
+        }
       }
     }
   }
@@ -186,13 +196,13 @@ $green: var(--confirm-green);
       height: 40px;
       border: none;
       border-radius: 50%;
-      background-color: $pink;
+      background-color: var(--theme-pink);
       cursor: pointer;
       transition: all 0.3s ease;
 
       &:hover {
         transform: translateY(-2px);
-        background-color: color-mix(in srgb, $pink 90%, black);
+        background-color: color-mix(in srgb, var(--theme-pink) 90%, black);
       }
 
       &:active {
@@ -211,7 +221,7 @@ $green: var(--confirm-green);
       top: 120%;
       right: 0;
       width: 200px;
-      background-color: $dark-gray;
+      background-color: var(--secondary-background);
       border-radius: $border-radius;
       padding: 0.5em 0;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -230,7 +240,7 @@ $green: var(--confirm-green);
         transition: all 0.2s ease;
 
         &:hover {
-          background-color: $pink;
+          background-color: var(--theme-pink);
         }
 
         .menuIcon {
@@ -238,10 +248,6 @@ $green: var(--confirm-green);
           height: 16px;
         }
       }
-    }
-    &:hover {
-      transform: translateY(-2px);
-      color: color-mix(in srgb, var(--theme-pink) 90%, black);
     }
   }
 }
@@ -257,75 +263,6 @@ $green: var(--confirm-green);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
     gap: 2em;
-
-    .groupCard {
-      background-color: $dark-gray;
-      border-radius: $border-radius;
-      text-align: center;
-      padding-bottom: 1em;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-      align-items: center;
-      position: relative;
-      box-shadow: 4px 8px 40px rgb(0, 0, 0, 0.1);
-      img {
-        width: 100%;
-        height: 60%;
-        object-fit: cover;
-        border-radius: $border-radius;
-        border-bottom: 4px solid color-mix(in srgb, var(--background-color) 90%, var(--theme-pink));
-      }
-
-      h3 {
-        margin: 0;
-        color: $pink;
-      }
-      p {
-        width: 90%;
-      }
-      label {
-        font-weight: bold;
-        color: $purple;
-      }
-      span {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: rgba(0, 0, 0, 0.7);
-        color: #e3e3e3;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        z-index: 1;
-      }
-      button {
-        width: 90%;
-        padding: 0.8em;
-        background-color: color-mix(in srgb, var(--background-color) 20%, var(--theme-pink));
-        color: $background;
-        border: none;
-        border-radius: $border-radius;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 0.5em;
-        box-shadow: 4px 6px 10px rgb(0, 0, 0, 0.3);
-        transition:
-          background-color 0.3s,
-          transform 0.2s,
-          box-shadow 0.2s;
-        &:hover {
-          background-color: color-mix(in srgb, var(--background-color) 30%, var(--theme-pink));
-          transform: translateY(-2px);
-          box-shadow: 4px 6px 20px rgb(0, 0, 0, 0.6);
-        }
-
-        &:active {
-          transform: translateY(0);
-        }
-      }
-    }
   }
 }
 
@@ -344,44 +281,23 @@ $green: var(--confirm-green);
     justify-content: space-between;
     width: 100%;
     padding: 0.8em 1em;
-    color: $pink;
-    border: 2px solid $pink;
+    color: var(--theme-pink);
+    border: 2px solid var(--theme-pink);
     border-radius: $border-radius;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
     &:hover,
     &.active {
-      box-shadow: 0 0 15px rgba($pink, 0.5);
-    }
-  }
-
-  button {
-    padding: 0.8em 2em;
-    background-color: color-mix(in srgb, var(--theme-pink) 90%, black);
-    background-color: color-mix(in srgb, var(--theme-pink) 90%, black);
-    color: $background;
-    border: none;
-    border-radius: $border-radius;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 0.5em;
-    box-shadow: 4px 8px 10px rgb(0, 0, 0, 0.3);
-    transition:
-      background-color 0.3s,
-      transform 0.2s,
-      box-shadow 0.2s;
-    &:hover {
-      background-color: color-mix(in srgb, var(--theme-pink) 80%, black);
-      transform: translateY(-2px);
-      box-shadow: 4px 8px 20px rgb(0, 0, 0, 0.6);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--theme-pink) 50%, transparent);
     }
 
     .icon {
       width: 20px;
       height: 20px;
       transition: transform 0.3s ease;
-      color: $pink;
+      color: var(--theme-pink);
     }
 
     &[aria-expanded="true"] .icon {
@@ -395,7 +311,7 @@ $green: var(--confirm-green);
     left: 0;
     width: 100%;
     background-color: #ffffff;
-    border: 2px solid $pink;
+    border: 2px solid var(--theme-pink);
     border-radius: $border-radius;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     z-index: 10;
@@ -410,48 +326,20 @@ $green: var(--confirm-green);
       text-align: left;
       cursor: pointer;
       transition: all 0.3s ease;
-      color: $pink;
+      color: var(--theme-pink);
 
       &:hover {
-        background-color: color-mix(in srgb, $dark-gray 90%, white);
+        background-color: color-mix(in srgb, var(--secondary-background) 90%, black);
       }
 
       &.selected {
-        background-color: $pink;
-        color: $dark-gray;
+        background-color: var(--theme-pink);
+        color: var(--secondary-background);
       }
     }
   }
 }
-.buttonContainer{
-  display: flex;
-  justify-content: center;
-  gap: 1em;
-  margin: 2em 0;
-  align-items: center;
 
-  button {
-    padding: 0.8em 2em;
-    background-color: color-mix(in srgb, $pink 90%, black);
-    color: $background;
-    border: none;
-    border-radius: $border-radius;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-    &:hover {
-      transform: translateY(-2px);
-      background-color: color-mix(in srgb, $pink 80%, black);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
-}
 @keyframes slideIn {
   from {
     opacity: 0;
