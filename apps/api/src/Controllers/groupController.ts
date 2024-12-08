@@ -55,6 +55,23 @@ export const getAllGroups = async (req: Request, res: Response) => {
     }
 };
 
+// Get a group by name
+export const searchGroupByName = async (req: Request, res: Response) => {
+    try {
+        const limit = parseInt(req.query.limit as string) || 10; //default to 10
+        const skip = parseInt(req.query.skip as string) * limit || 0;
+        const { name } = req.query;
+        const group = await groupModel.find({ name: { $regex: name, $options: 'i' } }).limit(limit).skip(skip);
+        if (group.length === 0) {
+            return res.status(404).json({ message: 'No groups found'});
+        } else {
+            res.status(200).json(group);
+        }
+    } catch (error) {
+        return res.status(500).json({ message: 'Server Error', error: (error as Error).message });
+    }
+}
+
 // Let the user join a group
 export const joinGroup = async (req: Request, res: Response) => {
     try {
@@ -117,13 +134,61 @@ export const leaveGroup = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ message: 'Server Error', error: (error as Error).message});
     }
+};
+
+// Edit a group detail
+export const uploadGroupPic = async (req: Request, res: Response) => {
+    try {
+        const user_id = req.user?.user_id;
+        const { group_id } = req.params;
+        const group_owner = await groupModel.findOne({ owner_id: user_id, group_id: group_id });
+        const group_profile = (req.file as any).path;
+        if (!group_owner) {
+            return res.status(403).json({ message: 'You are not the owner of this group' });
+        }
+
+        const updateGroup = await groupModel.updateOne({ group_id: group_id }, { group_profile: group_profile }, { new: true });
+        return res.status(200).json({ message: 'Group details updated successfully', group: updateGroup });
+    } catch (error) {
+        return res.status(500).json({ message: 'Server Error', error: (error as Error).message });
+    }
+};
+
+export const updateGroupDetail = async (req: Request, res: Response) => {
+    try {
+        const user_id = req.user?.user_id;
+        const { group_id } = req.params;
+        const group_owner = await groupModel.findOne({ owner_id: user_id, group_id: group_id });
+        const subscriptionUser =  req.user?.subscription;
+        if (subscriptionUser) {
+            const validatedData = createGroupForSubscriptionUserSchema.parse(req.body);
+            const { name, description, member_limit } = validatedData;
+            if (!group_owner) {
+                return res.status(403).json({ message: 'You are not the owner of the group'})
+            }
+            // Create a group without limit for members
+            const group = await groupModel.updateOne({ group_id: group_id }, { name, description, member_limit });
+            res.status(200).json({ message: "Group updated successfully", group: group }); 
+        } else {
+            const validatedData = createGroupDefaultSchema.parse(req.body);
+            const { name, description, member_limit } = validatedData;
+            if (!group_owner) {
+                return res.status(403).json({ message: 'You are not the owner of the group'})
+            }
+            // Create a group without limit for members
+            const group = await groupModel.findOneAndUpdate({ group_id: group_id }, { name, description, member_limit }, { new: true });
+            res.status(200).json({ message: "Group updated successfully", group: group });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: 'Server Error', error: (error as Error).message});
+    }
 }
 
 // Delete a group
 export const deleteGroup = async (req: Request, res: Response) => {
     try {
         const user_id = req.user?.user_id;
-        const group_owner = await groupModel.findOne({ owner_id: user_id});
+        const group_owner = await groupModel.findOne({ owner_id: user_id });
         const { group_id } = req.params;
         if (!group_owner) {
             return res.status(403).json({ message: 'Your are not the owner of the group' });

@@ -16,6 +16,7 @@ export interface IGroup extends Document {
             user_id: string; // uuid for user
     } }[]; // array of user_ids
     owner_id: string; // uuid for user_id
+    group_profile: string;
 }
 
 // Define the user schema 
@@ -55,6 +56,9 @@ const groupSchema: Schema<IGroup> = new Schema({
     owner_id: {
         type: String,
     }, // uuid for user_id
+    group_profile: {
+        type: String,
+    }
 })
 
 groupSchema.index({ name: 1 });
