@@ -1,3 +1,9 @@
+// Breakpoints
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+// Existing variables
 $background: #f9f9f9;
 $pink: #ff77b4;
 $purple: #9b4d97;
@@ -6,28 +12,48 @@ $error-red: #e02b2b;
 $border-radius: 8px;
 $green: #38eb38;
 
+// Base styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 
 .Nav {
-  display: flex;
-  background-color: darken($dark-gray, 10%);
-  justify-content: space-around;
-  align-items: center;
+  position: fixed;
+  top: 0;
   width: 100%;
+  z-index: 1000;
+  background-color: darken($dark-gray, 10%);
   padding: 1em;
-  box-sizing: border-box;
-  z-index: 2;
-  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: stretch;
+  @media (max-width: $mobile) {
     padding: 0.5em;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .pages {
+    display: flex;
+    gap: 1.5em;
+
+    @media (max-width: $mobile) {
+      width: 100%;
+      justify-content: space-around;
+      gap: 0.5em;
+    }
   }
 
   .pages a {
@@ -40,44 +66,6 @@ body {
 
     &:hover {
       color: $pink;
-    }
-  }
-
-  .pages {
-    display: flex;
-    gap: 1em;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5em;
-    }
-
-    a {
-      color: $background;
-      text-decoration: none;
-      position: relative;
-      padding-bottom: 2px;
-      transition: color 0.3s ease;
-
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: $pink;
-        transition: width 0.3s ease;
-      }
-
-      &:hover {
-        color: $pink;
-
-        &::after {
-          width: 100%;
-        }
-      }
     }
   }
 
@@ -149,13 +137,25 @@ body {
 }
 
 .mainContent {
+  margin-top: 60px; // Account for fixed Nav
   display: flex;
+  height: calc(100vh - 60px);
 
-  @media (max-width: 768px) {
+  @media (max-width: $tablet) {
     flex-direction: column;
   }
 
   .aside {
+    width: 300px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    @media (max-width: $tablet) {
+      width: 100%;
+      height: auto;
+      max-height: 40vh;
+    }
+
     @media screen and (max-width: 1080px) {
       display: none;
     }
@@ -197,6 +197,23 @@ body {
       align-items: center;
     }
     .member {
+      padding: 0.8em;
+      touch-action: manipulation;
+
+      @media (max-width: $mobile) {
+        padding: 0.5em;
+        font-size: 0.9em;
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+
+        @media (max-width: $mobile) {
+          width: 32px;
+          height: 32px;
+        }
+      }
       display: flex;
       align-items: center;
       gap: 0.8em;
@@ -268,6 +285,47 @@ body {
 
   .messagesTab {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .messagesContainer {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 70px; // Space for input
+
+      .message {
+        max-width: 85%;
+        
+        @media (max-width: $mobile) {
+          max-width: 95%;
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    .inputContainer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1em;
+      background: rgba($dark-gray, 0.95);
+      backdrop-filter: blur(10px);
+      
+      @media (max-width: $mobile) {
+        padding: 0.5em;
+      }
+
+      input {
+        width: 100%;
+        height: 40px;
+        border-radius: $border-radius;
+        padding: 0 1em;
+        font-size: 16px; // Prevent zoom on iOS
+      }
+    }
     padding: 1em;
     display: flex;
     justify-content: space-between;
@@ -280,6 +338,9 @@ body {
 
     @media (max-width: 768px) {
       order: 1;
+      top: 0px !important;
+      position: relative;
+      min-height: calc(100vh - 100px);
     }
 
     .inputContainer {
@@ -380,6 +441,7 @@ body {
         width: max-content;
         max-width: min(90%, 400px);
         display: flex;
+        height: max-content;
         justify-content: center;
         flex-direction: column;
         position: relative;
@@ -400,6 +462,7 @@ body {
           display: flex;
           align-items: center;
           gap: 0.5em;
+          position: relative;
             .username {
             font-weight: 600;
             text-shadow: 0 0 8px rgba($pink, 0.3);
@@ -423,9 +486,10 @@ body {
         & footer {
           position: absolute;
           font-size: 0.8em;
-          bottom: -10px;
+          bottom: 0px;
           right: 10px;
           color: #ccc;
+          padding: .4em .2em;
         }
         .content {
           color: #f9f9f9;
@@ -633,4 +697,59 @@ body {
   .member .avatar {
     margin-bottom: 0.5em;
   }
+}
+
+// Enhanced touch interactions
+.userButton,
+.menuItem,
+.member {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+// Improved menu transitions
+.menu {
+  display: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: $tablet) {
+    display: block;
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    z-index: 1000;
+    background: $pink;
+    padding: 0.8em;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+// Add smooth transitions
+.aside,
+.messagesTab {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Improved scrollbars
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($pink, 0.5);
+  border-radius: 3px;
 }
