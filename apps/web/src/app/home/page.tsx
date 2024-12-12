@@ -1,7 +1,7 @@
 "use client";
 
 import { NextPage } from "next";
-import { LogOut, Search, Settings, User, ChevronDown } from 'lucide-react';
+import { LogOut, Search, Settings, User, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import "./Home.scss";
 import { useState, useRef, useEffect } from "react";
@@ -20,25 +20,121 @@ interface Groups {
   category: string;
 }
 
+interface fetchRecommendedCategoriesProps {
+  top_n: number;
+  temperature: number;
+  model: string;
+  feedback: { category: string; liked: boolean }[];
+}
+
 const Home: NextPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("recommended");
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("recommended");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [recommendedCategories, setRecommendedCategories] = useState<string[]>(
+    []
+  );
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchRecommendedCategories = async ({
+    top_n,
+    temperature,
+    model,
+    feedback,
+  }: fetchRecommendedCategoriesProps): Promise<void> => {
+    try {
+      setIsLoading(true);
+      const formattedFeedback = feedback.map((f) => ({
+        category: f.category.toLowerCase().trim(),
+        liked: Boolean(f.liked),
+      }));
+
+      const encodedFeedback = encodeURIComponent(
+        JSON.stringify(formattedFeedback)
+      );
+      // checkout https://github.com/MonkyMars/PopQuick-Category-Algorithm to see how to run and fetch results
+      const response = await fetch(
+        `http://localhost:5000/api/categories?temperature=${temperature}&top_n=${top_n}&model=${model}&feedback=${encodedFeedback}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data.data)) {
+        setRecommendedCategories(data.data);
+      } else {
+        console.error("Invalid data format received");
+        setRecommendedCategories([]);
+      }
+    } catch (error) {
+      console.error("Error fetching recommended categories:", error);
+      setRecommendedCategories([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const initializeFetch = async () => {
+      const feedback: { category: string; liked: boolean }[] = [
+        { category: "biology", liked: true },
+        { category: "ecology", liked: true },
+        { category: "marine biology", liked: true },
+        { category: "wildlife", liked: true },
+        { category: "biodiversity", liked: true },
+        { category: "environmental geography", liked: true },
+        { category: "botany", liked: true },
+        { category: "gene editing", liked: true },
+        { category: "conservation", liked: true },
+        { category: "zoology", liked: true },
+        { category: "gardening", liked: true },
+        { category: "outdoor adventure", liked: true },
+        { category: "ecosystem services", liked: true },
+      ];
+      const props: {
+        top_n: number;
+        temperature: number;
+        model: string;
+        feedback: { category: string; liked: boolean }[];
+      } = {
+        top_n: 20,
+        temperature: 1,
+        model: "popai",
+        feedback: feedback,
+      };
+
+      await fetchRecommendedCategories(props);
+    };
+
+    initializeFetch();
   }, []);
 
   const pages: Pages[] = [
@@ -175,12 +271,18 @@ const Home: NextPage = () => {
       </nav>
       <div className="mainContent">
         <div className="categorySelect" ref={dropdownRef}>
-          <button 
-            className={`dropdownTrigger ${isDropdownOpen ? 'active' : ''}`}
+          <button
+            className={`dropdownTrigger ${isDropdownOpen ? "active" : ""}`}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-expanded={isDropdownOpen}
           >
-            <span>{categoryOptions.find(option => option.value === selectedCategory)?.label}</span>
+            <span>
+              {
+                categoryOptions.find(
+                  (option) => option.value === selectedCategory
+                )?.label
+              }
+            </span>
             <ChevronDown className="icon" />
           </button>
           {isDropdownOpen && (
@@ -188,7 +290,7 @@ const Home: NextPage = () => {
               {categoryOptions.map((option) => (
                 <button
                   key={option.value}
-                  className={`dropdownItem ${selectedCategory === option.value ? 'selected' : ''}`}
+                  className={`dropdownItem ${selectedCategory === option.value ? "selected" : ""}`}
                   onClick={() => {
                     setSelectedCategory(option.value);
                     setIsDropdownOpen(false);
@@ -204,11 +306,13 @@ const Home: NextPage = () => {
           <>
             <h2>Recommended Groups for You</h2>
             <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
                   <PopQuickGroupCard
                     key={index}
-                    name={group.name}
+                    name={recommendedCategories[index] || group.name}
                     imageUrl={group.image}
                     description={group.description}
                     category={group.category}
