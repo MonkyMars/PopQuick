@@ -6,6 +6,7 @@ import Link from "next/link";
 import "./Home.scss";
 import { useState, useRef, useEffect } from "react";
 import PopQuickGroupCard from "@/components/GroupCard/GroupCard";
+import LoadingGroupCard from "@/components/GroupCard/LoadingGroupCard";
 
 interface Pages {
   id: number;
@@ -39,7 +40,6 @@ const Home: NextPage = () => {
     []
   );
   const [isLoading, setIsLoading] = useState(false);
-
   const fetchRecommendedCategories = async ({
     top_n,
     temperature,
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
       console.error("Error fetching recommended categories:", error);
       setRecommendedCategories([]);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => setIsLoading(false), 500);
     }
   };
 
@@ -105,19 +105,19 @@ const Home: NextPage = () => {
   useEffect(() => {
     const initializeFetch = async () => {
       const feedback: { category: string; liked: boolean }[] = [
-        { category: "biology", liked: true },
-        { category: "ecology", liked: true },
-        { category: "marine biology", liked: true },
-        { category: "wildlife", liked: true },
-        { category: "biodiversity", liked: true },
-        { category: "environmental geography", liked: true },
-        { category: "botany", liked: true },
-        { category: "gene editing", liked: true },
-        { category: "conservation", liked: true },
-        { category: "zoology", liked: true },
-        { category: "gardening", liked: true },
-        { category: "outdoor adventure", liked: true },
-        { category: "ecosystem services", liked: true },
+        { category: "blockchain", liked: true },
+        { category: "cryptocurrency", liked: true },
+        { category: "nfts", liked: true },
+        { category: "decentralized finance", liked: true },
+        { category: "smart contracts", liked: true },
+        { category: "tokenization", liked: true },
+        { category: "digital art", liked: true },
+        { category: "crypto wallets", liked: true },
+        { category: "blockchain technology", liked: true },
+        { category: "web3", liked: true },
+        { category: "metaverse", liked: true },
+        { category: "crypto trading", liked: true },
+        { category: "blockchain platforms", liked: true },
       ];
       const props: {
         top_n: number;
@@ -307,7 +307,9 @@ const Home: NextPage = () => {
             <h2>Recommended Groups for You</h2>
             <div className="groupGrid">
               {isLoading ? (
-                <div>Loading...</div>
+                Array.from({ length: 8 }).map((_, index) => (
+                  <LoadingGroupCard key={index} />
+                ))
               ) : filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
                   <PopQuickGroupCard
