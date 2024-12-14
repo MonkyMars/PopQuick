@@ -21,11 +21,16 @@ interface Groups {
   category: string;
 }
 
+interface Feedback {
+  category: string;
+  liked: boolean;
+}
+
 interface fetchRecommendedCategoriesProps {
   top_n: number;
   temperature: number;
   model: string;
-  feedback: { category: string; liked: boolean }[];
+  feedback: Feedback[];
 }
 
 const Home: NextPage = () => {
@@ -36,16 +41,50 @@ const Home: NextPage = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [recommendedCategories, setRecommendedCategories] = useState<string[]>(
-    []
-  );
+  const [recommendedCategories, setRecommendedCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+
+  const fetchUserPreferences = async (): Promise<Feedback[]> => { // fetch user preferences from the backend
+    try{
+      const response = await fetch('/api/user/preferences', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+      }});
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const feedback: Feedback[] = [ // default feedback
+        { category: "blockchain", liked: true },
+        { category: "cryptocurrency", liked: true },
+        { category: "nfts", liked: true },
+        { category: "decentralized finance", liked: true },
+        { category: "smart contracts", liked: true },
+        { category: "tokenization", liked: true },
+        { category: "digital art", liked: true },
+        { category: "crypto wallets", liked: true },
+        { category: "blockchain technology", liked: true },
+        { category: "web3", liked: true },
+        { category: "metaverse", liked: true },
+        { category: "crypto trading", liked: true },
+        { category: "blockchain platforms", liked: true },
+      ];
+      return data.data || feedback;
+    } catch (error) {
+      console.error('Error fetching user preferences:', error);
+      let data: [] = []
+      return data;
+    }
+  }
+
   const fetchRecommendedCategories = async ({
     top_n,
     temperature,
     model,
     feedback,
-  }: fetchRecommendedCategoriesProps): Promise<void> => {
+  }: fetchRecommendedCategoriesProps): Promise<{category: string}[] | undefined> => { // fetch recommended categories from the backend
     try {
       setIsLoading(true);
       const formattedFeedback = feedback.map((f) => ({
@@ -73,14 +112,15 @@ const Home: NextPage = () => {
 
       const data = await response.json();
       if (Array.isArray(data.data)) {
-        setRecommendedCategories(data.data);
+        return data.data
       } else {
         console.error("Invalid data format received");
         setRecommendedCategories([]);
       }
     } catch (error) {
       console.error("Error fetching recommended categories:", error);
-      setRecommendedCategories([]);
+      let data: [] = []
+      return data;
     } finally {
       setTimeout(() => setIsLoading(false), 500);
     }
@@ -103,37 +143,17 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    const initializeFetch = async () => {
-      const feedback: { category: string; liked: boolean }[] = [
-        { category: "blockchain", liked: true },
-        { category: "cryptocurrency", liked: true },
-        { category: "nfts", liked: true },
-        { category: "decentralized finance", liked: true },
-        { category: "smart contracts", liked: true },
-        { category: "tokenization", liked: true },
-        { category: "digital art", liked: true },
-        { category: "crypto wallets", liked: true },
-        { category: "blockchain technology", liked: true },
-        { category: "web3", liked: true },
-        { category: "metaverse", liked: true },
-        { category: "crypto trading", liked: true },
-        { category: "blockchain platforms", liked: true },
-      ];
-      const props: {
-        top_n: number;
-        temperature: number;
-        model: string;
-        feedback: { category: string; liked: boolean }[];
-      } = {
+    const initializeFetch = async () => { // fetch user preferences and recommended categories
+      const feedback = await fetchUserPreferences();
+      const props: fetchRecommendedCategoriesProps = { // set props for fetching func
         top_n: 20,
         temperature: 1,
         model: "popai",
         feedback: feedback,
       };
-
-      await fetchRecommendedCategories(props);
+      const recommendedCategories = await fetchRecommendedCategories(props);
+      setRecommendedCategories(recommendedCategories?.map((category) => category.category) || []);
     };
-
     initializeFetch();
   }, []);
 
