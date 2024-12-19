@@ -6,15 +6,13 @@ $error-red: #e02b2b;
 $border-radius: 8px;
 $green: #38eb38;
 
-body {
+body, html {
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
   overflow: hidden;
 }
-*{
-  overflow-x: hidden;
-}
+
 .Nav {
   display: flex;
   background-color: darken($dark-gray, 10%);
@@ -33,7 +31,6 @@ body {
     font-size: 1rem;
     font-weight: bold;
     transition: color 0.3s ease;
-
     &:hover {
       color: $pink;
     }
@@ -42,7 +39,9 @@ body {
   .pages {
     display: flex;
     gap: 1em;
-
+    @media screen and (max-width: 460px) {
+      gap: 0;
+    }
     a {
       color: $background;
       text-decoration: none;
@@ -73,7 +72,6 @@ body {
 
   .userMenuContainer {
     position: relative;
-
     .userButton {
       display: flex;
       align-items: center;
@@ -85,7 +83,6 @@ body {
       background-color: $pink;
       cursor: pointer;
       transition: all 0.3s ease;
-
       &:hover {
         transform: translateY(-2px);
         background-color: darken($pink, 10%);
@@ -145,6 +142,7 @@ body {
   min-height: calc(100vh - 100px);
   box-sizing: border-box;
   position: relative;
+  overflow: hidden !important;
   .aside {
     background-color: #383838;
     width: 300px;
@@ -579,18 +577,32 @@ body {
   }
   .menu {
     position: absolute;
-    top: 0.3em;
-    left: 0.3em;
-    width: 50px;
-    height: 50px;
+    top: 0.5em;
+    left: 0.5em;
+    width: 35px;
+    height: 35px;
     cursor: pointer;
-    transition:
-      transform 0.5s ease,
-      left 0.3s ease;
+    transition: transform 0.5s ease, left 0.3s ease;
     z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $pink;
+    border-radius: 50%;
+    padding: 0.25em;
+    svg {
+      fill: currentColor;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
   }
   .open {
     transform: rotate(360deg);
     left: 90%;
+    margin-left: 5px;
+    svg {
+      transform: rotate(90deg);
+    }
   }
 }
