@@ -90,7 +90,7 @@ $google-signin: var(--google-signin);
       border: 2px solid transparent;
       border-radius: $border-radius;
       background-color: rgba(255, 255, 255, 0.1);
-      color: #383838;
+      color: var(--text-color);
       backdrop-filter: blur(5px);
       transition: all 0.3s ease;
       font-size: 1rem;
@@ -98,7 +98,7 @@ $google-signin: var(--google-signin);
       outline: .1px solid $pink;
       &:focus {
       outline: none;
-      border-color: rgba($pink, 0.6);
+      border-color: $pink;
       background-color: rgba(255, 255, 255, 0.15);
       box-shadow: 0 0 15px rgba($pink, 0.2);
       & ~ .password-requirements {
