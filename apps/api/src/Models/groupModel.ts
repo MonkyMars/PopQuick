@@ -19,7 +19,7 @@ export interface IGroup extends Document {
     group_profile: string;
 }
 
-// Define the user schema 
+// Define the group schema 
 const groupSchema: Schema<IGroup> = new Schema({
     group_id: {
         type: String,

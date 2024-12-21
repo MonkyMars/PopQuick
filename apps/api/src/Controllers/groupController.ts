@@ -33,9 +33,7 @@ export const createGroup = async (req: Request, res: Response) => {
             // Create a group without limit for members
             const group = await groupModel.create({ name, description, member_limit, owner_id: user_id });
             res.status(201).json({ message: "Group created successfully", group: group });
-        }
-
-        if (!subscriptionUser) {
+        } else {
             // Create a group with just 10 members
             const group = await groupModel.create({ name, description, member_limit, owner_id: user_id });
             res.status(201).json({ message: "Group created successfully", group: group });
