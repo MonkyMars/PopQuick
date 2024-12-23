@@ -21,7 +21,6 @@ import Profilecard from "@/components/ProfileCard/Profilecard";
 
 const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
-  // Remove unused router declaration
   const [timeRemaining, setTimeRemaining] = useState<{
     raw: number;
     formatted: string;
@@ -197,7 +196,7 @@ const EventPage: NextPage = () => {
       setProfileCardVisibility(member);
     }
   };
-  return (
+    return (
     <>
       <nav className="Nav">
         <div className="pages">
@@ -301,7 +300,7 @@ const EventPage: NextPage = () => {
                 bio={profileCardVisibility.bio || ""}
                 owner={profileCardVisibility.owner || false}
                 profilePicture={profileCardVisibility.profilePicture}
-                memberSince={profileCardVisibility.memberSince}
+                stats={{ memberSince: profileCardVisibility.memberSince, totalMessagesSent: 100 }}
                 onClick={() => handleProfileCardVisibility(profileCardVisibility)}
               />
             )}

@@ -1,8 +1,7 @@
 .profileCard {
   background: linear-gradient(
-    145deg,
-    var(--secondary-background),
-    var(--secondary-background) 60%,
+    170deg,
+    var(--secondary-background) 70%,
     var(--theme-pink) 140%
   );
   border-radius: 16px;
@@ -41,7 +40,7 @@
     bottom: 0;
     transform: translate(-50%, 0);
     max-height: 85vh;
-    width: 100vw;
+    width: 85vw;
   }
 
   &:focus-within {
@@ -61,11 +60,11 @@
       border: 4px solid var(--theme-pink);
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
       
       @media (hover: hover) {
         &:hover {
-          transform: scale(1.05);
-          border-color: var(--text-color);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
       }
 
@@ -74,11 +73,35 @@
       }
     }
   }
+  &__username {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4em;
+    margin-bottom: 0.5em;
+    padding: 0.3em 0.6em;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 
+    .copy {
+      cursor: pointer;
+      color: var(--theme-pink);
+      font-size: 1.2em;
+      transition: all 0.2s ease;
+      padding: 0.2em;
+      border-radius: 4px;
+
+      @media (hover: hover) {
+        &:hover {
+          color: var(--text-color);
+          background: rgba(var(--theme-pink-rgb), 0.1);
+        }
+      }
+    }
+  }
   &__details {
     text-align: center;
     margin-bottom: clamp(16px, 4vw, 24px);
-
     h2 {
       font-family: var(--headers-font);
       font-size: clamp(1.5rem, 5vw, 2rem);
@@ -91,12 +114,16 @@
       text-underline-offset: 4px;
       word-break: break-word;
     }
-
+    .alternativeBio{
+      color: #a1a1a1 !important;
+    }
     p {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.05);
       font-size: clamp(0.9rem, 2.5vw, 1.1rem);
       color: var(--text-color);
       line-height: 1.6;
-      background: rgba(var(--secondary-background-rgb), 0.7);
       backdrop-filter: blur(8px);
       border-radius: 12px;
       padding: clamp(0.8em, 2.5vw, 1.2em);
@@ -104,13 +131,6 @@
       transition: all 0.3s ease;
       margin: 0;
       word-wrap: break-word;
-
-      @media (hover: hover) {
-        &:hover {
-          background: rgba(var(--secondary-background-rgb), 0.8);
-          box-shadow: 0 6px 20px rgba(22, 22, 22, 0.15);
-        }
-      }
     }
   }
 
@@ -119,16 +139,28 @@
     font-size: clamp(0.875rem, 2.5vw, 1rem);
     line-height: 1.6;
     display: flex;
+    width: auto;
     justify-content: center;
     align-items: center;
     margin: clamp(16px, 4vw, 20px) 0;
     text-align: center;
-
-    p {
-      background: rgba(var(--secondary-background-rgb), 0.5);
-      padding: clamp(6px, 2vw, 8px) clamp(12px, 3vw, 16px);
-      border-radius: 20px;
-      backdrop-filter: blur(4px);
+    flex-direction: column;
+    padding: clamp(8px, 2.5vw, 12px);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+    label{
+      font-weight: 700;
+      color: #a1a1a1;
+    }
+    p, label {
+      margin: 0;
+      padding: 0.6em 1em;
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      font-weight: 500;
+      transition: transform 0.2s ease;
     }
   }
 
