@@ -1,0 +1,475 @@
+$background: var(--background-color);
+$pink: var(--theme-pink);
+$purple: var(--theme-pink);
+$dark-gray: var(--secondary-background);
+$error-red: var(--error-red);
+$border-radius: 8px;
+$green: var(--confirm-green);
+$text-color: var(--text-color);
+
+$background: #121212;
+$pink: #ff77b4;
+$purple: #9b4d97;
+$dark-gray: #383838;
+$error-red: #e02b2b;
+$border-radius: 8px;
+$green: #38eb38;
+$text-color: #ffffff;
+
+html { 
+  overflow-x: hidden;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+body {
+  overflow: hidden;
+  color: $text-color;
+  width: 100%;
+  height: 100%;
+  background-color: $background;
+}
+
+.Nav {
+  @include flex-center;
+  justify-content: space-around;
+  background-color: color-mix(in srgb, $dark-gray 90%, black);
+  width: 100vw;
+  height: 100px;
+  padding: 1em;
+  box-sizing: border-box;
+
+  .pages {
+    @include flex-center;
+    gap: 1em;
+
+    a {
+      color: $text-color;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      position: relative;
+      padding-bottom: 2px;
+      @include transition(color);
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: $pink;
+        @include transition(width);
+      }
+
+      &:hover {
+        color: $pink;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .userMenuContainer {
+    position: relative;
+
+    .userButton {
+      @include flex-center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background-color: $pink;
+      cursor: pointer;
+      @include transition;
+
+      &:hover {
+        transform: translateY(-2px);
+        background-color: darken($pink, 10%);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        color: $text-color;
+      }
+    }
+
+    .userMenu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      width: 200px;
+      background-color: $dark-gray;
+      border-radius: $border-radius;
+      padding: 0.5em 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease;
+
+      .menuItem {
+        @include flex-center;
+        gap: 0.5em;
+        width: 100%;
+        padding: 0.75em 1em;
+        border: none;
+        background: none;
+        color: $text-color;
+        cursor: pointer;
+        @include transition;
+        border-radius: 0.6em;
+
+        &:hover {
+          background-color: $pink;
+        }
+
+        .menuIcon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
+
+.settingsContainer {
+  display: flex;
+  height: calc(100vh - 100px);
+}
+
+.settingsMainContainer {
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.settingsSidebar {
+  width: 250px;
+  background-color: lighten($dark-gray, 10%);
+  padding: 2em 1em;
+  border-radius: 0.7rem;
+
+  .categoryButton {
+    @include flex-center;
+    width: 100%;
+    padding: 0.75em 1em;
+    margin-bottom: 0.5em;
+    border: none;
+    background: none;
+    color: $text-color;
+    cursor: pointer;
+    @include transition;
+    border-radius: $border-radius;
+
+    &:hover {
+      background-color: rgba($pink, 0.2);
+    }
+
+    &.active {
+      background-color: $pink;
+    }
+
+    .icon {
+      margin-right: 0.5em;
+    }
+  }
+}
+
+.settingsMain {
+  flex-grow: 1;
+  padding: 2em;
+  overflow-y: auto;
+}
+
+.settingsContent {
+  background-color: lighten($dark-gray, 5%);
+  border-radius: $border-radius;
+  padding: 2em;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: $text-color;
+  @include transition(opacity, 0.3s);
+  @include transition(transform, 0.3s);
+  opacity: 0;
+  transform: translateY(20px);
+  position: absolute;
+  width: calc(100% - 4em);
+  height: calc(100% - 4em);
+
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.exit {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  h2 {
+    margin-bottom: 1em;
+    color: $pink;
+  }
+
+  .inputGroup,
+  .toggleGroup {
+    margin-bottom: 1em;
+
+    label {
+      display: block;
+      margin-bottom: 0.5em;
+      color: $text-color;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 40%;
+      padding: 0.5em;
+      border: 1px solid lighten($dark-gray, 20%);
+      border-radius: $border-radius;
+      background-color: lighten($dark-gray, 10%);
+      color: $text-color;
+
+      &::placeholder {
+        color: darken($text-color, 30%);
+      }
+    }
+  }
+
+  .toggleGroup {
+    @include flex-center;
+    justify-content: space-between;
+
+    input[type="checkbox"] {
+      appearance: none;
+      width: 50px;
+      height: 26px;
+      background-color: lighten($dark-gray, 40%);
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+      @include transition(background-color);
+
+      &:checked {
+        background-color: $green;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        background-color: $text-color;
+        @include transition(transform);
+      }
+
+      &:checked::before {
+        transform: translateX(24px);
+      }
+    }
+  }
+
+  .saveButton,
+  .upgradeButton,
+  .addPaymentButton {
+    background-color: $pink;
+    color: $text-color;
+    border: none;
+    padding: 0.75em 1.5em;
+    border-radius: $border-radius;
+    cursor: pointer;
+    @include transition(background-color);
+
+    &:hover {
+      background-color: darken($pink, 10%);
+    }
+  }
+
+  .resetLink {
+    margin-top: 1em;
+    font-size: 0.9em;
+
+    a {
+      color: $pink;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutToTop {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .Nav {
+    height: auto;
+    flex-direction: column;
+    padding: 0.5em;
+
+    .pages {
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 0.5em;
+
+      a {
+        font-size: 0.9rem;
+        margin: 0.25em;
+      }
+    }
+
+    .userMenuContainer {
+      position: static;
+      margin-top: 0.5em;
+
+      .userMenu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: $border-radius $border-radius 0 0;
+      }
+    }
+  }
+
+  .settingsContainer {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .settingsSidebar {
+    width: 100%;
+    padding: 1em 0.5em;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex; 
+    border-radius: 0;
+    
+    .categoryButton {
+      flex: 0 0 auto;
+      padding: 0.5em 0.75em;
+      margin-right: 0.5em;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+      width: 40%;
+
+      .icon {
+        margin-right: 0.25em;
+      }
+    }
+  }
+
+  .settingsMainContainer {
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+    display: grid;
+    place-items: center;
+  }
+
+  .settingsContent {
+    position: static;
+    height: auto;
+    padding: 1em;
+    border-radius: 0.5rem;
+    margin-top: 1em;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .inputGroup,
+    .toggleGroup {
+      margin-bottom: 0.75em;
+
+      label {
+        font-size: 0.9rem;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        font-size: 0.9rem;
+      }
+    }
+
+    .toggleGroup {
+      input[type="checkbox"] {
+        width: 40px;
+        height: 22px;
+
+        &::before {
+          width: 18px;
+          height: 18px;
+        }
+
+        &:checked::before {
+          transform: translateX(18px);
+        }
+      }
+    }
+
+    .saveButton,
+    .upgradeButton,
+    .addPaymentButton {
+      width: 100%;
+      padding: 0.6em 1em;
+      font-size: 0.9rem;
+    }
+
+    .resetLink {
+      font-size: 0.8rem;
+    }
+  }
+}

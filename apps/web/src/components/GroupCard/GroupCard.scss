@@ -38,9 +38,6 @@ $border-radius: 12px;
     object-fit: cover;
     transition: transform 0.3s ease;
 
-    &:hover {
-      transform: scale(1.05);
-    }
   }
 
   .groupContent {
