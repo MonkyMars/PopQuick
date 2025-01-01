@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import "@/app/settings/settings.scss";
 import Image from "next/image";
 import { LogOut, Settings, User, Bell, CreditCard, Lock, Shield } from 'lucide-react';
@@ -92,7 +93,7 @@ const Profile: React.FC = () => {
       setTimeout(() => {
         setActiveCategory(category);
         setAnimatingOut(false);
-      }, 300); // This should match the animation duration in CSS
+      }, 300);
     }
   }, [activeCategory]);
 
@@ -111,6 +112,7 @@ const Profile: React.FC = () => {
                   name="username"
                   value={profileData.username}
                   onChange={handleInputChange}
+                  placeholder="Enter your new username"
                 />
               </div>
               <h3>Email</h3>
@@ -122,6 +124,8 @@ const Profile: React.FC = () => {
                   name="currentEmail"
                   value={profileData.currentEmail}
                   onChange={handleInputChange}
+                  placeholder="Your current email"
+                  disabled
                 />
               </div>
               <div className="inputGroup">
@@ -132,6 +136,7 @@ const Profile: React.FC = () => {
                   name="newEmail"
                   value={profileData.newEmail}
                   onChange={handleInputChange}
+                  placeholder="Enter new email"
                 />
               </div>
               <div className="inputGroup">
@@ -142,6 +147,7 @@ const Profile: React.FC = () => {
                   name="repeatNewEmail"
                   value={profileData.repeatNewEmail}
                   onChange={handleInputChange}
+                  placeholder="Repeat new email"
                 />
               </div>
               <button className="saveButton" onClick={handleSave}>Save Changes</button>
@@ -153,15 +159,15 @@ const Profile: React.FC = () => {
               <h2>Change Password</h2>
               <div className="inputGroup">
                 <label htmlFor="currentPassword">Current Password</label>
-                <input type="password" id="currentPassword" name="currentPassword" />
+                <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter current password" />
               </div>
               <div className="inputGroup">
                 <label htmlFor="newPassword">New Password</label>
-                <input type="password" id="newPassword" name="newPassword" />
+                <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" />
               </div>
               <div className="inputGroup">
                 <label htmlFor="confirmPassword">Confirm New Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" />
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" />
               </div>
               <button className="saveButton">Change Password</button>
               <p className="resetLink">
@@ -216,69 +222,109 @@ const Profile: React.FC = () => {
     })();
 
     return (
-      <div 
+      <motion.div
         className={`settingsContent ${animatingOut ? 'exit' : 'active'}`}
-        style={{
-          animation: animatingOut 
-            ? 'slideOutToTop 0.3s ease forwards'
-            : 'slideInFromBottom 0.3s ease forwards'
-        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
       >
         {content}
-      </div>
+      </motion.div>
     );
   };
 
   return (
     <>
-      <nav className="Nav">
+      <motion.nav
+        className="Nav"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <div className="pages">
           {pages.map((page) => (
-            <Link href={page.href} key={page.id}>
-              {page.label}
-            </Link>
+            <motion.div
+              key={page.id}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href={page.href}>
+                {page.label}
+              </Link>
+            </motion.div>
           ))}
         </div>
 
         <div className="userMenuContainer">
-          <button
+          <motion.button
             className="userButton"
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             aria-label="User menu"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <User className="icon" />
-          </button>
-          {isUserMenuOpen && (
-            <div className="userMenu">
-              <button
-                className="menuItem"
-                onClick={() => (window.location.href = "/signout")}
+          </motion.button>
+          <AnimatePresence>
+            {isUserMenuOpen && (
+              <motion.div
+                className="userMenu"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
               >
-                <LogOut className="menuIcon" />
-                Sign out
-              </button>
-            </div>
-          )}
+                <motion.button
+                  className="menuItem"
+                  onClick={() => (window.location.href = "/signout")}
+                  whileHover={{ backgroundColor: "var(--theme-pink)" }}
+                >
+                  <LogOut className="menuIcon" />
+                  Sign out
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </nav>
+      </motion.nav>
 
-      <div className="settingsContainer">
-        <div className="settingsSidebar">
+      <motion.div
+        className="settingsContainer"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <motion.div
+          className="settingsSidebar"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           {settingsCategories.map((category) => (
-            <button
+            <motion.button
               key={category.id}
               className={`categoryButton ${activeCategory === category.id ? 'active' : ''}`}
               onClick={() => setActiveCategoryWithAnimation(category.id)}
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.95 }}
             >
               {category.icon}
               {category.label}
-            </button>
+            </motion.button>
           ))}
-        </div>
-        <div className="settingsMainContainer">
-          {renderSettingsContent()}
-        </div>
-      </div>
+        </motion.div>
+        <motion.div
+          className="settingsMainContainer"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+        >
+          <AnimatePresence mode="wait">
+            {renderSettingsContent()}
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
     </>
   );
 };
