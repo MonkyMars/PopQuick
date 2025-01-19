@@ -1,7 +1,7 @@
 "use client";
 
 import { NextPage } from "next";
-import { LogOut, Search, Settings, User, ChevronDown } from 'lucide-react';
+import { LogOut, Search, Settings, User, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import "./Home.scss";
 import { useState, useRef, useEffect } from "react";
@@ -22,7 +22,8 @@ interface Groups {
 
 const Home: NextPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("recommended");
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("recommended");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -30,20 +31,23 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
-    { label: "Placeholder", href: "/", id: 2 },
+    { label: "Home", href: "/home", id: 1 },
+    { label: "Contact", href: "/contact", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
 
@@ -161,11 +165,17 @@ const Home: NextPage = () => {
           </button>
           {isUserMenuOpen && (
             <div className="userMenu">
-              <button className="menuItem">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/settings")}
+              >
                 <Settings className="menuIcon" />
                 Settings
               </button>
-              <button className="menuItem">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/signout")}
+              >
                 <LogOut className="menuIcon" />
                 Sign out
               </button>
@@ -175,12 +185,18 @@ const Home: NextPage = () => {
       </nav>
       <div className="mainContent">
         <div className="categorySelect" ref={dropdownRef}>
-          <button 
-            className={`dropdownTrigger ${isDropdownOpen ? 'active' : ''}`}
+          <button
+            className={`dropdownTrigger ${isDropdownOpen ? "active" : ""}`}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-expanded={isDropdownOpen}
           >
-            <span>{categoryOptions.find(option => option.value === selectedCategory)?.label}</span>
+            <span>
+              {
+                categoryOptions.find(
+                  (option) => option.value === selectedCategory
+                )?.label
+              }
+            </span>
             <ChevronDown className="icon" />
           </button>
           {isDropdownOpen && (
@@ -188,7 +204,7 @@ const Home: NextPage = () => {
               {categoryOptions.map((option) => (
                 <button
                   key={option.value}
-                  className={`dropdownItem ${selectedCategory === option.value ? 'selected' : ''}`}
+                  className={`dropdownItem ${selectedCategory === option.value ? "selected" : ""}`}
                   onClick={() => {
                     setSelectedCategory(option.value);
                     setIsDropdownOpen(false);

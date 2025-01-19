@@ -106,12 +106,13 @@ body {
       top: 120%;
       right: 0;
       width: 200px;
-      background-color: $dark-gray;
+      background-color: var(--secondary-background);
       border-radius: $border-radius;
       padding: 0.5em 0;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       animation: slideIn 0.3s ease;
-      z-index: 2;
+      z-index: 100;
+
       .menuItem {
         display: flex;
         align-items: center;
@@ -122,10 +123,12 @@ body {
         background: none;
         color: white;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.6em;
+
 
         &:hover {
-          background-color: $pink;
+          background-color: var(--theme-pink);
         }
 
         .menuIcon {
