@@ -18,7 +18,6 @@ router.post('/:group_id/leave', authMiddleware, leaveGroup);
 router.patch('/:group_id/upload', authMiddleware, uploadPicture.single('image'), uploadGroupPic);
 // Update group detail
 router.patch('/:group_id/update', authMiddleware, updateGroupDetail);
-
 router.delete('/:group_id', authMiddleware, deleteGroup);
 
 export default router;
