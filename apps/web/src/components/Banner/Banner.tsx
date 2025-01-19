@@ -8,7 +8,7 @@ interface BannerProps {
 
 const Banner: FC<BannerProps> = ({ type, message }) => (
   <div
-    className={`Banner ${type.toLowerCase() === "error" ? "error" : "info"}`}
+    className={`Banner ${type}}`}
   >
   <TriangleAlert/>
     <span>{message}</span>

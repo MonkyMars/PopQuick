@@ -12,6 +12,9 @@ export interface Member {
   username: string;
   profilePicture: string;
   status?: "online" | "offline";
+  bio?: string;
+  owner?: boolean;
+  memberSince?: string;
 }
 
 export interface MessageType {
