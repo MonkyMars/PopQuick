@@ -158,8 +158,8 @@ const Home: NextPage = () => {
   }, []);
 
   const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
-    { label: "Placeholder", href: "/", id: 2 },
+    { label: "Home", href: "/home", id: 1 },
+    { label: "Contact", href: "/contact", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
 
@@ -277,11 +277,17 @@ const Home: NextPage = () => {
           </button>
           {isUserMenuOpen && (
             <div className="userMenu">
-              <button className="menuItem">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/settings")}
+              >
                 <Settings className="menuIcon" />
                 Settings
               </button>
-              <button className="menuItem">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/signout")}
+              >
                 <LogOut className="menuIcon" />
                 Sign out
               </button>

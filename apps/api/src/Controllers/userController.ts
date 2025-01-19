@@ -47,10 +47,10 @@ export const uploadProfilePicture = async (req: Request, res: Response) => {
         // Get the cloudinary URL
         const profilePictureUrl = (req.file as any).path;
 
-        const { userId } = res.locals.user.user_id;
+        const userId = req.user?.user_id;
 
         // Update user profile picture in the database
-        const updatedProfilePicture = await userModel.findOneAndUpdate(userId,
+        const updatedProfilePicture = await userModel.findOneAndUpdate({user_id: userId},
             { profile_picture: profilePictureUrl },
             { new: true },
         );
@@ -74,9 +74,9 @@ export const uploadProfilePicture = async (req: Request, res: Response) => {
 // Update user information
 export const updateUser = async (req: Request, res: Response) => {
     const userId = req.user?.user_id;
-    const { username, email } = req.body;
+    const { username, email, bio } = req.body;
     try {
-        await userModel.findOneAndUpdate({user_id: userId }, { username, email }) as IUser | null;
+        await userModel.findOneAndUpdate({user_id: userId }, { username, email, bio }) as IUser | null;
         res.json({ message: "User information updated successfully" });
     } catch (error) {
         return res.status(404).json({ message: "User information updated" });

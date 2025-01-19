@@ -7,6 +7,7 @@ import userRouter from "@/src/Routers/userRouter";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import '@/src/configs/passportConfig';
+import groupRouter from "@/src/Routers/groupRouter";
 
 export const createServer = (): Express => {
   const app = express();
@@ -25,7 +26,8 @@ export const createServer = (): Express => {
       return res.json({ ok: true });
     })
     .use("/api/auth", authRouter)
-    .use("/api/users", userRouter);
+    .use("/api/users", userRouter)
+    .use("/api/groups", groupRouter);
 
   return app;
 };
