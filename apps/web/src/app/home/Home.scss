@@ -1,5 +1,6 @@
 $background: var(--background-color);
 $pink: var(--theme-pink);
+$pink: #ff77b4;
 $purple: var(--theme-pink);
 $dark-gray: var(--secondary-background);
 $error-red: var(--error-red);
@@ -9,6 +10,10 @@ $text-color: var(--text-color);
 
 *{
   box-sizing: border-box;
+}
+
+body { 
+  overflow-x:  hidden;
 }
 
 .Nav {
@@ -31,51 +36,55 @@ $text-color: var(--text-color);
     gap: 1em;
     position: relative;
     border-radius: $border-radius;
-    padding: 0.5em;
-    background: linear-gradient(
-      to right,
-      color-mix(in srgb, var(--theme-pink) 80%, white),
-      color-mix(in srgb, var(--theme-pink) 70%, white)
-    );
+    padding: 0.4em;
+    background: linear-gradient(to right, lighten($pink, 20%), lighten($pink, 30%));
     transition: all 0.3s ease;
-
+  
     &.focused {
       transform: scale(1.03);
-      box-shadow: 0 4px 10px color-mix(in srgb, var(--theme-pink) 30%, transparent);
+      box-shadow: 0 4px 10px rgba($pink, 0.3);
     }
-
+  
     .icon {
+      color: lighten($pink, 20%);
       position: absolute;
       left: 12px;
       width: 24px;
       height: 24px;
-      color: color-mix(in srgb, var(--secondary-background) 40%, black);
       transition: all 0.3s ease;
-
+  
       &.active {
-        color: var(--theme-pink);
+        color: $pink;
         transform: scale(1.15);
       }
     }
-
+  
     input {
+      box-sizing: border-box;
+      width: 250px;
+      padding: 0.5em 1em;
       width: 300px;
       padding: 0.6em 1em 0.6em 3em;
       border: none;
       border-radius: $border-radius;
-      background-color: color-mix(in srgb, var(--theme-pink) 75%, white);
+      background-color: lighten($pink, 20%);
+      background-color: lighten($pink, 25%);
       font-size: 1rem;
+      color: $dark-gray;
       outline: none;
+      transition:
+        outline 0.3s,
+        transform 0.3s;
       transition: all 0.3s ease;
-      color: $text-color !important;
+  
       &::placeholder {
-        color: color-mix(in srgb, var(--secondary-background) 5%, white);
+        color: rgba($dark-gray, 0.6);
       }
-
+  
       &:focus {
-        outline: 2px solid var(--theme-pink);
-        box-shadow: 0 0 12px color-mix(in srgb, var(--theme-pink) 40%, transparent);
-
+        outline: 2px solid $pink;
+        box-shadow: 0 0 12px rgba($pink, 0.4);
+  
         &::placeholder {
           transform: translateX(15px);
           opacity: 0;
@@ -93,7 +102,6 @@ $text-color: var(--text-color);
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
-
     &:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 12px color-mix(in srgb, var(--theme-pink) 30%, transparent);
@@ -237,7 +245,9 @@ $text-color: var(--text-color);
         background: none;
         color: white;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.6em;
+
 
         &:hover {
           background-color: var(--theme-pink);
@@ -314,7 +324,7 @@ $text-color: var(--text-color);
     border: 2px solid var(--theme-pink);
     border-radius: $border-radius;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 10;
+    z-index: 90;
     overflow: hidden;
     animation: slideIn 0.3s ease;
 
@@ -368,5 +378,39 @@ $text-color: var(--text-color);
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .Nav {
+    height: auto;
+    flex-direction: column;
+    padding: 0.5em;
+
+    .pages {
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 0.5em;
+
+      a {
+        font-size: 0.9rem;
+        margin: 0.25em;
+      }
+    }
+
+    .userMenuContainer {
+      position: static;
+      margin-top: 0.5em;
+
+      .userMenu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: $border-radius $border-radius 0 0;
+      }
+    }
   }
 }

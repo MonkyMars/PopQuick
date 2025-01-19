@@ -17,7 +17,7 @@ export interface IGroup extends Document {
     } }[]; // array of user_ids
     owner_id: string; // uuid for user_id
     group_profile: string;
-}
+};
 
 // Define the group schema 
 const groupSchema: Schema<IGroup> = new Schema({

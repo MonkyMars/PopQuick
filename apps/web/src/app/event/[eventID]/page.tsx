@@ -17,10 +17,10 @@ import Message from "./message/message";
 import InputField from "./inputField/inputField";
 import { Member, MessageType, Event } from "./event-util";
 import { fetchEvent } from "./fetching/event-fetching";
+import Profilecard from "@/components/ProfileCard/Profilecard";
 
 const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
-  const router = useRouter();
   const [timeRemaining, setTimeRemaining] = useState<{
     raw: number;
     formatted: string;
@@ -40,6 +40,9 @@ const EventPage: NextPage = () => {
       username: "Monky",
       profilePicture:
         "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
+      owner: true,
+      bio: "Full stack web dev \n (Next.js, Ts, Scss, PostgreSQL) \n -- Orbit dev",
+      memberSince: "2022-01-01",
     },
     {
       id: 2,
@@ -171,9 +174,11 @@ const EventPage: NextPage = () => {
     { label: "Placeholder", href: "/", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
-  
+
   const [activeUser] = useState<Member | null>(staticMembers[0]);
   const members = event?.members.map((member) => member.username).join(", ");
+  const [profileCardVisibility, setProfileCardVisibility] =
+    useState<Member | null>(null);
   const formattedDate = new Date(String(event?.date)).toLocaleDateString(
     "en-US",
     {
@@ -184,7 +189,14 @@ const EventPage: NextPage = () => {
     }
   );
 
-  return (
+  const handleProfileCardVisibility = (member: Member) => {
+    if (profileCardVisibility?.id === member.id) {
+      setProfileCardVisibility(null);
+    } else {
+      setProfileCardVisibility(member);
+    }
+  };
+    return (
     <>
       <nav className="Nav">
         <div className="pages">
@@ -262,15 +274,36 @@ const EventPage: NextPage = () => {
             <section className="messagesTab">
               <div className="messagesContainer">
                 {staticMessages.map((message) => (
-                  <Message message={message} activeUser={activeUser} />
+                  <Message
+                    key={message.id}
+                    message={message}
+                    activeUser={activeUser}
+                    onClick={() =>
+                      message.sender &&
+                      handleProfileCardVisibility(message.sender)
+                    }
+                  />
                 ))}
-                <InputField messageInput={messageInput} setMessageInput={setMessageInput}/>
+                <InputField
+                  messageInput={messageInput}
+                  setMessageInput={setMessageInput}
+                />
               </div>
             </section>
             <Menu
               className={`menu ${isMemberMenuOpen ? "open" : ""}`}
               onClick={() => setIsMemberMenuOpen(!isMemberMenuOpen)}
             />
+            {profileCardVisibility && (
+              <Profilecard
+                username={profileCardVisibility.username}
+                bio={profileCardVisibility.bio || ""}
+                owner={profileCardVisibility.owner || false}
+                profilePicture={profileCardVisibility.profilePicture}
+                stats={{ memberSince: profileCardVisibility.memberSince, totalMessagesSent: 100 }}
+                onClick={() => handleProfileCardVisibility(profileCardVisibility)}
+              />
+            )}
           </>
         )}
       </main>

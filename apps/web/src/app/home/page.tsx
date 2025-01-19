@@ -1,11 +1,12 @@
 "use client";
 
 import { NextPage } from "next";
-import { LogOut, Search, Settings, User, ChevronDown } from 'lucide-react';
+import { LogOut, Search, Settings, User, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import "./Home.scss";
 import { useState, useRef, useEffect } from "react";
 import PopQuickGroupCard from "@/components/GroupCard/GroupCard";
+import LoadingGroupCard from "@/components/GroupCard/LoadingGroupCard";
 
 interface Pages {
   id: number;
@@ -20,30 +21,145 @@ interface Groups {
   category: string;
 }
 
+interface Feedback {
+  category: string;
+  liked: boolean;
+}
+
+interface fetchRecommendedCategoriesProps {
+  top_n: number;
+  temperature: number;
+  model: string;
+  feedback: Feedback[];
+}
+
 const Home: NextPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("recommended");
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("recommended");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [recommendedCategories, setRecommendedCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  const fetchUserPreferences = async (): Promise<Feedback[]> => { // fetch user preferences from the backend
+    try{
+      const response = await fetch('/api/user/preferences', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+      }});
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const feedback: Feedback[] = [ // default feedback
+        { category: "blockchain", liked: true },
+        { category: "cryptocurrency", liked: true },
+        { category: "nfts", liked: true },
+        { category: "decentralized finance", liked: true },
+        { category: "smart contracts", liked: true },
+        { category: "tokenization", liked: true },
+        { category: "digital art", liked: true },
+        { category: "crypto wallets", liked: true },
+        { category: "blockchain technology", liked: true },
+        { category: "web3", liked: true },
+        { category: "metaverse", liked: true },
+        { category: "crypto trading", liked: true },
+        { category: "blockchain platforms", liked: true },
+      ];
+      return data.data || feedback;
+    } catch (error) {
+      console.error('Error fetching user preferences:', error);
+      let data: [] = []
+      return data;
+    }
+  }
+
+  const fetchRecommendedCategories = async ({
+    top_n,
+    temperature,
+    model,
+    feedback,
+  }: fetchRecommendedCategoriesProps): Promise<{category: string}[] | undefined> => { // fetch recommended categories from the backend
+    try {
+      setIsLoading(true);
+      const formattedFeedback = feedback.map((f) => ({
+        category: f.category.toLowerCase().trim(),
+        liked: Boolean(f.liked),
+      }));
+
+      const encodedFeedback = encodeURIComponent(
+        JSON.stringify(formattedFeedback)
+      );
+      // checkout https://github.com/MonkyMars/PopQuick-Category-Algorithm to see how to run and fetch results
+      const response = await fetch(
+        `http://localhost:5000/api/categories?temperature=${temperature}&top_n=${top_n}&model=${model}&feedback=${encodedFeedback}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data.data)) {
+        return data.data
+      } else {
+        console.error("Invalid data format received");
+        setRecommendedCategories([]);
+      }
+    } catch (error) {
+      console.error("Error fetching recommended categories:", error);
+      let data: [] = []
+      return data;
+    } finally {
+      setTimeout(() => setIsLoading(false), 500);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
+  useEffect(() => {
+    const initializeFetch = async () => { // fetch user preferences and recommended categories
+      const feedback = await fetchUserPreferences();
+      const props: fetchRecommendedCategoriesProps = { // set props for fetching func
+        top_n: 20,
+        temperature: 1,
+        model: "popai",
+        feedback: feedback,
+      };
+      const recommendedCategories = await fetchRecommendedCategories(props);
+      setRecommendedCategories(recommendedCategories?.map((category) => category.category) || []);
+    };
+    initializeFetch();
+  }, []);
+
   const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
-    { label: "Placeholder", href: "/", id: 2 },
+    { label: "Home", href: "/home", id: 1 },
+    { label: "Contact", href: "/contact", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
 
@@ -161,11 +277,17 @@ const Home: NextPage = () => {
           </button>
           {isUserMenuOpen && (
             <div className="userMenu">
-              <button className="menuItem">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/settings")}
+              >
                 <Settings className="menuIcon" />
                 Settings
               </button>
-              <button className="menuItem">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/signout")}
+              >
                 <LogOut className="menuIcon" />
                 Sign out
               </button>
@@ -175,12 +297,18 @@ const Home: NextPage = () => {
       </nav>
       <div className="mainContent">
         <div className="categorySelect" ref={dropdownRef}>
-          <button 
-            className={`dropdownTrigger ${isDropdownOpen ? 'active' : ''}`}
+          <button
+            className={`dropdownTrigger ${isDropdownOpen ? "active" : ""}`}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-expanded={isDropdownOpen}
           >
-            <span>{categoryOptions.find(option => option.value === selectedCategory)?.label}</span>
+            <span>
+              {
+                categoryOptions.find(
+                  (option) => option.value === selectedCategory
+                )?.label
+              }
+            </span>
             <ChevronDown className="icon" />
           </button>
           {isDropdownOpen && (
@@ -188,7 +316,7 @@ const Home: NextPage = () => {
               {categoryOptions.map((option) => (
                 <button
                   key={option.value}
-                  className={`dropdownItem ${selectedCategory === option.value ? 'selected' : ''}`}
+                  className={`dropdownItem ${selectedCategory === option.value ? "selected" : ""}`}
                   onClick={() => {
                     setSelectedCategory(option.value);
                     setIsDropdownOpen(false);
@@ -204,11 +332,15 @@ const Home: NextPage = () => {
           <>
             <h2>Recommended Groups for You</h2>
             <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
+              {isLoading ? (
+                Array.from({ length: 8 }).map((_, index) => (
+                  <LoadingGroupCard key={index} />
+                ))
+              ) : filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
                   <PopQuickGroupCard
                     key={index}
-                    name={group.name}
+                    name={recommendedCategories[index] || group.name}
                     imageUrl={group.image}
                     description={group.description}
                     category={group.category}

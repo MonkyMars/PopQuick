@@ -29,7 +29,8 @@ export const expressServer = (): Express => {
     .use("/api/auth", authRouter)
     .use("/api/users", userRouter)
     .use("/api/groups", groupRouter)
-    .use("/api/chat", chatRouter);
+    .use("/api/chat", chatRouter)
+    .use("/api/groups", groupRouter);
 
   return app;
 };
