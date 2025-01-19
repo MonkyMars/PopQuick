@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 interface JwtPayload {
     user_id: string;
     isAdmin: boolean;
+    subscription: boolean;
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +19,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         req.user = {
             user_id: decoded.user_id,
             isAdmin: decoded.isAdmin,
+            subscription: decoded.subscription,
         }
         next();
     } catch (error) {
@@ -32,7 +34,7 @@ export const isAdminMiddleware = async (req: Request, res: Response, next: NextF
         if (!token) {
             return res.status(403).json({ message: 'Invalid token' });
         }
-        if (!res.locals.user.isAdmin) {
+        if (!req.user?.isAdmin) {
             return res.status(403).json({ message: 'Access denied, you are not admin' });
         }
         next();

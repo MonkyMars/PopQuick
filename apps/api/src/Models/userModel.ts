@@ -10,6 +10,9 @@ export interface IUser extends Document {
     password: string;
     isAdmin: boolean;
     profile_picture?: string;
+    subscription: boolean;
+    bio: string;
+    created_at: Date;
 }
 
 // Define the User schema
@@ -37,6 +40,16 @@ const userSchema: Schema<IUser> = new Schema({
     profile_picture: {
         type: String,
         default: "https://i.pinimg.com/736x/99/d0/7f/99d07f72ea74f29fe21833964704cdc9.jpg"
+    },
+    bio: {
+        type: String
+    },
+    subscription: {
+        type: Boolean,
+        default: false
+    },
+    created_at: {
+        type: Date,
     }
 })
 

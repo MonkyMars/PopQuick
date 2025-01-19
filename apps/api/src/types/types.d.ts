@@ -6,6 +6,7 @@ declare global {
             user_id: string;
             isAdmin: boolean;
             email?: string; // Add other properties if needed
+            subscription: boolean;
         }
 
         interface Request {
