@@ -21,13 +21,11 @@ import Profilecard from "@/components/ProfileCard/Profilecard";
 
 const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
-  const [timeRemaining, setTimeRemaining] = useState<{
-    raw: number;
-    formatted: string;
-  }>({
+const [timeRemaining, setTimeRemaining] = useState<{ raw: number; formatted: string }>({
     raw: 600,
     formatted: "10:00",
-  });
+});
+
   const eventID = params.eventID as string;
   const [event, setEvent] = useState<Event | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
@@ -120,34 +118,48 @@ const EventPage: NextPage = () => {
       sender: staticMembers[3],
       timeSent: new Date().toTimeString().toString(),
     },
+    {
+      id: 9,
+      content: "Looking forward to meeting you all.",
+      date: "2022-01-02",
+      sender: staticMembers[1],
+      timeSent: new Date().toTimeString().toString(),
+    },
+    {
+      id: 10,
+      content: "Don't forget to bring your tickets.",
+      date: "2022-01-03",
+      sender: staticMembers[2],
+      timeSent: new Date().toTimeString().toString(),
+    },
+    {
+      id:11,
+      content: "See you all there!",
+      date: "2022-01-04",
+      sender: staticMembers[3],
+      timeSent: new Date().toTimeString().toString(),
+    },
   ];
 
-  const calculateTimeRemaining = (timeRemaining: number): string => {
-    const minutes = Math.floor(timeRemaining / 60);
-    const seconds = timeRemaining % 60;
+  const calculateTimeRemaining = (time: number): string => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (timeRemaining.raw > 0) {
-        setTimeRemaining((prevTime) => ({
-          raw: prevTime.raw - 1,
-          formatted: calculateTimeRemaining(prevTime.raw - 1),
-        }));
-      } else {
-        clearInterval(interval);
-      }
+      setTimeRemaining((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timeRemaining]);
+  }, []);
 
   const staticEvent: Event = {
     id: eventID,
     name: `Event ${eventID}`,
     date: new Date().toString(),
-    timeRemaining: calculateTimeRemaining(600),
+    timeRemaining: calculateTimeRemaining(timeRemaining),
     members: staticMembers,
     messages: staticMessages,
   } as Event;
@@ -231,18 +243,18 @@ const EventPage: NextPage = () => {
       <main className="mainContent">
         {event && (
           <>
-            <aside className={`aside ${isMemberMenuOpen ? "AsideOpen" : null}`}>
+            <aside className={`aside ${isMemberMenuOpen ? "AsideOpen" : ""}`}>
               <header>
                 <h1>{event.name}</h1>
                 <span className="timer">
                   <Clock className="icon" />
-                  {timeRemaining.formatted}
+                  {calculateTimeRemaining(timeRemaining)}
                 </span>
               </header>
               {staticMembers.map((member) => (
                 <div
                   key={member.id}
-                  className={`member ${member.id === activeUser?.id ? "you" : null}`}
+                  className={`member ${member.id === activeUser?.id ? "you" : ""}`}
                 >
                   <Image
                     src={member.profilePicture}
@@ -254,7 +266,7 @@ const EventPage: NextPage = () => {
                   />
                   <span className="username">
                     {member.username === activeUser?.username
-                      ? member.username + " (You)"
+                      ? `${member.username} (You)`
                       : member.username}
                   </span>
                 </div>
