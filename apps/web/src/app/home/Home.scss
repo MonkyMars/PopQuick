@@ -1,14 +1,24 @@
-$background: #f9f9f9;
+$background: var(--background-color);
+$pink: var(--theme-pink);
 $pink: #ff77b4;
-$purple: #9b4d97;
-$dark-gray: #383838;
-$error-red: #e02b2b;
+$purple: var(--theme-pink);
+$dark-gray: var(--secondary-background);
+$error-red: var(--error-red);
 $border-radius: 8px;
-$green: #38eb38;
+$green: var(--confirm-green);
+$text-color: var(--text-color);
+
+*{
+  box-sizing: border-box;
+}
+
+body { 
+  overflow-x:  hidden;
+}
 
 .Nav {
   display: flex;
-  background-color: darken($dark-gray, 10%);
+  background-color: color-mix(in srgb, var(--secondary-background) 90%, black);
   justify-content: space-around;
   align-items: center;
   width: 100vw;
@@ -16,34 +26,138 @@ $green: #38eb38;
   height: 100px;
   padding: 1em;
   box-sizing: border-box;
-
-  .logo {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
+  color: $text-color !important;
+  .pages a{
+    color: $text-color !important;
   }
-
   .search {
     display: flex;
     align-items: center;
     gap: 1em;
-
+    position: relative;
+    border-radius: $border-radius;
+    padding: 0.4em;
+    background: linear-gradient(to right, lighten($pink, 20%), lighten($pink, 30%));
+    transition: all 0.3s ease;
+  
+    &.focused {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba($pink, 0.3);
+    }
+  
+    .icon {
+      color: lighten($pink, 20%);
+      position: absolute;
+      left: 12px;
+      width: 24px;
+      height: 24px;
+      transition: all 0.3s ease;
+  
+      &.active {
+        color: $pink;
+        transform: scale(1.15);
+      }
+    }
+  
     input {
       box-sizing: border-box;
       width: 250px;
       padding: 0.5em 1em;
+      width: 300px;
+      padding: 0.6em 1em 0.6em 3em;
       border: none;
       border-radius: $border-radius;
       background-color: lighten($pink, 20%);
+      background-color: lighten($pink, 25%);
+      font-size: 1rem;
       color: $dark-gray;
       outline: none;
       transition:
         outline 0.3s,
         transform 0.3s;
-
+      transition: all 0.3s ease;
+  
+      &::placeholder {
+        color: rgba($dark-gray, 0.6);
+      }
+  
       &:focus {
         outline: 2px solid $pink;
+        box-shadow: 0 0 12px rgba($pink, 0.4);
+  
+        &::placeholder {
+          transform: translateX(15px);
+          opacity: 0;
+        }
       }
+    }
+  }
+
+  .groupCard {
+    background: color-mix(in srgb, var(--theme-pink) 65%, white);
+    border-radius: $border-radius;
+    box-shadow: 0 4px 8px color-mix(in srgb, var(--secondary-background) 10%, transparent);
+    padding: 1em;
+    text-align: center;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px color-mix(in srgb, var(--theme-pink) 30%, transparent);
+    }
+
+    img {
+      border-radius: $border-radius;
+      margin-bottom: 0.5em;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin: 0.5em 0;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: color-mix(in srgb, var(--secondary-background) 20%, black);
+      margin-bottom: 1em;
+    }
+
+    label {
+      display: inline-block;
+      background: var(--theme-pink);
+      color: #fff;
+      padding: 0.3em 0.6em;
+      font-size: 0.8rem;
+      border-radius: $border-radius;
+      margin-bottom: 1em;
+    }
+
+    button {
+      background: var(--theme-pink);
+      color: #fff;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: color-mix(in srgb, var(--theme-pink) 90%, black);
+      }
+    }
+  }
+
+  .pages a {
+    color: var(--secondary-background);
+    text-decoration: none;
+    margin: 0 1em;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--theme-pink);
     }
   }
 
@@ -52,33 +166,98 @@ $green: #38eb38;
     gap: 1em;
 
     a {
-      color: $background;
+      color: var(--background-color);
       text-decoration: none;
-      transition:
-        transform 0.3s,
-        color,
-        border-bottom 0.5s;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.3s ease;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--theme-pink);
+        transition: width 0.3s ease;
+      }
 
       &:hover {
-        transform: translateY(-2px);
-        color: darken($pink, 10%);
-        border-bottom: 1px solid darken($pink, 10%);
+        color: var(--theme-pink);
+
+        &::after {
+          width: 100%;
+        }
       }
     }
   }
 
-  .icon {
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    object-fit: cover;
-    transition:
-      transform 0.3s,
-      color 0.5s;
+  .userMenuContainer {
+    position: relative;
 
-    &:hover {
-      transform: translateY(-2px);
-      color: darken($pink, 10%);
+    .userButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background-color: var(--theme-pink);
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        background-color: color-mix(in srgb, var(--theme-pink) 90%, black);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        color: white;
+      }
+    }
+
+    .userMenu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      width: 200px;
+      background-color: var(--secondary-background);
+      border-radius: $border-radius;
+      padding: 0.5em 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease;
+
+      .menuItem {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        width: 100%;
+        padding: 0.75em 1em;
+        border: none;
+        background: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.6em;
+
+
+        &:hover {
+          background-color: var(--theme-pink);
+        }
+
+        .menuIcon {
+          width: 16px;
+          height: 16px;
+        }
+      }
     }
   }
 }
@@ -94,111 +273,144 @@ $green: #38eb38;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
     gap: 2em;
-
-    .groupCard {
-      background-color: $dark-gray;
-      border-radius: $border-radius;
-      text-align: center;
-      padding-bottom: 1em;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-      align-items: center;
-      position: relative;
-      box-shadow: 4px 8px 40px rgb(0, 0, 0, 0.1);
-      img {
-        width: 100%;
-        height: 60%;
-        object-fit: cover;
-        border-radius: $border-radius;
-        border-bottom: 4px solid darken($pink, 10%);
-      }
-
-      h3 {
-        margin: 0;
-        color: $pink;
-      }
-      p {
-        width: 90%;
-      }
-      label {
-        font-weight: bold;
-        color: $purple;
-      }
-      span {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: rgba(0, 0, 0, 0.7);
-        color: #e3e3e3;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        z-index: 1;
-      }
-      button {
-        width: 90%;
-        padding: 0.8em;
-        background-color: darken($pink, 10%);
-        color: $background;
-        border: none;
-        border-radius: $border-radius;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 0.5em;
-        box-shadow: 4px 6px 10px rgb(0, 0, 0, 0.3);
-        transition:
-          background-color 0.3s,
-          transform 0.2s,
-          box-shadow 0.2s;
-        &:hover {
-          background-color: darken($pink, 20%);
-          transform: translateY(-2px);
-          box-shadow: 4px 6px 20px rgb(0, 0, 0, 0.6);
-        }
-
-        &:active {
-          transform: translateY(0);
-        }
-      }
-    }
   }
 }
 
-.buttonContainer {
+.categorySelect {
   display: flex;
-  align-content: center;
-  width: 100%;
   justify-content: center;
-  gap: 3em;
-  & button {
-    padding: 0.8em 2em;
-    background-color: darken($pink, 10%);
-    color: $background;
-    border: none;
+  margin-bottom: 2em;
+  position: relative;
+  width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .dropdownTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.8em 1em;
+    color: var(--theme-pink);
+    border: 2px solid var(--theme-pink);
     border-radius: $border-radius;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 0.5em;
-    box-shadow: 4px 8px 10px rgb(0, 0, 0, 0.3);
-    transition:
-      background-color 0.3s,
-      transform 0.2s,
-      box-shadow 0.2s;
-    &:hover {
-      background-color: darken($pink, 20%);
-      transform: translateY(-2px);
-      box-shadow: 4px 8px 20px rgb(0, 0, 0, 0.6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover,
+    &.active {
+      box-shadow: 0 0 15px color-mix(in srgb, var(--theme-pink) 50%, transparent);
     }
-    &:active {
-      transform: translateY(0);
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s ease;
+      color: var(--theme-pink);
+    }
+
+    &[aria-expanded="true"] .icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .dropdownMenu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border: 2px solid var(--theme-pink);
+    border-radius: $border-radius;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 90;
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+
+    .dropdownItem {
+      width: 100%;
+      padding: 0.8em 1em;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--theme-pink);
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--secondary-background) 90%, black);
+      }
+
+      &.selected {
+        background-color: var(--theme-pink);
+        color: var(--secondary-background);
+      }
     }
   }
 }
 
-.selected{
-  background-color: var(--theme-pink) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 4px 8px 20px rgb(0, 0, 0, 0.6) !important;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .Nav {
+    height: auto;
+    flex-direction: column;
+    padding: 0.5em;
+
+    .pages {
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 0.5em;
+
+      a {
+        font-size: 0.9rem;
+        margin: 0.25em;
+      }
+    }
+
+    .userMenuContainer {
+      position: static;
+      margin-top: 0.5em;
+
+      .userMenu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: $border-radius $border-radius 0 0;
+      }
+    }
+  }
 }

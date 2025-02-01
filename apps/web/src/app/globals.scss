@@ -6,23 +6,40 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: "Raleway", "Poppins", "Rubik";
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: scroll;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background: lightgray;
+}
+
 :root {
   --background-color: #f9f9f9;
   --text-color: #222;
-  --secondary-background: #383838;
+  --secondary-background: #a1a1a1;
   --headers-font: "Raleway", "Poppins";
   --buttons-font: "Rubik", "Poppins";
   --theme-pink: #ff77b4;
   --theme-purple: #9b4d97;
   --confirm-green: #38eb38;
   --error-red: #e02b2b;
+  --form-background: rgba(255, 199, 226, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: #222;
     --text-color: #f9f9f9;
-    --secondary-background: #a1a1a1;
+    --secondary-background: #383838;
+    --form-background: rgba(0, 0, 0, 0.2);
   }
 }

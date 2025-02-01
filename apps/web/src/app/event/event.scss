@@ -12,6 +12,7 @@ $error-red: #e02b2b;
 $border-radius: 8px;
 $green: #38eb38;
 
+
 // Base styles
 * {
   box-sizing: border-box;
@@ -21,6 +22,9 @@ $green: #38eb38;
 }
 
 body {
+=======
+body, html {
+
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
@@ -35,6 +39,7 @@ body {
   z-index: 1000;
   background-color: darken($dark-gray, 10%);
   padding: 1em;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,6 +61,10 @@ body {
     }
   }
 
+
+  box-sizing: border-box;
+  z-index: 2;
+
   .pages a {
     color: $dark-gray;
     text-decoration: none;
@@ -63,15 +72,49 @@ body {
     font-size: 1rem;
     font-weight: bold;
     transition: color 0.3s ease;
-
     &:hover {
       color: $pink;
     }
   }
 
+
+  .pages {
+    display: flex;
+    gap: 1em;
+    @media screen and (max-width: 460px) {
+      gap: 0;
+    }
+    a {
+      color: $background;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.3s ease;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: $pink;
+        transition: width 0.3s ease;
+      }
+
+      &:hover {
+        color: $pink;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+
   .userMenuContainer {
     position: relative;
-
     .userButton {
       display: flex;
       align-items: center;
@@ -83,7 +126,6 @@ body {
       background-color: $pink;
       cursor: pointer;
       transition: all 0.3s ease;
-
       &:hover {
         transform: translateY(-2px);
         background-color: darken($pink, 10%);
@@ -105,12 +147,13 @@ body {
       top: 120%;
       right: 0;
       width: 200px;
-      background-color: $dark-gray;
+      background-color: var(--secondary-background);
       border-radius: $border-radius;
       padding: 0.5em 0;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       animation: slideIn 0.3s ease;
-      z-index: 2;
+      z-index: 100;
+
       .menuItem {
         display: flex;
         align-items: center;
@@ -121,10 +164,12 @@ body {
         background: none;
         color: white;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.6em;
+
 
         &:hover {
-          background-color: $pink;
+          background-color: var(--theme-pink);
         }
 
         .menuIcon {
@@ -137,6 +182,7 @@ body {
 }
 
 .mainContent {
+
   margin-top: 60px; // Account for fixed Nav
   display: flex;
   height: calc(100vh - 60px);
@@ -144,6 +190,15 @@ body {
   @media (max-width: $tablet) {
     flex-direction: column;
   }
+
+
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  transition: grid-template-columns 0.3s ease;
+  min-height: calc(100vh - 100px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden !important;
 
   .aside {
     width: 300px;
@@ -172,6 +227,7 @@ body {
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: rgba($pink, 0.5) #383838;
+
 
     @media (max-width: 768px) {
       width: 100%;
@@ -331,6 +387,7 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
+
     background-color: #292929;
     box-sizing: border-box;
     overflow: hidden;
@@ -343,10 +400,18 @@ body {
       min-height: calc(100vh - 100px);
     }
 
+
+    padding: 0.5em 1em;
+    width: auto;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    height: 100vh;
+
     .inputContainer {
       background-color: #383838;
       position: fixed;
-      width: calc(100% - 300px);
+      width: 100%;
       height: auto;
       bottom: 0;
       right: 0;
@@ -355,6 +420,9 @@ body {
       justify-content: flex-start;
       padding: 0.5em 1em;
       box-sizing: border-box;
+      @media screen and (max-width: 390px) {
+        padding: 0.5em;
+      }
       & button {
         display: flex;
         align-items: center;
@@ -383,7 +451,7 @@ body {
         }
       }
       & input {
-        width: calc(100% - 40px);
+        width: 100%;
         height: 40px;
         border: none;
         background: transparent;
@@ -414,15 +482,16 @@ body {
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      position: relative;
-      height: calc(100vh - 160px);
+      position: fixed;
+      top: 100px;
       width: 100%;
+      height: calc(100vh - 100px);
       overflow-y: auto;
       overflow-x: hidden;
-      padding-bottom: 20px;
+      padding-bottom: 50px;
       scrollbar-width: thin;
       scrollbar-color: rgba($pink, 0.5) #292929;
-
+      
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -663,19 +732,33 @@ body {
   }
   .menu {
     position: absolute;
-    top: 0.3em;
-    left: 0.3em;
-    width: 50px;
-    height: 50px;
+    top: 0.5em;
+    left: 0.5em;
+    width: 35px;
+    height: 35px;
     cursor: pointer;
-    transition:
-      transform 0.5s ease,
-      left 0.3s ease;
+    transition: transform 0.5s ease, left 0.3s ease;
     z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $pink;
+    border-radius: 50%;
+    padding: 0.25em;
+    svg {
+      fill: currentColor;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
   }
   .open {
     transform: rotate(360deg);
     left: 90%;
+    margin-left: 5px;
+    svg {
+      transform: rotate(90deg);
+    }
   }
 }
 

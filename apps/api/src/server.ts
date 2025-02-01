@@ -7,8 +7,10 @@ import userRouter from "@/src/Routers/userRouter";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import '@/src/configs/passportConfig';
+import groupRouter from "@/src/Routers/groupRouter";
+import chatRouter from "@/src/Routers/chatRouter";
 
-export const createServer = (): Express => {
+export const expressServer = (): Express => {
   const app = express();
   app
     .disable("x-powered-by")
@@ -25,7 +27,10 @@ export const createServer = (): Express => {
       return res.json({ ok: true });
     })
     .use("/api/auth", authRouter)
-    .use("/api/users", userRouter);
+    .use("/api/users", userRouter)
+    .use("/api/groups", groupRouter)
+    .use("/api/chat", chatRouter)
+    .use("/api/groups", groupRouter);
 
   return app;
 };

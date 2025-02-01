@@ -1,6 +1,6 @@
 import express, { type Express } from "express";
 import { deleteUserAccount, getUserInfo, updateUser, searchUserByUsername, uploadProfilePicture } from "@/src/Controllers/userController";
-import { authMiddleware, isAdminMiddleware } from "@/src/Middlewares/authMiddleware";
+import { authMiddleware } from "@/src/Middlewares/authMiddleware";
 import uploadPicture from "../configs/multerConfig";
 
 const router = express.Router();

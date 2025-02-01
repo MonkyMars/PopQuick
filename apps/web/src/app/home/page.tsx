@@ -1,11 +1,12 @@
 "use client";
 
 import { NextPage } from "next";
-import Image from "next/image";
-import { Search, User } from "lucide-react";
+import { LogOut, Search, Settings, User, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import "./Home.scss";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import PopQuickGroupCard from "@/components/GroupCard/GroupCard";
+import LoadingGroupCard from "@/components/GroupCard/LoadingGroupCard";
 
 interface Pages {
   id: number;
@@ -20,14 +21,145 @@ interface Groups {
   category: string;
 }
 
+interface Feedback {
+  category: string;
+  liked: boolean;
+}
+
+interface fetchRecommendedCategoriesProps {
+  top_n: number;
+  temperature: number;
+  model: string;
+  feedback: Feedback[];
+}
+
 const Home: NextPage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedGroups, setSelectedGroups] = useState<
-    "recommended" | "location" | "interests"
-  >("recommended");
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("recommended");
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [recommendedCategories, setRecommendedCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  const fetchUserPreferences = async (): Promise<Feedback[]> => { // fetch user preferences from the backend
+    try{
+      const response = await fetch('/api/user/preferences', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+      }});
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const feedback: Feedback[] = [ // default feedback
+        { category: "blockchain", liked: true },
+        { category: "cryptocurrency", liked: true },
+        { category: "nfts", liked: true },
+        { category: "decentralized finance", liked: true },
+        { category: "smart contracts", liked: true },
+        { category: "tokenization", liked: true },
+        { category: "digital art", liked: true },
+        { category: "crypto wallets", liked: true },
+        { category: "blockchain technology", liked: true },
+        { category: "web3", liked: true },
+        { category: "metaverse", liked: true },
+        { category: "crypto trading", liked: true },
+        { category: "blockchain platforms", liked: true },
+      ];
+      return data.data || feedback;
+    } catch (error) {
+      console.error('Error fetching user preferences:', error);
+      let data: [] = []
+      return data;
+    }
+  }
+
+  const fetchRecommendedCategories = async ({
+    top_n,
+    temperature,
+    model,
+    feedback,
+  }: fetchRecommendedCategoriesProps): Promise<{category: string}[] | undefined> => { // fetch recommended categories from the backend
+    try {
+      setIsLoading(true);
+      const formattedFeedback = feedback.map((f) => ({
+        category: f.category.toLowerCase().trim(),
+        liked: Boolean(f.liked),
+      }));
+
+      const encodedFeedback = encodeURIComponent(
+        JSON.stringify(formattedFeedback)
+      );
+      // checkout https://github.com/MonkyMars/PopQuick-Category-Algorithm to see how to run and fetch results
+      const response = await fetch(
+        `http://localhost:5000/api/categories?temperature=${temperature}&top_n=${top_n}&model=${model}&feedback=${encodedFeedback}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data.data)) {
+        return data.data
+      } else {
+        console.error("Invalid data format received");
+        setRecommendedCategories([]);
+      }
+    } catch (error) {
+      console.error("Error fetching recommended categories:", error);
+      let data: [] = []
+      return data;
+    } finally {
+      setTimeout(() => setIsLoading(false), 500);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const initializeFetch = async () => { // fetch user preferences and recommended categories
+      const feedback = await fetchUserPreferences();
+      const props: fetchRecommendedCategoriesProps = { // set props for fetching func
+        top_n: 20,
+        temperature: 1,
+        model: "popai",
+        feedback: feedback,
+      };
+      const recommendedCategories = await fetchRecommendedCategories(props);
+      setRecommendedCategories(recommendedCategories?.map((category) => category.category) || []);
+    };
+    initializeFetch();
+  }, []);
+
   const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
-    { label: "Placeholder", href: "/", id: 2 },
+    { label: "Home", href: "/home", id: 1 },
+    { label: "Contact", href: "/contact", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
 
@@ -79,7 +211,7 @@ const Home: NextPage = () => {
       image: "https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg",
       description:
         "A group dedicated to promoting sustainable living and environmental awareness.",
-      category: "Environment",
+      category: "environmentalism",
     },
     {
       name: "Foodies Haven",
@@ -108,27 +240,15 @@ const Home: NextPage = () => {
     group.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
+  const categoryOptions = [
+    { value: "recommended", label: "Recommended" },
+    { value: "location", label: "Location Based" },
+    { value: "interests", label: "Interest Based" },
+  ];
+
   return (
     <>
       <nav className="Nav">
-        <Image
-          src={"/PopQuick.png"}
-          alt="PopQuick"
-          className="logo"
-          width={60}
-          height={60}
-          priority
-          draggable={false}
-        />
-        <div className="search">
-          <Search className="icon" />
-          <input
-            type="text"
-            placeholder="Search groups..."
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-          />
-        </div>
         <div className="pages">
           {pages.map((page) => (
             <Link href={page.href} key={page.id}>
@@ -136,65 +256,97 @@ const Home: NextPage = () => {
             </Link>
           ))}
         </div>
-        <User className="icon" />
+        <div className={`search ${isSearchFocused ? "focused" : ""}`}>
+          <Search className={`icon ${isSearchFocused ? "active" : ""}`} />
+          <input
+            type="text"
+            placeholder="Search groups..."
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+          />
+        </div>
+        <div className="userMenuContainer">
+          <button
+            className="userButton"
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            aria-label="User menu"
+          >
+            <User className="icon" />
+          </button>
+          {isUserMenuOpen && (
+            <div className="userMenu">
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/settings")}
+              >
+                <Settings className="menuIcon" />
+                Settings
+              </button>
+              <button
+                className="menuItem"
+                onClick={() => (window.location.href = "/signout")}
+              >
+                <LogOut className="menuIcon" />
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </nav>
       <div className="mainContent">
-        <div className="buttonContainer">
-        <button onClick={() => setSelectedGroups("recommended")} className={selectedGroups === 'recommended' ? 'selected' : ''}>
-            Recommended groups
+        <div className="categorySelect" ref={dropdownRef}>
+          <button
+            className={`dropdownTrigger ${isDropdownOpen ? "active" : ""}`}
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            aria-expanded={isDropdownOpen}
+          >
+            <span>
+              {
+                categoryOptions.find(
+                  (option) => option.value === selectedCategory
+                )?.label
+              }
+            </span>
+            <ChevronDown className="icon" />
           </button>
-          <button onClick={() => setSelectedGroups("location")} className={selectedGroups === 'location' ? 'selected' : ''}>
-            Location based groups
-          </button>
-          <button onClick={() => setSelectedGroups("interests")} className={selectedGroups === 'interests' ? 'selected' : ''}>
-            Interest based groups
-          </button>
+          {isDropdownOpen && (
+            <div className="dropdownMenu">
+              {categoryOptions.map((option) => (
+                <button
+                  key={option.value}
+                  className={`dropdownItem ${selectedCategory === option.value ? "selected" : ""}`}
+                  onClick={() => {
+                    setSelectedCategory(option.value);
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-        {selectedGroups === "recommended" && (
+        {selectedCategory === "recommended" && (
           <>
             <h2>Recommended Groups for You</h2>
             <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
-                filteredGroups.map((group, index) => (
-                  <div className="groupCard" key={index}>
-                    <Image
-                      src={group.image}
-                      alt={group.name}
-                      width={300}
-                      height={300}
-                    />
-                    <span>Participants: 1/4</span>
-                    <h3>{group.name}</h3>
-                    <p>{group.description}</p>
-                    <label>{group.category}</label>
-                    <button>Join</button>
-                  </div>
+              {isLoading ? (
+                Array.from({ length: 8 }).map((_, index) => (
+                  <LoadingGroupCard key={index} />
                 ))
-              ) : (
-                <h2>No groups found</h2>
-              )}
-            </div>{" "}
-          </>
-        )}
-        {selectedGroups === "interests" && (
-          <>
-            <h2>Interesting Groups for You</h2>
-            <div className="groupGrid">
-              {filteredGroups.length > 0 ? (
+              ) : filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
-                  <div className="groupCard" key={index}>
-                    <Image
-                      src={group.image}
-                      alt={group.name}
-                      width={300}
-                      height={300}
-                    />
-                    <span>Participants: 1/4</span>
-                    <h3>{group.name}</h3>
-                    <p>{group.description}</p>
-                    <label>{group.category}</label>
-                    <button>Join</button>
-                  </div>
+                  <PopQuickGroupCard
+                    key={index}
+                    name={recommendedCategories[index] || group.name}
+                    imageUrl={group.image}
+                    description={group.description}
+                    category={group.category}
+                    memberCount={4}
+                    maxMemberSize={4}
+                  />
                 ))
               ) : (
                 <h2>No groups found</h2>
@@ -202,25 +354,43 @@ const Home: NextPage = () => {
             </div>
           </>
         )}
-        {selectedGroups === "location" && (
+        {selectedCategory === "location" && (
           <>
             <h2>Nearby Groups for You</h2>
             <div className="groupGrid">
               {filteredGroups.length > 0 ? (
                 filteredGroups.map((group, index) => (
-                  <div className="groupCard" key={index}>
-                    <Image
-                      src={group.image}
-                      alt={group.name}
-                      width={300}
-                      height={300}
-                    />
-                    <span>Participants: 1/4</span>
-                    <h3>{group.name}</h3>
-                    <p>{group.description}</p>
-                    <label>{group.category}</label>
-                    <button>Join</button>
-                  </div>
+                  <PopQuickGroupCard
+                    key={index}
+                    name={group.name}
+                    imageUrl={group.image}
+                    description={group.description}
+                    category={group.category}
+                    memberCount={4}
+                    maxMemberSize={4}
+                  />
+                ))
+              ) : (
+                <h2>No groups found</h2>
+              )}
+            </div>
+          </>
+        )}
+        {selectedCategory === "interests" && (
+          <>
+            <h2>Interesting Groups for You</h2>
+            <div className="groupGrid">
+              {filteredGroups.length > 0 ? (
+                filteredGroups.map((group, index) => (
+                  <PopQuickGroupCard
+                    key={index}
+                    name={group.name}
+                    imageUrl={group.image}
+                    description={group.description}
+                    category={group.category}
+                    memberCount={4}
+                    maxMemberSize={4}
+                  />
                 ))
               ) : (
                 <h2>No groups found</h2>
