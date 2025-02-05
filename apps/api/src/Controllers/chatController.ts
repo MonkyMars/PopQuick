@@ -68,7 +68,7 @@ export const sendMessage = async (req: Request, res: Response) => {
   }
   
   // 15 minutes to delete the messages
-  const startDeletionTimer = (group_id: string) => {
+  export const startDeletionByTimer = (group_id: string) => {
     const FIFTEEN_MINUTES = 15 * 60 * 1000 // 15 minutes (basically)
   
     setTimeout(async () => {
