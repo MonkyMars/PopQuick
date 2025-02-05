@@ -35,34 +35,53 @@ export const getMessages = async ( req: Request, res: Response ) => {
 }
 
 // create a send message
-export const sendMessage = async ( req: Request, res: Response) => {
-    const user_id = req.user?.user_id;
-    const user = await userModel.findOne({ user_id: user_id }) as IUser | null;
-    const username = user?.username;
-    const { group_id } = req.params;
-    const group = await groupModel.findOne({ group_id: group_id });
-    const groupMember = group?.members.some((member) => member.user.username === username);
-    const { message } = req.body;
+export const sendMessage = async (req: Request, res: Response) => {
+    const user_id = req.user?.user_id
+    const user = (await userModel.findOne({ user_id: user_id })) as IUser | null
+    const username = user?.username
+    const { group_id } = req.params
+    const group = await groupModel.findOne({ group_id: group_id })
+    const groupMember = group?.members.some((member) => member.user.username === username)
+    const { message } = req.body
     try {
-        if (groupMember) {
-            // Save messages to DB
-            const newMessage = new chatModel({ groupID: group_id, username, message });
-            await newMessage.save();
-
-            // Emit the message in real-time using Socket.IO
-            const io = getIO();
-            io.to(group_id).emit("newMessage", newMessage);
-
-            res.status(200).json({ success: true, data: newMessage});
-        } else {
-            return res.status(403).json({ message: 'You are not in the group' });
+      if (groupMember && group) {
+        const newMessage = new chatModel({ groupID: group_id, username, message })
+        await newMessage.save()
+  
+        const io = getIO()
+        io.to(group_id).emit("newMessage", newMessage)
+  
+        // this will check if there is 2 people in the group so it can start the timer.
+        if (group.members.length === 2) {
+          // starts the time for the deletion
+          startDeletionTimer(group_id)
         }
+  
+        res.status(200).json({ success: true, data: newMessage })
+      } else {
+        return res.status(403).json({ message: "You are not in the group" })
+      }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, error: 'Server Error' });
+      console.log(error)
+      res.status(500).json({ success: false, error: "Server Error" })
     }
-};
-
+  }
+  
+  // 15 minutes to delete the messages
+  const startDeletionTimer = (group_id: string) => {
+    const FIFTEEN_MINUTES = 15 * 60 * 1000 // 15 minutes (basically)
+  
+    setTimeout(async () => {
+      try {
+        // delete all messages from the gc (which there is 2 people in the group)
+        await chatModel.deleteMany({ groupID: group_id })
+          const io = getIO()
+        io.to(group_id).emit("redirectToHome", { message: "Chat session ended. Redirecting to home." })
+      } catch (error) {
+        console.error("Error in deletion timer:", error)
+      }
+    }, FIFTEEN_MINUTES)
+  }
 // Edit the message via messageId
 export const editMessage = async (req: Request, res: Response) => {
     const { message_id, group_id } = req.params;
