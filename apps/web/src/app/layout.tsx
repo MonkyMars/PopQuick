@@ -1,8 +1,12 @@
+import { Metadata } from "next";
 import "./globals.scss";
 import React from "react";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "PopQuick",
+  icons: {
+    icon: "/PopQuick.png"
+  },
   description: "Connect and share with new friends on PopQuick - the social platform that brings people together. Join our vibrant community for instant messaging and networking.",
   keywords: [
     "social media",
