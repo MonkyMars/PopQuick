@@ -42,7 +42,7 @@ const Profile: React.FC = () => {
   }, []);
 
   const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
+    { label: "Home", href: "/home", id: 1 },
     { label: "Placeholder", href: "/", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
