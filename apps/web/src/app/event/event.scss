@@ -21,8 +21,6 @@ $green: #38eb38;
   -webkit-tap-highlight-color: transparent;
 }
 
-body {
-=======
 body, html {
 
   margin: 0;
@@ -344,7 +342,6 @@ body, html {
     display: flex;
     flex-direction: column;
     height: 100%;
-
     .messagesContainer {
       flex: 1;
       overflow-y: auto;
