@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import {
   User,
@@ -22,8 +22,8 @@ import Profilecard from "@/components/ProfileCard/Profilecard";
 const EventPage: NextPage = () => {
   const params = useParams() as { eventID: string };
 const [timeRemaining, setTimeRemaining] = useState<{ raw: number; formatted: string }>({
-    raw: 600,
-    formatted: "10:00",
+    raw: 900,
+    formatted: "15:00",
 });
 
   const eventID = params.eventID as string;
@@ -149,7 +149,10 @@ const [timeRemaining, setTimeRemaining] = useState<{ raw: number; formatted: str
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeRemaining((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+      setTimeRemaining((prevTime) => ({
+        raw: prevTime.raw > 0 ? prevTime.raw - 1 : 0,
+        formatted: calculateTimeRemaining(prevTime.raw > 0 ? prevTime.raw - 1 : 0)
+      }));
     }, 1000);
 
     return () => clearInterval(interval);
@@ -159,7 +162,7 @@ const [timeRemaining, setTimeRemaining] = useState<{ raw: number; formatted: str
     id: eventID,
     name: `Event ${eventID}`,
     date: new Date().toString(),
-    timeRemaining: calculateTimeRemaining(timeRemaining),
+    timeRemaining: calculateTimeRemaining(timeRemaining.raw),
     members: staticMembers,
     messages: staticMessages,
   } as Event;
@@ -248,7 +251,7 @@ const [timeRemaining, setTimeRemaining] = useState<{ raw: number; formatted: str
                 <h1>{event.name}</h1>
                 <span className="timer">
                   <Clock className="icon" />
-                  {calculateTimeRemaining(timeRemaining)}
+                  {calculateTimeRemaining(timeRemaining.raw)}
                 </span>
               </header>
               {staticMembers.map((member) => (
