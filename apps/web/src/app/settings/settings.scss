@@ -18,7 +18,7 @@ $border-radius: 8px;
 $green: #38eb38;
 $text-color: #ffffff;
 
-html { 
+html {
   overflow-x: hidden;
 }
 
@@ -41,7 +41,6 @@ body {
   color: $text-color;
   width: 100%;
   height: 100%;
-  background-color: $background;
 }
 
 .Nav {
@@ -162,44 +161,73 @@ body {
 
 .settingsMainContainer {
   position: relative;
-  overflow: hidden;
   flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 2em;
+  overflow-y: scroll;
 }
 
 .settingsSidebar {
-  width: 250px;
-  background-color: lighten($dark-gray, 10%);
-  padding: 2em 1em;
-  border-radius: 0.7rem;
-  @include transition;
-  @include box-shadow;
+  width: 280px;
+  background: linear-gradient(to bottom, color-mix(in srgb, $dark-gray 90%, black), darken($pink, 20%) 250%);
+  padding: 2.5em 1.2em;
+  @include transition(all, 0.4s, cubic-bezier(0.4, 0, 0.2, 1));
+  @include box-shadow(rgba(0, 0, 0, 0.25));
+  border-right: 2px solid rgba($pink, 0.1);
 
   .categoryButton {
     @include flex-center;
     width: 100%;
-    padding: 0.75em 1em;
-    margin-bottom: 0.5em;
+    padding: 1em 1.2em;
+    margin-bottom: 0.8em;
     border: none;
     background: none;
     color: $text-color;
     cursor: pointer;
-    @include transition;
+    font-weight: 500;
+    @include transition(all, 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
     border-radius: $border-radius;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba($pink, 0.1);
 
     &:hover {
-      background-color: rgba($pink, 0.2);
-      transform: translateX(5px);
+      background: rgba($pink, 0.15);
+      transform: translateX(8px);
+      letter-spacing: 0.5px;
     }
 
     &.active {
-      background-color: $pink;
+      background: linear-gradient(90deg, darken($pink, 10%), darken($pink, 20%));
+      @include box-shadow(rgba($pink, 0.3));
+      transform: translateX(5px);
+
+      .icon {
+        transform: scale(1.1);
+      }
     }
 
     .icon {
-      margin-right: 0.5em;
+      margin-right: 0.8em;
+      @include transition(transform);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: $pink;
+      transform: scaleY(0);
+      @include transition(transform);
+    }
+
+    &:hover::after {
+      transform: scaleY(1);
     }
   }
 }
@@ -207,23 +235,28 @@ body {
 .settingsMain {
   flex-grow: 1;
   padding: 2em;
-  overflow-y: auto;
+  overflow: hidden;
+  height: 100%;
 }
 
 .settingsContent {
-  background-color: lighten($dark-gray, 5%);
-  border-radius: $border-radius;
-  padding: 2em;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, color-mix(in srgb, $dark-gray 90%, black), darken($pink, 20%) 500%);
+  border-radius: $border-radius * 1.5;
+  padding: 2.5em;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
   color: $text-color;
-  @include transition(all, 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
-  @include box-shadow;
+  @include transition(all, 0.4s, cubic-bezier(0.4, 0, 0.2, 1));
+  @include box-shadow(rgba($pink, 0.1));
   opacity: 0;
   transform: translateY(20px);
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
   margin: auto;
-
+  border: 1px solid rgba($pink, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: 2em;
+  overflow: hidden;
   &.active {
     opacity: 1;
     transform: translateY(0);
@@ -239,17 +272,46 @@ body {
   h2 {
     margin-bottom: 1.5em;
     color: $pink;
-    font-size: 1.8rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 700;
     text-align: center;
+    position: relative;
+    padding-bottom: 0.5em;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, $pink, darken($pink, 20%));
+      border-radius: 2px;
+    }
   }
 
   h3 {
-    margin-top: 1.5em;
-    margin-bottom: 1em;
-    color: lighten($pink, 10%);
-    font-size: 1.4rem;
-    font-weight: 500;
+    margin-top: 1.8em;
+    margin-bottom: 1.2em;
+    color: lighten($pink, 5%);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-left: 1em;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 70%;
+      background: $pink;
+      border-radius: 2px;
+    }
   }
 
   .inputGroup,
@@ -268,16 +330,28 @@ body {
     input[type="email"],
     input[type="password"] {
       width: 90%;
-      padding: 0.75em 1em;
-      border: 1px solid lighten($dark-gray, 20%);
+      padding: 1em 1.2em;
+      border: 2px solid rgba($pink, 0.15);
       border-radius: $border-radius;
-      background-color: lighten($dark-gray, 10%);
+      background: linear-gradient(to right, rgba($dark-gray, 0.3), rgba($dark-gray, 0.1));
       color: $text-color;
       font-size: 1rem;
-      @include transition;
+      backdrop-filter: blur(5px);
+      @include transition(all, 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
 
       &::placeholder {
-        color: darken($text-color, 30%);
+        color: rgba($text-color, 0.4);
+        font-weight: 300;
+      }
+
+      &:hover {
+        border-color: rgba($pink, 0.3);
+        background: linear-gradient(to right, rgba($dark-gray, 0.4), rgba($dark-gray, 0.2));
+      }
+
+      &:focus::placeholder {
+        opacity: 0.7;
+        transform: translateX(5px);
       }
 
       &:focus {
@@ -378,6 +452,7 @@ body {
     opacity: 0;
     transform: translateY(-20%);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -389,6 +464,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -400,6 +476,7 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+
   to {
     opacity: 0;
     transform: translateY(20px);
@@ -449,9 +526,9 @@ body {
     padding: 1em 0.5em;
     overflow-x: auto;
     white-space: nowrap;
-    display: flex; 
+    display: flex;
     border-radius: 0;
-    
+
     .categoryButton {
       flex: 0 0 auto;
       padding: 0.5em 0.75em;
