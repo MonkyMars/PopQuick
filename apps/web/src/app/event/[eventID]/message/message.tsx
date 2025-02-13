@@ -13,7 +13,6 @@ const Message: React.FC<MessageProps> = ({ message, activeUser, onClick }) => {
     <div
       key={message.id}
       className={`message ${message.sender?.id === activeUser?.id ? "sent" : "received"}`}
-      onClick={() => onClick()}
     >
       <header>
         {message.sender?.profilePicture && (
@@ -24,9 +23,10 @@ const Message: React.FC<MessageProps> = ({ message, activeUser, onClick }) => {
             height={50}
             className="avatar"
             draggable={false}
+            onClick={onClick}
           />
         )}
-        <span className="username">{message.sender?.username}</span>
+        <span className="username" onClick={() => onClick()}>{message.sender?.username}</span>
       </header>
       <p className="content">{message.content}</p>
       <footer>

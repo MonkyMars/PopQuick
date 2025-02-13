@@ -258,6 +258,7 @@ const [timeRemaining, setTimeRemaining] = useState<{ raw: number; formatted: str
                 <div
                   key={member.id}
                   className={`member ${member.id === activeUser?.id ? "you" : ""}`}
+                  onClick={() => handleProfileCardVisibility(member)}
                 >
                   <Image
                     src={member.profilePicture}
