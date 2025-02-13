@@ -513,7 +513,7 @@ html {
 // Message Variants
 .sent {
   margin: 10px 30px 10px 45% !important;
-  background-color: rgba($pink, 0.8) !important;
+  background-color: darken(rgba($pink, 0.8), 10%) !important;
 
   footer {
     color: lighten($pink, 10%) !important;
