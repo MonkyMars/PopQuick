@@ -192,15 +192,15 @@ $form-background: var(--form-background);
     align-items: center;
     text-align: center;
     margin: 1.5em 0;
-    color: $background;
+    color: $text-color;
     width: 90%;
     &::before,
     &::after {
       content: "";
       flex: 1;
-      border-bottom: 1px solid rgba($background, 0.3);
+      border-bottom: 1px solid $text-color;
     }
-
+  
     span {
       padding: 0 10px;
       font-size: 0.9em;

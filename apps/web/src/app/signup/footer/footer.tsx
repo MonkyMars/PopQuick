@@ -1,17 +1,13 @@
-import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Button } from "@repo/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 interface FooterProps {
   handleGoogleSignup: () => void;
-  handleDiscordSignup: () => void;
 }
 
-const Footer: React.FC<FooterProps> = ({
-  handleDiscordSignup,
-  handleGoogleSignup,
-}) => {
+const Footer: React.FC<FooterProps> = ({ handleGoogleSignup }) => {
   return (
     <>
       <div className="divider">
@@ -19,19 +15,12 @@ const Footer: React.FC<FooterProps> = ({
       </div>
 
       <div className="socialSignup">
-        <button
+        <Button
           type="button"
           className="googleButton"
           onClick={handleGoogleSignup}
         >
           <FontAwesomeIcon icon={faGoogle} /> <label>Google</label>
-        </button>
-        <Button
-          type="button"
-          className="discordButton"
-          onClick={handleDiscordSignup}
-        >
-          <FontAwesomeIcon icon={faDiscord} /> <label>Discord</label>
         </Button>
       </div>
 

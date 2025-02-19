@@ -3,12 +3,9 @@ import React, { useState, useRef, FormEvent } from "react";
 import "@/app/signup/signup.scss";
 import { Button } from "@repo/ui/button";
 import { NextPage } from "next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Check, X } from "lucide-react";
 import { passwordRequirements } from "@/utils/password-validation";
 import validator from "validator";
-import Link from "next/link";
 import { Eye, EyeClosed } from "lucide-react";
 import Footer from "./footer/footer";
 import Banner from "@/components/Banner/Banner";
@@ -133,7 +130,7 @@ const Signup: NextPage = () => {
                 <input
                   ref={passwordInputRef}
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder="Enter a password"
                   value={user.password}
                   onChange={(e) => {
                     setUser({ ...user, password: e.target.value });
@@ -173,7 +170,6 @@ const Signup: NextPage = () => {
               </div>
               <button className="signupButton" onClick={handleContinue}>Continue</button>
               <Footer 
-                handleDiscordSignup={handleDiscordSignup}
                 handleGoogleSignup={handleGoogleSignup}
               />
             </>

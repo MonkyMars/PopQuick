@@ -2,9 +2,6 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { type LoginUser } from "@/utils/user-service";
 import "@/app/login/login.scss";
-import { Button } from "@repo/ui/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { Eye, EyeClosed } from "lucide-react";
 import Link from "next/link"; // Added import for Link
 import { NextPage } from "next";
@@ -53,10 +50,6 @@ const Login: NextPage = () => {
 
   const handleGoogleLogin = () => {
     // Add Google login logic here
-  };
-
-  const handleDiscordLogin = () => {
-    // Add Discord login logic here
   };
 
   useEffect(() => {
@@ -124,7 +117,6 @@ const Login: NextPage = () => {
 
           <Footer
             handleGoogleLogin={handleGoogleLogin}
-            handleDiscordLogin={handleDiscordLogin}
           />
         </form>
       </div>
