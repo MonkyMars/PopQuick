@@ -1,9 +1,8 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "@/app/settings/settings.scss";
-import Image from "next/image";
-import { LogOut, Settings, User, Bell, CreditCard, Lock, Shield } from 'lucide-react';
+import "./settings.scss";
+import { LogOut, User, Bell, CreditCard, Lock, Shield } from 'lucide-react';
 import Link from "next/link";
 
 const Profile: React.FC = () => {
