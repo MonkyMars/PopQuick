@@ -360,7 +360,7 @@ html {
 
       .message {
         font-size: 1.2rem;
-        max-width: min(90%, 400px);
+        max-width: min(90%, 300px);
         margin: 10px 20px;
         padding: 0.3em 0.7em;
         border-radius: 12px;
@@ -381,7 +381,7 @@ html {
           display: flex;
           align-items: center;
           gap: 0.5em;
-
+          margin-bottom: 0.5em;
           .username {
             font-weight: 600;
             cursor: pointer;
