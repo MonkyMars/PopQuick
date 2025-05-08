@@ -7,7 +7,7 @@ import { z } from "zod";
 const createGroupDefaultSchema = z.object({
     name: z.string().min(3).max(50),
     description: z.string().min(10).max(500),
-    member_limit: z.number().default(10),
+    member_limit: z.number().max(10).default(10),
 });
 
 const createGroupForSubscriptionUserSchema = z.object({
