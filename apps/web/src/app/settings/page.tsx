@@ -1,9 +1,8 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "@/app/settings/settings.scss";
-import Image from "next/image";
-import { LogOut, Settings, User, Bell, CreditCard, Lock, Shield } from 'lucide-react';
+import "./settings.scss";
+import { LogOut, User, Bell, CreditCard, Lock, Shield } from 'lucide-react';
 import Link from "next/link";
 
 const Profile: React.FC = () => {
@@ -42,7 +41,7 @@ const Profile: React.FC = () => {
   }, []);
 
   const pages: Pages[] = [
-    { label: "Home", href: "/", id: 1 },
+    { label: "Home", href: "/home", id: 1 },
     { label: "Placeholder", href: "/", id: 2 },
     { label: "Placeholder", href: "/", id: 3 },
   ];
